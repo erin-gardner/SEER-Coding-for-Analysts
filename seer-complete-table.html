@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEER Cancer Site Reference Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --oral:    #b03010;
+    --digest:  #1a6e3c;
+    --resp:    #0e4e8a;
+    --bone:    #7a4e10;
+    --soft:    #7a2070;
+    --skin:    #9a4e08;
+    --breast:  #a01448;
+    --female:  #561890;
+    --male:    #0a4e7a;
+    --urinary: #096070;
+    --eye:     #145e44;
+    --brain:   #2e2e96;
+    --endo:    #785000;
+    --lymph:   #3c2e78;
+    --misc:    #2a2a2a;
+    --bg: #edebe8;
+    --card: #ffffff;
+    --text-dark: #0e0c0a;
+    --text-mid: #2e2820;
+    --text-soft: #58504a;
+    --divider: #ccc8c2;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--text-dark);
+    padding: 16px 14px 36px;
+    font-size: 11px;
+  }
+
+  .page-wrap { max-width: 900px; margin: 0 auto; }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+  }
+  header p {
+    font-size: 10px;
+    color: var(--text-soft);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  /* ── SECTION ── */
+  .section-block {
+    background: var(--card);
+    border: 1px solid var(--divider);
+    border-radius: 4px;
+    margin-bottom: 7px;
+    overflow: hidden;
+    page-break-inside: avoid;
+  }
+  .section-header {
+    display: flex;
+    align-items: stretch;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .section-bar {
+    width: 6px;
+    flex-shrink: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .section-title-wrap {
+    padding: 7px 12px;
+    flex: 1;
+  }
+  .section-title-wrap h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+  .section-title-wrap p {
+    font-size: 10px;
+    color: var(--text-soft);
+    margin-top: 2px;
+  }
+
+  /* Section-level exclusion banner */
+  .excl-banner {
+    display: inline-block;
+    font-size: 8.5px;
+    font-weight: 600;
+    background: #ede8e0;
+    color: #6a6058;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-top: 4px;
+    margin-left: 12px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    letter-spacing: 0.05px;
+  }
+
+  /* Sub-section exclusion (for sections with mixed rules) */
+  .excl-sub-banner {
+    display: inline-block;
+    font-size: 8.5px;
+    font-weight: 600;
+    background: #e2dcd2;
+    color: #5a504a;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-top: 4px;
+    margin-left: 12px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    letter-spacing: 0.05px;
+  }
+
+  .subgroup-row td {
+    background: #e6e2dc;
+    padding: 3px 10px;
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    border-top: 1px solid var(--divider);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Parent grouping (sits above subgroup-row, slightly more prominent) */
+  .parentgroup-row td {
+    background: color-mix(in srgb, var(--c) 18%, #fff);
+    padding: 5px 10px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    color: color-mix(in srgb, var(--c) 70%, #000);
+    border-top: 2px solid color-mix(in srgb, var(--c) 35%, #fff);
+    border-bottom: 1px solid color-mix(in srgb, var(--c) 25%, #fff);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .parentgroup-row .pg-meta {
+    display: block;
+    font-size: 8.5px;
+    font-weight: 500;
+    color: var(--text-mid);
+    letter-spacing: 0;
+    text-transform: none;
+    margin-top: 2px;
+  }
+
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { border-top: 1px solid var(--divider); }
+  thead th {
+    padding: 3px 10px;
+    text-align: left;
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: var(--text-soft);
+    background: #f2eeea;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  tbody tr { border-top: 1px solid var(--divider); }
+  tbody tr:hover { background: #f8f6f2; }
+  tbody td { padding: 4px 10px; font-size: 10.5px; vertical-align: top; line-height: 1.3; }
+  td:nth-child(2), td:nth-child(3) { white-space: nowrap; vertical-align: middle; }
+
+  .site-name {
+    font-weight: 700;
+    font-size: 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .site-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 2px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .site-desc {
+    font-size: 8.5px;
+    color: var(--text-soft);
+    font-weight: 400;
+    margin-top: 1px;
+    padding-left: 12px;
+  }
+  .code-wrap { display: flex; flex-direction: column; gap: 2px; }
+  .code-badge {
+    display: inline-block;
+    font-size: 9px;
+    font-family: 'Courier New', monospace;
+    background: #ddd8d0;
+    color: #0e0c0a;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 700;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .recode-num {
+    font-size: 10.5px;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* ── THEMES ── */
+  .t-oral    { --c: var(--oral); }
+  .t-digest  { --c: var(--digest); }
+  .t-resp    { --c: var(--resp); }
+  .t-bone    { --c: var(--bone); }
+  .t-soft    { --c: var(--soft); }
+  .t-skin    { --c: var(--skin); }
+  .t-breast  { --c: var(--breast); }
+  .t-female  { --c: var(--female); }
+  .t-male    { --c: var(--male); }
+  .t-urinary { --c: var(--urinary); }
+  .t-eye     { --c: var(--eye); }
+  .t-brain   { --c: var(--brain); }
+  .t-endo    { --c: var(--endo); }
+  .t-lymph   { --c: var(--lymph); }
+  .t-misc    { --c: var(--misc); }
+
+  .section-block .section-bar { background: var(--c); }
+  .section-block .section-title-wrap { background: color-mix(in srgb, var(--c) 8%, #fff); }
+  .section-block .section-title-wrap h2 { color: var(--c); }
+  .section-block .site-dot { background: var(--c); }
+
+  .footnotes { font-size: 8.5px; color: var(--text-soft); padding: 8px 0 0; line-height: 1.8; }
+  .source-note { font-size: 8.5px; color: var(--text-soft); text-align: right; margin-top: 4px; }
+  .source-note a { color: var(--text-soft); }
+
+  /* ── SEARCH ── */
+  .search-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--bg);
+    padding: 8px 0 10px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid var(--divider);
+  }
+  .search-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .search-input {
+    flex: 1;
+    font-family: inherit;
+    font-size: 13px;
+    padding: 8px 12px;
+    border: 1.5px solid var(--divider);
+    border-radius: 5px;
+    background: #fff;
+    color: var(--text-dark);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .search-input:focus { border-color: #7a8aa0; }
+  .search-clear {
+    font-size: 11px;
+    font-weight: 600;
+    background: #fff;
+    border: 1px solid var(--divider);
+    border-radius: 4px;
+    padding: 6px 10px;
+    cursor: pointer;
+    color: var(--text-mid);
+  }
+  .search-clear:hover { background: #f4f0ec; }
+  .search-stats {
+    font-size: 10px;
+    color: var(--text-soft);
+    margin-top: 4px;
+    min-height: 12px;
+  }
+  mark.search-mark {
+    background: #fff3a0;
+    color: inherit;
+    padding: 0 1px;
+    border-radius: 2px;
+  }
+  .row-hidden { display: none !important; }
+  .section-hidden { display: none !important; }
+
+  /* ── SEX-SPECIFICITY FLAGS & ANALYST NOTES ── */
+  .sex-flag {
+    display: inline-block;
+    font-size: 8.5px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-left: 6px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    vertical-align: 1px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .sex-flag.female {
+    background: #c4548a;
+    color: #fff;
+  }
+  .sex-flag.male {
+    background: #2a6a9a;
+    color: #fff;
+  }
+  .sex-flag.predom-female {
+    background: #f2c4d6;
+    color: #6a2048;
+    border: 1px solid #c4548a;
+    padding: 0 5px;
+  }
+  .analyst-note {
+    display: block;
+    font-size: 8.5px;
+    font-weight: 600;
+    color: #5a2a18;
+    background: #fdf0e0;
+    border-left: 3px solid #c46028;
+    padding: 3px 6px 3px 8px;
+    margin-top: 4px;
+    margin-left: 12px;
+    border-radius: 0 3px 3px 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .analyst-note::before {
+    content: "↳ Analyst note: ";
+    font-weight: 700;
+    color: #8a4018;
+  }
+
+  /* Section-level analyst banner (sits below header like excl-banner did before) */
+  .section-banner {
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-top: 1px solid var(--divider);
+    border-bottom: 1px solid var(--divider);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    letter-spacing: 0.1px;
+  }
+  .section-banner.female-banner {
+    background: #fbe4ee;
+    color: #6a2048;
+    border-left: 3px solid #c4548a;
+  }
+  .section-banner.male-banner {
+    background: #dde9f4;
+    color: #1a4068;
+    border-left: 3px solid #2a6a9a;
+  }
+  .section-banner.predom-banner {
+    background: #fdf4e8;
+    color: #6a3a1a;
+    border-left: 3px solid #c46028;
+  }
+  .section-banner strong { letter-spacing: 0.4px; }
+
+  @media print {
+    .search-wrap { display: none !important; }
+    .section-block.collapsed .table-wrap { display: block !important; }
+    .section-block.collapsed { display: block !important; }
+  }
+
+  /* ── COLLAPSIBLE SECTIONS ── */
+  .section-header {
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.12s;
+  }
+  .section-header:hover .section-title-wrap { background: color-mix(in srgb, var(--c) 15%, #fff); }
+  .chevron {
+    font-size: 14px;
+    color: var(--text-soft);
+    padding: 0 10px;
+    flex-shrink: 0;
+    align-self: center;
+    transition: transform 0.18s;
+    line-height: 1;
+  }
+  .section-block.collapsed .chevron { transform: rotate(-90deg); }
+  .section-block.collapsed .table-wrap { display: none; }
+
+  .collapse-controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 10px;
+  }
+  .collapse-controls button {
+    background: #fff;
+    border: 1px solid var(--divider);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-mid);
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .collapse-controls button:hover { background: #f4f0ec; }
+
+  @media print {
+    .collapse-controls { display: none !important; }
+    .chevron { display: none !important; }
+  }
+
+  @media print {
+    @page { margin: 9mm 8mm; size: A4; }
+    body { background: white !important; padding: 0; }
+    .page-wrap { max-width: 100%; }
+    .section-block { box-shadow: none !important; page-break-inside: avoid; }
+    tbody tr:hover { background: transparent !important; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <header style="margin-bottom:12px;">
+    <h1>SEER Cancer Site Reference Guide</h1>
+    <p>ICD-O-3 / WHO 2008 Definition &mdash; All site groups with plain-English descriptions, color-coded by anatomical region. Source: <strong>seer.cancer.gov</strong></p>
+  </header>
+
+  <div class="search-wrap">
+    <div class="search-row">
+      <input type="text" id="search-input" class="search-input"
+             placeholder="Search by site name, ICD-O-3 code (e.g. C509), SEER recode (e.g. 26000), or keyword…"
+             autocomplete="off">
+      <button id="search-clear" class="search-clear" type="button">Clear</button>
+    </div>
+    <div id="search-stats" class="search-stats"></div>
+  </div>
+
+
+  <div class="collapse-controls">
+    <button id="expand-all" type="button">Expand all</button>
+    <button id="collapse-all" type="button">Collapse all</button>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+   NOTE ON HISTOLOGY EXCLUSIONS
+   ═══════════════════════════════════════════
+   Per the SEER source table, the exclusion
+   "excluding 9050-9055, 9140, 9590-9993"
+   appears as a SINGLE SPANNING CELL that
+   applies to ALL rows within each section.
+   Sections without this note (e.g. Tongue,
+   Stomach, Small Intestine) have no
+   histology restriction — all types included.
+   Skin melanoma uses inclusive hist 8720-8790.
+   Lymphoma/Leukemia/Myeloma are histology-
+   defined with no site exclusion.
+  ═══════════════════════════════════════════ -->
+
+
+  <!-- 1. ORAL CAVITY & PHARYNX -->
+  <!-- Exclusion applies to ALL rows in this section -->
+  <div class="section-block t-oral">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Oral Cavity &amp; Pharynx</h2>
+        <p>Mouth, throat &amp; upper airway — head &amp; neck region</p>
+      </div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Body Site</th><th>ICD-O-3 Site Codes</th><th>SEER Site Recode</th></tr></thead>
+      <tbody>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Lip</div><div class="site-desc">Outer &amp; inner lip tissue</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C000–C009</span></td><td><span class="recode-num">20010</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Tongue</div><div class="site-desc">Oral tongue &amp; base of tongue</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C019–C029</span></td><td><span class="recode-num">20020</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Salivary Gland</div><div class="site-desc">Parotid, sublingual &amp; submandibular glands</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C079–C089</span></td><td><span class="recode-num">20030</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Floor of Mouth</div><div class="site-desc">Tissue beneath the tongue</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C040–C049</span></td><td><span class="recode-num">20040</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Gum &amp; Other Mouth</div><div class="site-desc">Gums, hard palate &amp; cheek lining</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><div class="code-wrap"><span class="code-badge">C030–C039</span><span class="code-badge">C050–C059</span><span class="code-badge">C060–C069</span></div></td><td><span class="recode-num">20050</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Nasopharynx</div><div class="site-desc">Upper throat, directly behind the nose</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C110–C119</span></td><td><span class="recode-num">20060</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Tonsil</div><div class="site-desc">Lymph tissue at the back of the throat</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C090–C099</span></td><td><span class="recode-num">20070</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Oropharynx</div><div class="site-desc">Middle throat — soft palate &amp; back wall</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C100–C109</span></td><td><span class="recode-num">20080</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Hypopharynx</div><div class="site-desc">Lower throat, just above the voice box</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><div class="code-wrap"><span class="code-badge">C129</span><span class="code-badge">C130–C139</span></div></td><td><span class="recode-num">20090</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Other Oral Cavity &amp; Pharynx</div><div class="site-desc">Waldeyer's ring &amp; overlapping mouth/throat sites</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C140, C142, C148</span></td><td><span class="recode-num">20100</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- 2. DIGESTIVE SYSTEM -->
+  <!-- Exclusion applies to ALL rows in this section -->
+  <div class="section-block t-digest">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Digestive System</h2>
+        <p>Esophagus through anus — plus liver, pancreas &amp; gallbladder</p>
+      </div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Body Site</th><th>ICD-O-3 Site Codes</th><th>SEER Site Recode</th></tr></thead>
+      <tbody>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Esophagus</div><div class="site-desc">Tube carrying food from throat to stomach</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C150–C159</span></td><td><span class="recode-num">21010</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Stomach</div><div class="site-desc">Primary digestive organ in the upper abdomen</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C160–C169</span></td><td><span class="recode-num">21020</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Small Intestine</div><div class="site-desc">Duodenum, jejunum &amp; ileum — nutrient absorption</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C170–C179</span></td><td><span class="recode-num">21030</span></td></tr>
+        <tr class="parentgroup-row"><td colspan="3">Colon and Rectum (combined)<span class="pg-meta">Combined grouping covers all colon subsites + rectosigmoid junction + rectum (SEER recodes 21041–21049 &amp; 21051–21052). <strong>Does NOT include Anus</strong> (recode 21060).</span></td></tr>
+        <tr class="subgroup-row"><td colspan="3">Colon (excluding Rectum)</td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Cecum</div><div class="site-desc">Start of the large intestine, lower right abdomen</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C180</span></td><td><span class="recode-num">21041</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Appendix</div><div class="site-desc">Small pouch attached to the cecum</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span><span class="analyst-note">Appendiceal cancers are <strong>controversial</strong> within the colorectal grouping. Growing evidence suggests they are biologically distinct from colon cancer (different mutational profiles, prognosis, and treatment response). Consider <strong>analyzing separately</strong> or excluding from colorectal-specific analyses depending on your research question.</span></td><td><span class="code-badge">C181</span></td><td><span class="recode-num">21042</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Ascending Colon</div><div class="site-desc">Right side of the colon, moving upward</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C182</span></td><td><span class="recode-num">21043</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Hepatic Flexure</div><div class="site-desc">Bend in the colon near the liver</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C183</span></td><td><span class="recode-num">21044</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Transverse Colon</div><div class="site-desc">Middle section of the colon crossing the abdomen</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C184</span></td><td><span class="recode-num">21045</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Splenic Flexure</div><div class="site-desc">Bend in the colon near the spleen</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C185</span></td><td><span class="recode-num">21046</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Descending Colon</div><div class="site-desc">Left side of the colon, moving downward</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C186</span></td><td><span class="recode-num">21047</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Sigmoid Colon</div><div class="site-desc">S-shaped segment connecting to the rectum</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C187</span></td><td><span class="recode-num">21048</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Large Intestine, NOS</div><div class="site-desc">Large bowel — site not more specifically described</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><div class="code-wrap"><span class="code-badge">C188–C189</span><span class="code-badge">C260</span></div></td><td><span class="recode-num">21049</span></td></tr>
+        <tr class="subgroup-row"><td colspan="3">Rectum and Rectosigmoid Junction</td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Rectosigmoid Junction</div><div class="site-desc">Transition zone between sigmoid colon and rectum</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C199</span></td><td><span class="recode-num">21051</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Rectum</div><div class="site-desc">Final straight section of the large bowel before the anus</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C209</span></td><td><span class="recode-num">21052</span></td></tr>
+        <tr class="subgroup-row"><td colspan="3">Anus &mdash; separate from Colon and Rectum grouping</td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Anus, Anal Canal &amp; Anorectum</div><div class="site-desc">Anal opening and surrounding tissue</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span><span class="analyst-note"><strong>Not part of the Colon and Rectum combined grouping.</strong> Anal cancers are biologically and etiologically distinct (often HPV-related squamous cell carcinomas) and should be analyzed separately.</span></td><td><span class="code-badge">C210–C212, C218</span></td><td><span class="recode-num">21060</span></td></tr>
+        <tr class="subgroup-row"><td colspan="3">Liver &amp; Bile Ducts</td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Liver</div><div class="site-desc">Largest internal organ — filters blood &amp; produces bile</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C220</span></td><td><span class="recode-num">21071</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Intrahepatic Bile Duct</div><div class="site-desc">Bile ducts inside the liver</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C221</span></td><td><span class="recode-num">21072</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Gallbladder</div><div class="site-desc">Small sac storing bile beneath the liver</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C239</span></td><td><span class="recode-num">21080</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Other Biliary</div><div class="site-desc">Bile ducts outside the liver (extrahepatic)</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C240–C249</span></td><td><span class="recode-num">21090</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Pancreas</div><div class="site-desc">Gland producing digestive enzymes &amp; insulin</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C250–C259</span></td><td><span class="recode-num">21100</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Retroperitoneum</div><div class="site-desc">Space behind the abdominal cavity lining</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C480</span></td><td><span class="recode-num">21110</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Peritoneum, Omentum &amp; Mesentery</div><div class="site-desc">Abdominal lining &amp; fatty tissue supporting organs</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C481–C482</span></td><td><span class="recode-num">21120</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Other Digestive Organs</div><div class="site-desc">Remaining or overlapping digestive structures</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C268–C269, C488</span></td><td><span class="recode-num">21130</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- 3. RESPIRATORY -->
+  <div class="section-block t-resp">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Respiratory System</h2>
+        <p>Nose, larynx, lungs &amp; airways</p>
+      </div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Body Site</th><th>ICD-O-3 Site Codes</th><th>SEER Site Recode</th></tr></thead>
+      <tbody>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Nose, Nasal Cavity &amp; Middle Ear</div><div class="site-desc">Nasal passages, sinuses &amp; inner ear structures</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><div class="code-wrap"><span class="code-badge">C300–C301</span><span class="code-badge">C310–C319</span></div></td><td><span class="recode-num">22010</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Larynx</div><div class="site-desc">Voice box — connects throat to windpipe</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C320–C329</span></td><td><span class="recode-num">22020</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Lung &amp; Bronchus</div><div class="site-desc">Primary breathing organs &amp; main airway branches</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C340–C349</span></td><td><span class="recode-num">22030</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Pleura</div><div class="site-desc">Thin tissue lining surrounding the lungs</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C384</span></td><td><span class="recode-num">22050</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Trachea, Mediastinum &amp; Other Respiratory</div><div class="site-desc">Windpipe, chest cavity between lungs &amp; remaining airway structures</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><div class="code-wrap"><span class="code-badge">C339, C381–C383</span><span class="code-badge">C388, C390, C398–C399</span></div></td><td><span class="recode-num">22060</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- 4. BONES & JOINTS -->
+  <div class="section-block t-bone">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Bones &amp; Joints</h2>
+        <p>All skeletal sites throughout the body</p>
+      </div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Body Site</th><th>ICD-O-3 Site Codes</th><th>SEER Site Recode</th></tr></thead>
+      <tbody>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Bones &amp; Joints</div><div class="site-desc">All primary bone tumors — skull, spine, limbs &amp; pelvis</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C400–C419</span></td><td><span class="recode-num">23000</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- 5. SOFT TISSUE -->
+  <div class="section-block t-soft">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Soft Tissue including Heart</h2>
+        <p>Muscle, fat, nerves, connective tissue &amp; heart</p>
+      </div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Body Site</th><th>ICD-O-3 Site Codes</th><th>SEER Site Recode</th></tr></thead>
+      <tbody>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Soft Tissue &amp; Heart</div><div class="site-desc">Sarcomas of muscle, fat, blood vessels, nerves &amp; cardiac tissue</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><div class="code-wrap"><span class="code-badge">C380, C470–C479</span><span class="code-badge">C490–C499</span></div></td><td><span class="recode-num">24000</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- 6. SKIN — two sub-rows with DIFFERENT histology rules -->
+  <div class="section-block t-skin">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Skin (excluding Basal &amp; Squamous Cell)</h2>
+        <p>Melanoma and other non-epithelial skin cancers</p>
+      </div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Body Site</th><th>ICD-O-3 Site Codes / Histology</th><th>SEER Site Recode</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="site-name"><span class="site-dot"></span>Melanoma of the Skin</div>
+            <div class="site-desc">Pigment-cell cancer — most serious common skin cancer</div>
+            <span class="excl-sub-banner">Inclusive hist: 8720–8790 only</span>
+          </td>
+          <td><span class="code-badge">C440–C449</span></td>
+          <td><span class="recode-num">25010</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="site-name"><span class="site-dot"></span>Other Non-Epithelial Skin</div>
+            <div class="site-desc">Rare skin cancers not of surface cell origin (e.g. Merkel cell)</div>
+            <span class="excl-sub-banner">Excl. hist: 8000–8005, 8010–8046, 8050–8084, 8090–8110, 8720–8790, 9050–9055, 9140, 9590–9993</span>
+          </td>
+          <td><span class="code-badge">C440–C449</span></td>
+          <td><span class="recode-num">25020</span></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- 7. BREAST -->
+  <div class="section-block t-breast">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Breast</h2>
+        <p>Breast tissue — affects all genders</p>
+      </div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Body Site</th><th>ICD-O-3 Site Codes</th><th>SEER Site Recode</th></tr></thead>
+      <tbody>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Breast<span class="sex-flag predom-female">~99% Female</span></div><div class="site-desc">All breast tissue including ducts, lobules &amp; nipple</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span><span class="analyst-note">Affects all sexes, but ~99% of cases are female. Male breast cancer (~1%) is included in this recode. <strong>By convention, breast cancer incidence and mortality are typically reported female-only</strong> — restrict the denominator to females unless your analysis specifically includes male breast cancer.</span></td><td><span class="code-badge">C500–C509</span></td><td><span class="recode-num">26000</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- 8. FEMALE GENITAL -->
+  <div class="section-block t-female">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Female Genital System</h2>
+        <p>Cervix, uterus, ovaries &amp; surrounding structures</p>
+      </div>
+    </div>
+    <div class="section-banner female-banner">⚠ <strong>FEMALE-SPECIFIC SECTION</strong> — When calculating incidence or mortality rates, restrict the denominator (population at risk) to FEMALES ONLY.</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Body Site</th><th>ICD-O-3 Site Codes</th><th>SEER Site Recode</th></tr></thead>
+      <tbody>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Cervix Uteri<span class="sex-flag female">♀ Female only</span></div><div class="site-desc">Lower opening of the uterus (cervix)</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C530–C539</span></td><td><span class="recode-num">27010</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Corpus Uteri<span class="sex-flag female">♀ Female only</span></div><div class="site-desc">Body of the uterus — endometrium &amp; myometrium</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C540–C549</span></td><td><span class="recode-num">27020</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Uterus, NOS<span class="sex-flag female">♀ Female only</span></div><div class="site-desc">Uterus — part not more specifically described</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C559</span></td><td><span class="recode-num">27030</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Ovary<span class="sex-flag female">♀ Female only</span></div><div class="site-desc">Egg-producing reproductive glands</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C569</span></td><td><span class="recode-num">27040</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Vagina<span class="sex-flag female">♀ Female only</span></div><div class="site-desc">Birth canal connecting uterus to external genitalia</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C529</span></td><td><span class="recode-num">27050</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Vulva<span class="sex-flag female">♀ Female only</span></div><div class="site-desc">External female genitalia</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C510–C519</span></td><td><span class="recode-num">27060</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Other Female Genital Organs<span class="sex-flag female">♀ Female only</span></div><div class="site-desc">Fallopian tubes, broad ligament &amp; overlapping sites</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C570–C579, C589</span></td><td><span class="recode-num">27070</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- 9. MALE GENITAL -->
+  <div class="section-block t-male">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Male Genital System</h2>
+        <p>Prostate, testes &amp; surrounding structures</p>
+      </div>
+    </div>
+    <div class="section-banner male-banner">⚠ <strong>MALE-SPECIFIC SECTION</strong> — When calculating incidence or mortality rates, restrict the denominator (population at risk) to MALES ONLY.</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Body Site</th><th>ICD-O-3 Site Codes</th><th>SEER Site Recode</th></tr></thead>
+      <tbody>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Prostate<span class="sex-flag male">♂ Male only</span></div><div class="site-desc">Gland below the bladder producing seminal fluid</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C619</span></td><td><span class="recode-num">28010</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Testis<span class="sex-flag male">♂ Male only</span></div><div class="site-desc">Sperm-producing glands</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C620–C629</span></td><td><span class="recode-num">28020</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Penis<span class="sex-flag male">♂ Male only</span></div><div class="site-desc">External male urinary &amp; reproductive organ</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C600–C609</span></td><td><span class="recode-num">28030</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Other Male Genital Organs<span class="sex-flag male">♂ Male only</span></div><div class="site-desc">Epididymis, scrotum &amp; overlapping sites</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C630–C639</span></td><td><span class="recode-num">28040</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- 10. URINARY -->
+  <div class="section-block t-urinary">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Urinary System</h2>
+        <p>Kidneys, bladder &amp; urinary tract</p>
+      </div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Body Site</th><th>ICD-O-3 Site Codes</th><th>SEER Site Recode</th></tr></thead>
+      <tbody>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Urinary Bladder</div><div class="site-desc">Sac storing urine before excretion</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C670–C679</span></td><td><span class="recode-num">29010</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Kidney &amp; Renal Pelvis</div><div class="site-desc">Organs filtering blood to produce urine</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C649, C659</span></td><td><span class="recode-num">29020</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Ureter</div><div class="site-desc">Tubes carrying urine from kidneys to bladder</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C669</span></td><td><span class="recode-num">29030</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Other Urinary Organs</div><div class="site-desc">Urethra &amp; remaining urinary structures</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C680–C689</span></td><td><span class="recode-num">29040</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- 11. EYE -->
+  <div class="section-block t-eye">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Eye &amp; Orbit</h2>
+        <p>Eyeball, optic nerve &amp; surrounding socket</p>
+      </div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Body Site</th><th>ICD-O-3 Site Codes</th><th>SEER Site Recode</th></tr></thead>
+      <tbody>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Eye &amp; Orbit</div><div class="site-desc">Eyeball, conjunctiva, orbit &amp; optic nerve</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C690–C699</span></td><td><span class="recode-num">30000</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- 12. BRAIN — Brain row has extra exclusion 9530-9539; CNS row uses those codes inclusively -->
+  <div class="section-block t-brain">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Brain &amp; Other Nervous System</h2>
+        <p>Brain, spinal cord &amp; cranial nerves</p>
+      </div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Body Site</th><th>ICD-O-3 Site Codes</th><th>SEER Site Recode</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="site-name"><span class="site-dot"></span>Brain</div>
+            <div class="site-desc">Cerebrum, cerebellum &amp; brainstem tumors</div>
+            <span class="excl-sub-banner">Excl. hist: 9050–9055, 9140, 9530–9539, 9590–9993</span>
+          </td>
+          <td><span class="code-badge">C710–C719</span></td>
+          <td><span class="recode-num">31010</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="site-name"><span class="site-dot"></span>Cranial Nerves &amp; Other Nervous System</div>
+            <div class="site-desc">Meninges, spinal cord, cranial &amp; peripheral nerves</div>
+            <span class="excl-sub-banner">C710–C719 inclusive hist 9530–9539 only; C700–C709 &amp; C720–C729 excl. 9050–9055, 9140, 9590–9993</span>
+          </td>
+          <td><div class="code-wrap"><span class="code-badge">C710–C719</span><span class="code-badge">C700–C709</span><span class="code-badge">C720–C729</span></div></td>
+          <td><span class="recode-num">31040</span></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- 13. ENDOCRINE -->
+  <div class="section-block t-endo">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Endocrine System</h2>
+        <p>Hormone-producing glands — thyroid, adrenal &amp; thymus</p>
+      </div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Body Site</th><th>ICD-O-3 Site Codes</th><th>SEER Site Recode</th></tr></thead>
+      <tbody>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Thyroid</div><div class="site-desc">Butterfly-shaped gland in the neck regulating metabolism</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><span class="code-badge">C739</span></td><td><span class="recode-num">32010</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Other Endocrine including Thymus</div><div class="site-desc">Adrenal glands, pituitary, pineal, thymus &amp; other hormone glands</div><span class="excl-banner">Excl. hist: 9050–9055, 9140, 9590–9993</span></td><td><div class="code-wrap"><span class="code-badge">C379, C740–C749</span><span class="code-badge">C750–C759</span></div></td><td><span class="recode-num">32020</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- 14. LYMPHOMA — histology-defined, no site exclusion; specific hist codes per row -->
+  <div class="section-block t-lymph">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Lymphoma</h2>
+        <p>Cancer of the lymphatic system — defined by histology codes, not site exclusions</p>
+      </div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Body Site / Subtype</th><th>ICD-O-3 Site &amp; Histology Codes</th><th>SEER Site Recode</th></tr></thead>
+      <tbody>
+        <tr class="subgroup-row"><td colspan="3">Hodgkin Lymphoma</td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Hodgkin — Nodal</div><div class="site-desc">Lymph nodes in neck, chest, armpits &amp; groin</div></td><td><div class="code-wrap"><span class="code-badge">C024, C098–C099, C111</span><span class="code-badge">C142, C379, C422, C770–C779</span><span class="code-badge">Hist: 9650–9667</span></div></td><td><span class="recode-num">33011</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Hodgkin — Extranodal</div><div class="site-desc">Hodgkin lymphoma arising outside lymph nodes</div></td><td><div class="code-wrap"><span class="code-badge">All other sites</span><span class="code-badge">Hist: 9650–9667</span></div></td><td><span class="recode-num">33012</span></td></tr>
+        <tr class="subgroup-row"><td colspan="3">Non-Hodgkin Lymphoma (NHL)</td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>NHL — Nodal</div><div class="site-desc">Non-Hodgkin lymphoma within lymph nodes</div></td><td><div class="code-wrap"><span class="code-badge">C024, C098–C099, C111</span><span class="code-badge">C142, C379, C422, C770–C779</span><span class="code-badge">Hist: 9590–9597, 9670–9729, 9811–9837</span></div></td><td><span class="recode-num">33041</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>NHL — Extranodal</div><div class="site-desc">Non-Hodgkin lymphoma arising in organs outside lymph nodes</div></td><td><div class="code-wrap"><span class="code-badge">All sites except nodal</span><span class="code-badge">Hist: 9590–9597, 9670–9729, 9811–9837</span></div></td><td><span class="recode-num">33042</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- 15. MYELOMA -->
+  <div class="section-block t-lymph">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Myeloma</h2>
+        <p>Cancer of plasma cells in the bone marrow — histology-defined</p>
+      </div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Body Site</th><th>Histology Codes</th><th>SEER Site Recode</th></tr></thead>
+      <tbody>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Multiple Myeloma</div><div class="site-desc">Abnormal plasma cells accumulate in bone marrow, weakening bones</div></td><td><span class="code-badge">Hist: 9731–9732, 9734</span></td><td><span class="recode-num">34000</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- 16. LEUKEMIA -->
+  <div class="section-block t-lymph">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Leukemia</h2>
+        <p>Cancer of blood-forming cells — acute &amp; chronic types; histology-defined</p>
+      </div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Body Site / Subtype</th><th>Histology Codes</th><th>SEER Site Recode</th></tr></thead>
+      <tbody>
+        <tr class="subgroup-row"><td colspan="3">Lymphocytic Leukemia — affects lymphocytes (immune cells)</td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Acute Lymphocytic Leukemia (ALL)</div><div class="site-desc">Fast-growing; most common childhood leukemia</div></td><td><div class="code-wrap"><span class="code-badge">9826, 9835–9836</span><span class="code-badge">9811–9819, 9837</span></div></td><td><span class="recode-num">35011</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Chronic Lymphocytic Leukemia (CLL)</div><div class="site-desc">Slow-growing; most common adult leukemia</div></td><td><span class="code-badge">9823</span></td><td><span class="recode-num">35012</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Other Lymphocytic Leukemia</div><div class="site-desc">Hairy cell leukemia &amp; other lymphocyte-based types</div></td><td><span class="code-badge">9820, 9832–9834, 9940</span></td><td><span class="recode-num">35013</span></td></tr>
+        <tr class="subgroup-row"><td colspan="3">Myeloid &amp; Monocytic Leukemia — affects myeloid cells (formed in bone marrow)</td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Acute Myeloid Leukemia (AML)</div><div class="site-desc">Aggressive cancer of myeloid blood cells</div></td><td><div class="code-wrap"><span class="code-badge">9840, 9861, 9865–9867, 9869</span><span class="code-badge">9871–9874, 9877–9879</span><span class="code-badge">9895–9898, 9910–9912, 9920</span></div></td><td><span class="recode-num">35021</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Acute Monocytic Leukemia</div><div class="site-desc">AML subtype with monocyte-like cancer cells</div></td><td><span class="code-badge">9891</span></td><td><span class="recode-num">35031</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Chronic Myeloid Leukemia (CML)</div><div class="site-desc">Slow-growing; often linked to the Philadelphia chromosome</div></td><td><span class="code-badge">9863, 9875–9876, 9945–9946</span></td><td><span class="recode-num">35022</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Other Myeloid/Monocytic Leukemia</div><div class="site-desc">Myeloid leukemia not elsewhere classified</div></td><td><span class="code-badge">9860, 9930</span></td><td><span class="recode-num">35023</span></td></tr>
+        <tr class="subgroup-row"><td colspan="3">Other Leukemia</td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Other Acute Leukemia</div><div class="site-desc">Biphenotypic &amp; other acute leukemias not classified above</div></td><td><span class="code-badge">9801, 9805–9809, 9931</span></td><td><span class="recode-num">35041</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Aleukemic, Subleukemic &amp; NOS</div><div class="site-desc">Leukemia with few/no circulating cancer cells, or type unspecified</div></td><td><div class="code-wrap"><span class="code-badge">9733, 9742, 9800, 9831</span><span class="code-badge">9870, 9948, 9963–9964</span></div></td><td><span class="recode-num">35043</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- 17. MESOTHELIOMA -->
+  <div class="section-block t-misc">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Mesothelioma</h2>
+        <p>Cancer of the lining of lungs, abdomen or heart — often asbestos-related; histology-defined</p>
+      </div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Body Site</th><th>Histology Codes</th><th>SEER Site Recode</th></tr></thead>
+      <tbody>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Mesothelioma</div><div class="site-desc">Arises from mesothelial cells lining the chest, abdomen or heart sac</div></td><td><span class="code-badge">Hist: 9050–9055</span></td><td><span class="recode-num">36010</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- 18. KAPOSI SARCOMA -->
+  <div class="section-block t-misc">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Kaposi Sarcoma</h2>
+        <p>Blood vessel tumor — commonly associated with HIV/AIDS; histology-defined</p>
+      </div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Body Site</th><th>Histology Codes</th><th>SEER Site Recode</th></tr></thead>
+      <tbody>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Kaposi Sarcoma</div><div class="site-desc">Tumor of blood vessel walls; can appear on skin or internal organs</div></td><td><span class="code-badge">Hist: 9140</span></td><td><span class="recode-num">36020</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- 19. MISCELLANEOUS -->
+  <div class="section-block t-misc">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Miscellaneous</h2>
+        <p>Cancers not classifiable elsewhere — unknown or overlapping primary sites</p>
+      </div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Body Site</th><th>ICD-O-3 Site / Histology Codes</th><th>SEER Site Recode</th></tr></thead>
+      <tbody>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Miscellaneous / Unknown Primary</div><div class="site-desc">Ill-defined sites, unknown origin, or cancers spanning multiple systems</div><span class="excl-sub-banner">Site codes C760–C768, C809, C420–C424, C770–C779 excl. hist 9050–9055, 9140, 9590–9993; hist 9740–9741, 9749–9769, 9950, 9960–9993 apply to any site</span></td><td><div class="code-wrap"><span class="code-badge">C760–C768, C809</span><span class="code-badge">C420–C424, C770–C779</span><span class="code-badge">Hist: 9740–9741, 9749–9769</span><span class="code-badge">9950, 9960–9993</span></div></td><td><span class="recode-num">37000</span></td></tr>
+        <tr><td><div class="site-name"><span class="site-dot"></span>Invalid Code</div><div class="site-desc">Site or histology code outside valid range or not found in this table</div></td><td><span class="code-badge">—</span></td><td><span class="recode-num">99999</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="footnotes">
+    * Updated for hematopoietic codes per <em>WHO Classification of Tumours of Haematopoietic and Lymphoid Tissues (2008)</em>.&nbsp;&nbsp;
+    ^ Some codes subject to change based on evolving ICD-O-3 coding rules.&nbsp;&nbsp;
+    NOS = Not Otherwise Specified.&nbsp;&nbsp;
+    Excl. hist = Excluding listed ICD-O-3 histology (Type) codes from that grouping.
+  </div>
+  <p class="source-note">Source: <a href="https://seer.cancer.gov/siterecode/icdo3_dwhoheme/index.html">seer.cancer.gov</a> — SEER Site Recode ICD-O-3/WHO 2008</p>
+
+</div>
+
+<script>
+(function() {
+  const input = document.getElementById('search-input');
+  const clearBtn = document.getElementById('search-clear');
+  const stats = document.getElementById('search-stats');
+  const sections = document.querySelectorAll('.section-block');
+  const expandBtn = document.getElementById('expand-all');
+  const collapseBtn = document.getElementById('collapse-all');
+
+  /* ── COLLAPSE / EXPAND ── */
+  sections.forEach(section => {
+    const header = section.querySelector('.section-header');
+    if (!header) return;
+    header.addEventListener('click', (e) => {
+      // ignore clicks on links/buttons inside the header
+      if (e.target.closest('a, button, input')) return;
+      section.classList.toggle('collapsed');
+    });
+  });
+
+  expandBtn.addEventListener('click', () => {
+    sections.forEach(s => s.classList.remove('collapsed'));
+  });
+  collapseBtn.addEventListener('click', () => {
+    sections.forEach(s => s.classList.add('collapsed'));
+  });
+
+  /* ── SEARCH ── */
+  const rowData = [];
+  sections.forEach(section => {
+    section.querySelectorAll('tbody tr').forEach(row => {
+      if (row.classList.contains('subgroup-row') || row.classList.contains('parentgroup-row')) return;
+      rowData.push({
+        row: row,
+        section: section,
+        text: row.textContent.toLowerCase()
+      });
+    });
+  });
+
+  const sectionData = [];
+  sections.forEach(section => {
+    const headerTxt = (section.querySelector('.section-title-wrap')?.textContent || '').toLowerCase();
+    sectionData.push({ section: section, text: headerTxt });
+  });
+
+  function clearHighlights() {
+    // Replace each mark with its text content, then merge adjacent text nodes
+    document.querySelectorAll('mark.search-mark').forEach(mark => {
+      const textNode = document.createTextNode(mark.textContent);
+      mark.parentNode.replaceChild(textNode, mark);
+    });
+    // Normalize so adjacent text nodes get merged back together
+    document.querySelectorAll('.section-block').forEach(s => s.normalize());
+  }
+
+  function escapeRegExp(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function highlight(el, query) {
+    if (!query) return;
+    const re = new RegExp(escapeRegExp(query), 'gi');
+    // Collect all text nodes first, then modify (to avoid live-DOM issues during walk)
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+      acceptNode: (n) => {
+        if (n.parentElement.closest('script, style, mark')) return NodeFilter.FILTER_REJECT;
+        return n.nodeValue.toLowerCase().includes(query) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      }
+    });
+    const targets = [];
+    let n;
+    while (n = walker.nextNode()) targets.push(n);
+
+    targets.forEach(textNode => {
+      const text = textNode.nodeValue;
+      const frag = document.createDocumentFragment();
+      let lastIndex = 0;
+      let match;
+      re.lastIndex = 0;
+      while ((match = re.exec(text)) !== null) {
+        if (match.index > lastIndex) {
+          frag.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+        }
+        const mark = document.createElement('mark');
+        mark.className = 'search-mark';
+        mark.textContent = match[0];
+        frag.appendChild(mark);
+        lastIndex = match.index + match[0].length;
+        // Avoid infinite loops on zero-length matches
+        if (match.index === re.lastIndex) re.lastIndex++;
+      }
+      if (lastIndex < text.length) {
+        frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+      }
+      textNode.parentNode.replaceChild(frag, textNode);
+    });
+  }
+
+  function filter() {
+    const q = input.value.trim().toLowerCase();
+    clearHighlights();
+
+    if (!q) {
+      rowData.forEach(r => r.row.classList.remove('row-hidden'));
+      sections.forEach(s => s.classList.remove('section-hidden'));
+      stats.textContent = '';
+      return;
+    }
+
+    let visibleRowCount = 0;
+    const sectionHasMatch = new Map();
+
+    rowData.forEach(r => {
+      const matches = r.text.includes(q);
+      if (matches) {
+        r.row.classList.remove('row-hidden');
+        sectionHasMatch.set(r.section, true);
+        visibleRowCount++;
+      } else {
+        r.row.classList.add('row-hidden');
+      }
+    });
+
+    sectionData.forEach(sd => {
+      if (sd.text.includes(q)) {
+        sectionHasMatch.set(sd.section, true);
+        sd.section.querySelectorAll('tbody tr').forEach(row => {
+          if (!row.classList.contains('subgroup-row') && !row.classList.contains('parentgroup-row') && row.classList.contains('row-hidden')) {
+            row.classList.remove('row-hidden');
+            visibleRowCount++;
+          }
+        });
+      }
+    });
+
+    sections.forEach(s => {
+      if (sectionHasMatch.get(s)) {
+        s.classList.remove('section-hidden');
+        s.classList.remove('collapsed'); // auto-expand sections with hits
+      } else {
+        s.classList.add('section-hidden');
+      }
+    });
+
+    rowData.forEach(r => {
+      if (!r.row.classList.contains('row-hidden')) {
+        highlight(r.row, q);
+      }
+    });
+
+    stats.textContent = visibleRowCount === 0
+      ? 'No matches found.'
+      : `${visibleRowCount} matching row${visibleRowCount === 1 ? '' : 's'} across ${[...sectionHasMatch.keys()].length} section${[...sectionHasMatch.keys()].length === 1 ? '' : 's'}.`;
+  }
+
+  let debounceTimer;
+  input.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(filter, 80);
+  });
+
+  clearBtn.addEventListener('click', () => {
+    input.value = '';
+    filter();
+    input.focus();
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      input.value = '';
+      filter();
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
