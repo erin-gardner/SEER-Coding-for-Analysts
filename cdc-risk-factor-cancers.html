@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modifiable Risk Factor-Associated Cancers</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Risk factor palette — intuitive metaphor colors (Option 4) */
+    --alcohol:    #7a2830;  /* deep wine — wine/spirits */
+    --hpv:        #6a2e7a;  /* medical violet — viral/clinical */
+    --obesity:    #b85820;  /* orange — food/caloric */
+    --inactivity: #4a5a6a;  /* muted slate — stillness/sedentary */
+    --tobacco:    #3d2e28;  /* ash brown — burnt tobacco */
+
+    --bg: #edebe8;
+    --card: #ffffff;
+    --text-dark: #0e0c0a;
+    --text-mid: #2e2820;
+    --text-soft: #58504a;
+    --divider: #ccc8c2;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--text-dark);
+    padding: 16px 14px 36px;
+    font-size: 11px;
+  }
+
+  .page-wrap { max-width: 900px; margin: 0 auto; }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+  }
+  header p {
+    font-size: 10px;
+    color: var(--text-soft);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  /* ── OVERVIEW BOX ── */
+  .overview {
+    background: var(--card);
+    border: 1px solid var(--divider);
+    border-left: 5px solid #5a4a3a;
+    border-radius: 0 5px 5px 0;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    font-size: 10px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+  .overview strong { color: var(--text-dark); }
+
+  /* ── SEARCH ── */
+  .search-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--bg);
+    padding: 8px 0 10px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid var(--divider);
+  }
+  .search-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .search-input {
+    flex: 1;
+    font-family: inherit;
+    font-size: 13px;
+    padding: 8px 12px;
+    border: 1.5px solid var(--divider);
+    border-radius: 5px;
+    background: #fff;
+    color: var(--text-dark);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .search-input:focus { border-color: #7a8aa0; }
+  .search-clear {
+    font-size: 11px;
+    font-weight: 600;
+    background: #fff;
+    border: 1px solid var(--divider);
+    border-radius: 4px;
+    padding: 6px 10px;
+    cursor: pointer;
+    color: var(--text-mid);
+    font-family: inherit;
+  }
+  .search-clear:hover { background: #f4f0ec; }
+  .search-stats {
+    font-size: 10px;
+    color: var(--text-soft);
+    margin-top: 4px;
+    min-height: 12px;
+  }
+  mark.search-mark {
+    background: #fff3a0;
+    color: inherit;
+    padding: 0 1px;
+    border-radius: 2px;
+  }
+  .row-hidden { display: none !important; }
+  .section-hidden { display: none !important; }
+
+  /* ── COLLAPSE CONTROLS ── */
+  .collapse-controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 10px;
+  }
+  .collapse-controls button {
+    background: #fff;
+    border: 1px solid var(--divider);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-mid);
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .collapse-controls button:hover { background: #f4f0ec; }
+
+  /* ── SECTION BLOCKS ── */
+  .section-block {
+    background: var(--card);
+    border: 1px solid var(--divider);
+    border-radius: 5px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    page-break-inside: avoid;
+  }
+  .section-header {
+    display: flex;
+    align-items: stretch;
+    cursor: pointer;
+    user-select: none;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .section-header:hover .section-title-wrap {
+    background: color-mix(in srgb, var(--c) 14%, #fff);
+  }
+  .section-bar {
+    width: 6px;
+    flex-shrink: 0;
+    background: var(--c);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .chevron {
+    font-size: 14px;
+    color: var(--text-soft);
+    padding: 0 10px;
+    flex-shrink: 0;
+    align-self: center;
+    transition: transform 0.18s;
+    line-height: 1;
+  }
+  .section-block.collapsed .chevron { transform: rotate(-90deg); }
+  .section-block.collapsed .table-wrap { display: none; }
+  .section-title-wrap {
+    padding: 7px 12px;
+    flex: 1;
+    background: color-mix(in srgb, var(--c) 8%, #fff);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .section-title-wrap h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--c);
+    letter-spacing: -0.1px;
+    line-height: 1.15;
+  }
+  .section-title-wrap p {
+    font-size: 10px;
+    color: var(--text-soft);
+    margin-top: 2px;
+  }
+  .section-title-wrap .risk-evidence {
+    font-size: 9px;
+    font-weight: 600;
+    margin-top: 3px;
+    color: color-mix(in srgb, var(--c) 80%, #000);
+  }
+
+  /* ── TABLE ── */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { border-top: 1px solid var(--divider); }
+  thead th {
+    padding: 4px 10px;
+    text-align: left;
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: var(--text-soft);
+    background: #f2eeea;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  tbody tr { border-top: 1px solid var(--divider); }
+  tbody tr:hover { background: #faf8f5; }
+  tbody td {
+    padding: 5px 10px;
+    font-size: 10.5px;
+    vertical-align: top;
+    line-height: 1.35;
+  }
+  td:nth-child(2), td:nth-child(3), td:nth-child(4) {
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  .cancer-name {
+    font-weight: 700;
+    font-size: 10.5px;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .cancer-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 3px;
+    background: var(--c);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .cancer-desc {
+    font-size: 9px;
+    color: var(--text-soft);
+    font-weight: 400;
+    margin-top: 1px;
+    padding-left: 12px;
+  }
+  .code-wrap { display: flex; flex-direction: column; gap: 2px; }
+  .code-badge {
+    display: inline-block;
+    font-size: 9px;
+    font-family: 'Courier New', monospace;
+    background: #ddd8d0;
+    color: #0e0c0a;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 700;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Sex flags */
+  .sex-flag {
+    display: inline-block;
+    font-size: 8.5px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-left: 6px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    vertical-align: 1px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  /* When sex-flag sits directly in a table cell as a restriction, no left margin */
+  td > .sex-flag:first-child { margin-left: 0; vertical-align: 0; }
+  .sex-flag.female { background: #c4548a; color: #fff; }
+  .sex-flag.male   { background: #2a6a9a; color: #fff; }
+
+  /* Restriction badges */
+  .restriction {
+    display: inline-block;
+    font-size: 8.5px;
+    font-weight: 700;
+    background: #e8e0d4;
+    color: #2e2820;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-top: 3px;
+    margin-right: 3px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .restriction.micro {
+    background: #dde8f0;
+    color: #0a2e48;
+  }
+  .restriction.micro .seer-code {
+    display: block;
+    font-size: 7.5px;
+    font-weight: 600;
+    color: #4a5a6a;
+    margin-top: 1px;
+    letter-spacing: 0.1px;
+    text-transform: none;
+  }
+  .restriction.age {
+    background: #e8f0d8;
+    color: #1a3a0a;
+  }
+
+  /* Analyst notes */
+  .analyst-note {
+    display: block;
+    font-size: 8.5px;
+    font-weight: 600;
+    color: #5a2a18;
+    background: #fdf0e0;
+    border-left: 3px solid #c46028;
+    padding: 3px 6px 3px 8px;
+    margin-top: 4px;
+    margin-left: 12px;
+    border-radius: 0 3px 3px 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .analyst-note::before {
+    content: "↳ Analyst note: ";
+    font-weight: 700;
+    color: #8a4018;
+  }
+
+  /* ── THEMES ── */
+  .t-alcohol    { --c: var(--alcohol); }
+  .t-hpv        { --c: var(--hpv); }
+  .t-obesity    { --c: var(--obesity); }
+  .t-inactivity { --c: var(--inactivity); }
+  .t-tobacco    { --c: var(--tobacco); }
+
+  /* ── COMPACT STANDARD-DEFINITION LIST ──
+     Rows that use the default histology range with no other restrictions
+     are displayed in a tighter grid format. Detailed rows below show
+     deviations from the standard. */
+  .standard-block {
+    background: color-mix(in srgb, var(--c) 4%, #fff);
+    border-bottom: 1px solid var(--divider);
+    padding: 8px 12px 10px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .standard-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--c) 70%, #2a2a2a);
+    margin-bottom: 6px;
+  }
+  .standard-sub {
+    font-size: 9px;
+    font-weight: 400;
+    color: var(--text-soft);
+    letter-spacing: 0.1px;
+    text-transform: none;
+    margin-top: 1px;
+  }
+  .standard-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 3px 14px;
+    align-items: baseline;
+  }
+  .standard-grid .std-name {
+    font-size: 11px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .standard-grid .std-name::before {
+    content: "";
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--c);
+    flex-shrink: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .standard-grid .std-codes {
+    font-size: 9.5px;
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    color: #2e2820;
+    background: #ddd8d0;
+    padding: 1px 6px;
+    border-radius: 3px;
+    white-space: nowrap;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .notable-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    padding: 7px 12px 4px;
+    background: #faf8f5;
+    border-top: 1px solid var(--divider);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ── FOOTNOTES ── */
+  .footnotes {
+    font-size: 9px;
+    color: var(--text-soft);
+    padding: 10px 0 0;
+    line-height: 1.8;
+  }
+  .footnotes ol { padding-left: 16px; }
+  .footnotes li { margin-bottom: 3px; }
+  .source-note {
+    font-size: 9px;
+    color: var(--text-soft);
+    text-align: right;
+    margin-top: 4px;
+  }
+  .source-note a { color: var(--text-soft); }
+
+  /* ── PAF BADGE in section header ── */
+  .paf-badge {
+    display: inline-block;
+    background: color-mix(in srgb, var(--c) 18%, #fff);
+    color: color-mix(in srgb, var(--c) 90%, #000);
+    border: 1px solid color-mix(in srgb, var(--c) 40%, #fff);
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-top: 4px;
+    margin-right: 4px;
+    letter-spacing: 0.2px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .paf-badge::before {
+    content: "PAF ≈ ";
+    font-weight: 600;
+    opacity: 0.85;
+  }
+
+  /* ── CROSS-REFERENCE MATRIX ── */
+  .matrix-card {
+    background: var(--card);
+    border: 1px solid var(--divider);
+    border-radius: 5px;
+    padding: 14px 16px 12px;
+    margin-bottom: 12px;
+    page-break-inside: avoid;
+  }
+  .matrix-wrap { overflow-x: auto; }
+  table.matrix {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 10px;
+  }
+  table.matrix th, table.matrix td {
+    border: 1px solid #e0dcd6;
+    padding: 5px 6px;
+    text-align: center;
+    vertical-align: middle;
+  }
+  table.matrix thead th {
+    background: #f4f0ec;
+    font-size: 9.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--text-mid);
+    padding: 6px 6px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  table.matrix th.rf-col {
+    color: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  table.matrix th.rf-col.alc    { background: #7a2830; }
+  table.matrix th.rf-col.hpv    { background: #6a2e7a; }
+  table.matrix th.rf-col.obs    { background: #b85820; }
+  table.matrix th.rf-col.pa     { background: #4a5a6a; }
+  table.matrix th.rf-col.tob    { background: #3d2e28; }
+  table.matrix td.cancer-cell {
+    text-align: left;
+    font-weight: 700;
+    background: #fafaf6;
+    padding-left: 8px;
+    white-space: nowrap;
+  }
+  table.matrix .check {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    display: inline-block;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  table.matrix .check.alc  { background: #7a2830; }
+  table.matrix .check.hpv  { background: #6a2e7a; }
+  table.matrix .check.obs  { background: #b85820; }
+  table.matrix .check.pa   { background: #4a5a6a; }
+  table.matrix .check.tob  { background: #3d2e28; }
+  table.matrix .check.diff {
+    background: transparent;
+    border: 2px solid currentColor;
+    width: 12px; height: 12px;
+  }
+  table.matrix td.has-match { background: color-mix(in srgb, var(--cell-c) 8%, #fff); }
+  table.matrix td.empty {
+    background: #fafaf6;
+    color: #ccc8c2;
+  }
+  table.matrix td .matrix-note {
+    display: block;
+    font-size: 8px;
+    color: var(--text-soft);
+    margin-top: 2px;
+    line-height: 1.2;
+  }
+  .matrix-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    margin-top: 10px;
+    font-size: 9.5px;
+    color: var(--text-mid);
+  }
+  .matrix-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .matrix-legend-item .swatch {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+  }
+  .matrix-legend-item .swatch.diff {
+    background: transparent;
+    border: 2px solid #3d2e28;
+    width: 10px; height: 10px;
+  }
+
+  /* ── CROSS-REFERENCE LEGEND ── */
+  .rf-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    padding: 8px 10px;
+    background: var(--card);
+    border: 1px solid var(--divider);
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 9.5px;
+  }
+  .rf-legend-title {
+    width: 100%;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin-bottom: 2px;
+  }
+  .rf-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+    color: var(--text-mid);
+  }
+  .rf-swatch {
+    width: 12px; height: 12px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  @media print {
+    @page { margin: 9mm 8mm; size: A4; }
+    body { background: white !important; padding: 0; }
+    .page-wrap { max-width: 100%; }
+    .section-block { page-break-inside: avoid; }
+    .section-block.collapsed .table-wrap { display: block !important; }
+    .search-wrap, .collapse-controls { display: none !important; }
+    .chevron { display: none !important; }
+    tbody tr:hover { background: transparent !important; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <header style="margin-bottom:10px;">
+    <h1>Modifiable Risk Factor-Associated Cancers</h1>
+    <p>ICD-O-3 site and histology codes defining cancer types associated with five modifiable risk factors. Source: <strong>CDC / U.S. Cancer Statistics Public Use Database</strong> — updated May 29, 2025.</p>
+  </header>
+
+  <div class="overview">
+    <strong>Purpose:</strong> Cancer registries do not collect risk factor exposure data. These definitions identify cancer <em>types</em> linked to each risk factor by conclusive epidemiological evidence, enabling population-based burden estimates and cross-state comparisons. Rates calculated using these definitions can help identify high-burden communities and track the effectiveness of prevention efforts.
+    <br><br>
+    <strong>Note:</strong> Cancers appearing under multiple risk factors share the same ICD-O-3 codes across those definitions. The cross-reference matrix below shows which cancers appear under which risk factors. Further restrictions beyond those listed here may be appropriate depending on the analysis — see the SEER*Stat tutorial on merged variables.
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <div class="search-row">
+      <input type="text" id="search-input" class="search-input"
+             placeholder="Search by cancer name, risk factor, ICD-O-3 code, or keyword…"
+             autocomplete="off">
+      <button id="search-clear" class="search-clear" type="button">Clear</button>
+    </div>
+    <div id="search-stats" class="search-stats"></div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="rf-legend">
+    <div class="rf-legend-title">Risk Factor Color Key</div>
+    <div class="rf-legend-item"><div class="rf-swatch" style="background:#7a2830"></div>Alcohol</div>
+    <div class="rf-legend-item"><div class="rf-swatch" style="background:#6a2e7a"></div>HPV</div>
+    <div class="rf-legend-item"><div class="rf-swatch" style="background:#b85820"></div>Obesity</div>
+    <div class="rf-legend-item"><div class="rf-swatch" style="background:#4a5a6a"></div>Physical Inactivity</div>
+    <div class="rf-legend-item"><div class="rf-swatch" style="background:#3d2e28"></div>Tobacco</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       CROSS-REFERENCE MATRIX — cancers × risk factors
+  ════════════════════════════════════════════ -->
+  <div class="matrix-card">
+    <div class="matrix-legend" style="margin-top:0; margin-bottom:10px;">
+      <div class="matrix-legend-item"><span class="swatch" style="background:#5a504a"></span>Solid = appears under this risk factor (standard definition)</div>
+      <div class="matrix-legend-item"><span class="swatch diff"></span>Open ring = appears with different code/age/histology restrictions</div>
+    </div>
+
+    <div class="matrix-wrap">
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th style="text-align:left">Cancer Site</th>
+            <th class="rf-col alc">Alcohol</th>
+            <th class="rf-col hpv">HPV</th>
+            <th class="rf-col obs">Obesity</th>
+            <th class="rf-col pa">Phys. Inactivity</th>
+            <th class="rf-col tob">Tobacco</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="cancer-cell">Lip, Oral Cavity &amp; Pharynx</td>
+            <td><span class="check alc"></span></td>
+            <td><span class="check diff" style="color:#6a2e7a"></span><span class="matrix-note">Oropharyngeal squamous subset only</span></td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td><span class="check tob"></span></td>
+          </tr>
+          <tr>
+            <td class="cancer-cell">Esophagus</td>
+            <td><span class="check alc"></span></td>
+            <td class="empty">—</td>
+            <td><span class="check diff" style="color:#b85820"></span><span class="matrix-note">Adenocarcinoma only</span></td>
+            <td class="empty">—</td>
+            <td><span class="check tob"></span></td>
+          </tr>
+          <tr>
+            <td class="cancer-cell">Stomach</td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td><span class="check diff" style="color:#b85820"></span><span class="matrix-note">Gastric cardia (C16.0) only</span></td>
+            <td class="empty">—</td>
+            <td><span class="check tob"></span></td>
+          </tr>
+          <tr>
+            <td class="cancer-cell">Colon and Rectum</td>
+            <td><span class="check alc"></span></td>
+            <td class="empty">—</td>
+            <td><span class="check obs"></span></td>
+            <td><span class="check diff" style="color:#4a5a6a"></span><span class="matrix-note">Colon only (no rectum)</span></td>
+            <td><span class="check tob"></span></td>
+          </tr>
+          <tr>
+            <td class="cancer-cell">Anus / Rectum SCC</td>
+            <td class="empty">—</td>
+            <td><span class="check hpv"></span></td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+          </tr>
+          <tr>
+            <td class="cancer-cell">Liver</td>
+            <td><span class="check alc"></span></td>
+            <td class="empty">—</td>
+            <td><span class="check obs"></span></td>
+            <td class="empty">—</td>
+            <td><span class="check tob"></span></td>
+          </tr>
+          <tr>
+            <td class="cancer-cell">Gallbladder</td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td><span class="check obs"></span></td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+          </tr>
+          <tr>
+            <td class="cancer-cell">Pancreas</td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td><span class="check obs"></span></td>
+            <td class="empty">—</td>
+            <td><span class="check tob"></span></td>
+          </tr>
+          <tr>
+            <td class="cancer-cell">Larynx</td>
+            <td><span class="check alc"></span></td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td><span class="check tob"></span></td>
+          </tr>
+          <tr>
+            <td class="cancer-cell">Trachea, Lung &amp; Bronchus</td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td><span class="check tob"></span></td>
+          </tr>
+          <tr>
+            <td class="cancer-cell">Multiple Myeloma</td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td><span class="check obs"></span></td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+          </tr>
+          <tr>
+            <td class="cancer-cell">Breast (Female)</td>
+            <td><span class="check diff" style="color:#7a2830"></span><span class="matrix-note">All ages</span></td>
+            <td class="empty">—</td>
+            <td><span class="check diff" style="color:#b85820"></span><span class="matrix-note">Age ≥50 only</span></td>
+            <td><span class="check diff" style="color:#4a5a6a"></span><span class="matrix-note">Age ≥50 only</span></td>
+            <td class="empty">—</td>
+          </tr>
+          <tr>
+            <td class="cancer-cell">Vulva (SCC)</td>
+            <td class="empty">—</td>
+            <td><span class="check hpv"></span></td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+          </tr>
+          <tr>
+            <td class="cancer-cell">Vagina (SCC)</td>
+            <td class="empty">—</td>
+            <td><span class="check hpv"></span></td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+          </tr>
+          <tr>
+            <td class="cancer-cell">Cervix Uteri</td>
+            <td class="empty">—</td>
+            <td><span class="check diff" style="color:#6a2e7a"></span><span class="matrix-note">Broader hist (incl. adeno)</span></td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td><span class="check tob"></span></td>
+          </tr>
+          <tr>
+            <td class="cancer-cell">Corpus &amp; Uterus, NOS</td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td><span class="check obs"></span></td>
+            <td><span class="check pa"></span></td>
+            <td class="empty">—</td>
+          </tr>
+          <tr>
+            <td class="cancer-cell">Ovary</td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td><span class="check obs"></span></td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+          </tr>
+          <tr>
+            <td class="cancer-cell">Penis (SCC)</td>
+            <td class="empty">—</td>
+            <td><span class="check hpv"></span></td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+          </tr>
+          <tr>
+            <td class="cancer-cell">Kidney</td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td><span class="check diff" style="color:#b85820"></span><span class="matrix-note">Kidney only (no renal pelvis)</span></td>
+            <td class="empty">—</td>
+            <td><span class="check diff" style="color:#3d2e28"></span><span class="matrix-note">Kidney + renal pelvis</span></td>
+          </tr>
+          <tr>
+            <td class="cancer-cell">Urinary Bladder</td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td><span class="check tob"></span></td>
+          </tr>
+          <tr>
+            <td class="cancer-cell">Meningioma</td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td><span class="check obs"></span></td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+          </tr>
+          <tr>
+            <td class="cancer-cell">Thyroid</td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td><span class="check obs"></span></td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+          </tr>
+          <tr>
+            <td class="cancer-cell">Acute Myeloid Leukemia</td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td class="empty">—</td>
+            <td><span class="check tob"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="collapse-controls">
+    <button id="expand-all" type="button">Expand all</button>
+    <button id="collapse-all" type="button">Collapse all</button>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       1. ALCOHOL
+  ════════════════════════════════════════════ -->
+  <div class="section-block t-alcohol">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Alcohol-Associated Cancers</h2>
+        <p>Cancers with conclusive evidence linking alcohol consumption as a causal risk factor</p>
+        <div class="risk-evidence">Evidence basis: IARC Monographs Vol. 100E (2012); Vol. 96 (2010)</div>
+        <div><span class="paf-badge" title="Source: Islami et al. 2024 (CA Cancer J Clin) — 2019 US data, adults ≥30 yrs">5.4% of US cancer cases</span></div>
+      </div>
+    </div>
+    <div class="standard-block">
+      <div class="standard-label">Standard Definitions
+        <span class="standard-sub">Site codes shown below use the default histology range (8000–9049, 9056–9139, 9141–9589) with no microscopic, age, or other restrictions.</span>
+      </div>
+      <div class="standard-grid">
+        <span class="std-name">Lip, Oral Cavity &amp; Pharynx</span><span class="std-codes">C00.0–C14.8</span>
+        <span class="std-name">Esophagus</span><span class="std-codes">C15.0–C15.9</span>
+        <span class="std-name">Colon and Rectum</span><span class="std-codes">C18.0–C20.9, C26.0</span>
+        <span class="std-name">Liver</span><span class="std-codes">C22.0</span>
+        <span class="std-name">Larynx</span><span class="std-codes">C32.0–C32.9</span>
+      </div>
+    </div>
+    <div class="notable-label">Notable Restrictions &amp; Variations</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Cancer</th><th>ICD-O-3 Site Codes</th><th>ICD-O-3 Histology Codes</th><th>Restrictions</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="cancer-name"><span class="cancer-dot"></span>Female Breast</div>
+            <div class="cancer-desc">All female breast cancers — includes all ages (not restricted to postmenopausal)</div>
+            <span class="analyst-note">Restrict denominator to <strong>females only</strong>. This definition covers all ages; contrast with the Obesity and Physical Inactivity definitions which restrict to postmenopausal (age ≥50).</span>
+          </td>
+          <td><span class="code-badge">C50.0–C50.9</span></td>
+          <td><span class="code-badge">8000–9049</span><br><span class="code-badge">9056–9139</span><br><span class="code-badge">9141–9589</span></td>
+          <td><span class="sex-flag female">♀ Female only</span></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       2. HPV
+  ════════════════════════════════════════════ -->
+  <div class="section-block t-hpv">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>HPV-Associated Cancers</h2>
+        <p>Cancers causally linked to human papillomavirus (HPV) infection</p>
+        <div class="risk-evidence">Evidence basis: IARC Monographs Vol. 90 (2007); Watson et al. 2008; Saraiya et al. 2015; Viens et al. 2016</div>
+        <div><span class="paf-badge" title="Source: Islami et al. 2024 — HPV-specific PAF; all infections combined ≈ 3.4%">~1.8% of US cancer cases (HPV alone)</span></div>
+      </div>
+    </div>
+    <div class="standard-block">
+      <div class="standard-label">All Rows Have Notable Restrictions
+        <span class="standard-sub">Every HPV-associated cancer definition uses a narrow histology range (squamous cell only, 8050–8086 &amp; 8120–8131) and requires microscopic confirmation. Cervical carcinoma uses a broader histology range (8010–8671, 8940–8941). See full table below.</span>
+      </div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Cancer</th><th>ICD-O-3 Site Codes</th><th>ICD-O-3 Histology Codes</th><th>Restrictions</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="cancer-name"><span class="cancer-dot"></span>Oropharyngeal Squamous Cell Carcinoma</div>
+            <div class="cancer-desc">Base of tongue, soft palate, tonsillar region, posterior pharyngeal wall — squamous histologies only</div>
+            <span class="analyst-note">Note narrow histology restriction: squamous cell and transitional cell types only (8050–8086, 8120–8131). This excludes lymphomas and salivary gland tumors of the same sites.</span>
+          </td>
+          <td><div class="code-wrap">
+            <span class="code-badge">C01.9, C02.4, C02.8</span>
+            <span class="code-badge">C05.1–C05.2</span>
+            <span class="code-badge">C09.0–C09.1, C09.8–C09.9</span>
+            <span class="code-badge">C10.0–C10.4, C10.8–C10.9</span>
+            <span class="code-badge">C14.0, C14.2, C14.8</span>
+          </div></td>
+          <td><span class="code-badge">8050–8086</span><br><span class="code-badge">8120–8131</span></td>
+          <td><span class="restriction micro">Microscopically confirmed<span class="seer-code">SEER var: <strong>Diagnostic Confirmation</strong> (NAACCR #490) = 1, 2, 3, or 4</span></span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cancer-name"><span class="cancer-dot"></span>Anal &amp; Rectal Squamous Cell Carcinoma</div>
+            <div class="cancer-desc">Anus, anal canal, anorectum, and rectum — squamous histologies only</div>
+            <span class="analyst-note">Includes rectum (C20.9) in this definition — distinct from colorectal groupings which typically separate anus. The HPV-associated rectal cancers are squamous cell only, not adenocarcinoma.</span>
+          </td>
+          <td><div class="code-wrap">
+            <span class="code-badge">C21.0–C21.8</span>
+            <span class="code-badge">C20.9</span>
+          </div></td>
+          <td><span class="code-badge">8050–8086</span><br><span class="code-badge">8120–8131</span></td>
+          <td><span class="restriction micro">Microscopically confirmed<span class="seer-code">SEER var: <strong>Diagnostic Confirmation</strong> (NAACCR #490) = 1, 2, 3, or 4</span></span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cancer-name"><span class="cancer-dot"></span>Vulvar Squamous Cell Carcinoma</div>
+            <div class="cancer-desc">External female genitalia — squamous histologies only</div>
+          </td>
+          <td><span class="code-badge">C51.0–C51.9</span></td>
+          <td><span class="code-badge">8050–8086</span><br><span class="code-badge">8120–8131</span></td>
+          <td><span class="sex-flag female">♀ Female only</span><br><span class="restriction micro">Microscopically confirmed<span class="seer-code">SEER var: <strong>Diagnostic Confirmation</strong> (NAACCR #490) = 1, 2, 3, or 4</span></span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cancer-name"><span class="cancer-dot"></span>Vaginal Squamous Cell Carcinoma</div>
+            <div class="cancer-desc">Vaginal canal — squamous histologies only</div>
+          </td>
+          <td><span class="code-badge">C52.9</span></td>
+          <td><span class="code-badge">8050–8086</span><br><span class="code-badge">8120–8131</span></td>
+          <td><span class="sex-flag female">♀ Female only</span><br><span class="restriction micro">Microscopically confirmed<span class="seer-code">SEER var: <strong>Diagnostic Confirmation</strong> (NAACCR #490) = 1, 2, 3, or 4</span></span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cancer-name"><span class="cancer-dot"></span>Cervical Carcinoma</div>
+            <div class="cancer-desc">All cervical carcinomas — broader histology range than other HPV sites (includes adenocarcinoma)</div>
+            <span class="analyst-note">Histology restriction (8010–8671, 8940–8941) is <strong>broader</strong> than the squamous-only restriction for other HPV sites — cervical adenocarcinoma is also HPV-associated. All histologies in range are included.</span>
+          </td>
+          <td><span class="code-badge">C53.0–C53.9</span></td>
+          <td><span class="code-badge">8010–8671</span><br><span class="code-badge">8940–8941</span></td>
+          <td><span class="sex-flag female">♀ Female only</span><br><span class="restriction micro">Microscopically confirmed<span class="seer-code">SEER var: <strong>Diagnostic Confirmation</strong> (NAACCR #490) = 1, 2, 3, or 4</span></span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cancer-name"><span class="cancer-dot"></span>Penile Squamous Cell Carcinoma</div>
+            <div class="cancer-desc">External male genitalia — squamous histologies only</div>
+          </td>
+          <td><span class="code-badge">C60.0–C60.9</span></td>
+          <td><span class="code-badge">8050–8086</span><br><span class="code-badge">8120–8131</span></td>
+          <td><span class="sex-flag male">♂ Male only</span><br><span class="restriction micro">Microscopically confirmed<span class="seer-code">SEER var: <strong>Diagnostic Confirmation</strong> (NAACCR #490) = 1, 2, 3, or 4</span></span></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       3. OBESITY
+  ════════════════════════════════════════════ -->
+  <div class="section-block t-obesity">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Obesity-Associated Cancers</h2>
+        <p>Cancers with evidence linking excess body weight (overweight/obesity) as a causal risk factor</p>
+        <div class="risk-evidence">Evidence basis: IARC Working Group (Lauby-Secretan et al. 2016); WCRF/AICR Continuous Update Project 2018; Eheman et al. 2012</div>
+        <div><span class="paf-badge" title="Source: Islami et al. 2024 (CA Cancer J Clin) — excess body weight, 2019 US data">7.6% of US cancer cases</span></div>
+      </div>
+    </div>
+    <div class="standard-block">
+      <div class="standard-label">Standard Definitions
+        <span class="standard-sub">Site codes shown below use the default histology range (8000–9049, 9056–9139, 9141–9589) with no microscopic or age restrictions beyond those noted. Sex restrictions apply to anatomically sex-specific sites.</span>
+      </div>
+      <div class="standard-grid">
+        <span class="std-name">Colon and Rectum</span><span class="std-codes">C18.0–C20.9, C26.0</span>
+        <span class="std-name">Liver</span><span class="std-codes">C22.0</span>
+        <span class="std-name">Gallbladder</span><span class="std-codes">C23.9</span>
+        <span class="std-name">Pancreas</span><span class="std-codes">C25.0–C25.9</span>
+        <span class="std-name">Corpus Uteri &amp; Uterus, NOS <span class="sex-flag female" style="margin-left:4px">♀</span></span><span class="std-codes">C54.0–C54.9, C55.9</span>
+        <span class="std-name">Ovary <span class="sex-flag female" style="margin-left:4px">♀</span></span><span class="std-codes">C56.9</span>
+        <span class="std-name">Thyroid</span><span class="std-codes">C73.9</span>
+      </div>
+    </div>
+    <div class="notable-label">Notable Restrictions &amp; Variations</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Cancer</th><th>ICD-O-3 Site Codes</th><th>ICD-O-3 Histology Codes</th><th>Restrictions</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="cancer-name"><span class="cancer-dot"></span>Esophageal Adenocarcinoma</div>
+            <div class="cancer-desc">Adenocarcinoma subtype only — squamous cell esophageal cancer is not obesity-associated</div>
+            <span class="analyst-note">Histology restriction (8140–8575) captures adenocarcinoma and related glandular types. <strong>Requires microscopically confirmed cases.</strong> Contrast with Alcohol/Tobacco esophagus definitions which include all histologies.</span>
+          </td>
+          <td><span class="code-badge">C15.0–C15.9</span></td>
+          <td><span class="code-badge">8140–8575</span></td>
+          <td><span class="restriction micro">Microscopically confirmed<span class="seer-code">SEER var: <strong>Diagnostic Confirmation</strong> (NAACCR #490) = 1, 2, 3, or 4</span></span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cancer-name"><span class="cancer-dot"></span>Gastric Cardia</div>
+            <div class="cancer-desc">Upper portion of the stomach at the junction with the esophagus — <strong>not</strong> full stomach</div>
+            <span class="analyst-note">Only C16.0 (cardia) is included — not the full stomach (C16.0–C16.9). Obesity is specifically linked to the gastric cardia subsite. Tobacco's stomach definition includes the full stomach.</span>
+          </td>
+          <td><span class="code-badge">C16.0</span></td>
+          <td><span class="code-badge">8000–9049</span><br><span class="code-badge">9056–9139</span><br><span class="code-badge">9141–9589</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cancer-name"><span class="cancer-dot"></span>Multiple Myeloma</div>
+            <div class="cancer-desc">Plasma cell malignancy of the bone marrow — histology 9732 only</div>
+            <span class="analyst-note">Narrower than the SEER myeloma recode 34000 which includes hist 9731, 9732, and 9734. This definition uses <strong>only 9732</strong>.</span>
+          </td>
+          <td><span class="code-badge">C42.1</span></td>
+          <td><span class="code-badge">9732</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cancer-name"><span class="cancer-dot"></span>Postmenopausal Female Breast</div>
+            <div class="cancer-desc">Breast cancer in women aged ≥50 years (proxy for postmenopausal status)</div>
+            <span class="analyst-note">Restrict denominator to <strong>females aged ≥50 only</strong>. Age 50 is used as a proxy for postmenopausal status in population-based data. Compare with the Alcohol definition which covers all ages.</span>
+          </td>
+          <td><span class="code-badge">C50.0–C50.9</span></td>
+          <td><span class="code-badge">8000–9049</span><br><span class="code-badge">9056–9139</span><br><span class="code-badge">9141–9589</span></td>
+          <td><span class="sex-flag female">♀ Female only</span><br><span class="restriction age">Age ≥50 years</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cancer-name"><span class="cancer-dot"></span>Kidney</div>
+            <div class="cancer-desc">Kidney parenchyma — <strong>renal pelvis not included</strong> in this definition</div>
+            <span class="analyst-note">C64.9 only — does not include renal pelvis (C65.9). Contrast with Tobacco definition which includes both kidney and renal pelvis (C64.9–C65.9).</span>
+          </td>
+          <td><span class="code-badge">C64.9</span></td>
+          <td><span class="code-badge">8000–9049</span><br><span class="code-badge">9056–9139</span><br><span class="code-badge">9141–9589</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cancer-name"><span class="cancer-dot"></span>Meningioma</div>
+            <div class="cancer-desc">Tumor of the meninges (brain/spinal cord lining) — histology 9530–9539 only</div>
+            <span class="analyst-note">Uses the same site and histology codes as the SEER CNS recode 31040 (Cranial Nerves / Other Nervous System meningioma subset). Not included in any other risk factor definition here.</span>
+          </td>
+          <td><div class="code-wrap"><span class="code-badge">C70.0–C70.1</span><span class="code-badge">C70.9</span></div></td>
+          <td><span class="code-badge">9530–9539</span></td>
+          <td>—</td>
+        </tr>
+      </tbody>
+    </table></div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       4. PHYSICAL INACTIVITY
+  ════════════════════════════════════════════ -->
+  <div class="section-block t-inactivity">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Physical Inactivity-Associated Cancers</h2>
+        <p>Cancers with evidence that insufficient physical activity is a causal risk factor</p>
+        <div class="risk-evidence">Evidence basis: WCRF/AICR Continuous Update Project 2018; Eheman et al. 2012</div>
+        <div><span class="paf-badge" title="Source: Islami et al. 2024 (CA Cancer J Clin) — 2019 US data">3.1% of US cancer cases</span></div>
+      </div>
+    </div>
+    <div class="standard-block">
+      <div class="standard-label">Standard Definition (Females Only)
+        <span class="standard-sub">Uses the default histology range (8000–9049, 9056–9139, 9141–9589).</span>
+      </div>
+      <div class="standard-grid">
+        <span class="std-name">Corpus Uteri &amp; Uterus, NOS <span class="sex-flag female" style="margin-left:4px">♀</span></span><span class="std-codes">C54.0–C54.9, C55.9</span>
+      </div>
+    </div>
+    <div class="notable-label">Notable Restrictions &amp; Variations</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Cancer</th><th>ICD-O-3 Site Codes</th><th>ICD-O-3 Histology Codes</th><th>Restrictions</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="cancer-name"><span class="cancer-dot"></span>Colon</div>
+            <div class="cancer-desc">Colon only — <strong>rectum excluded</strong> from this risk factor definition</div>
+            <span class="analyst-note"><strong>Colon only (C18.0–C18.9, C26.0)</strong> — physical inactivity evidence is strongest for colon, not rectum. Contrast with Alcohol, Obesity, and Tobacco which use the combined colon and rectum definition (C18.0–C20.9, C26.0).</span>
+          </td>
+          <td><div class="code-wrap"><span class="code-badge">C18.0–C18.9</span><span class="code-badge">C26.0</span></div></td>
+          <td><span class="code-badge">8000–9049</span><br><span class="code-badge">9056–9139</span><br><span class="code-badge">9141–9589</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cancer-name"><span class="cancer-dot"></span>Postmenopausal Female Breast</div>
+            <div class="cancer-desc">Breast cancer in women aged ≥50 (proxy for postmenopausal status)</div>
+            <span class="analyst-note">Restrict denominator to <strong>females aged ≥50 only</strong>. Identical definition to the Obesity postmenopausal breast definition.</span>
+          </td>
+          <td><span class="code-badge">C50.0–C50.9</span></td>
+          <td><span class="code-badge">8000–9049</span><br><span class="code-badge">9056–9139</span><br><span class="code-badge">9141–9589</span></td>
+          <td><span class="sex-flag female">♀ Female only</span><br><span class="restriction age">Age ≥50 years</span></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       5. TOBACCO
+  ════════════════════════════════════════════ -->
+  <div class="section-block t-tobacco">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Tobacco-Associated Cancers</h2>
+        <p>Cancers causally linked to tobacco use — the single largest category by number of sites</p>
+        <div class="risk-evidence">Evidence basis: U.S. Surgeon General Report — Health Consequences of Smoking (2014)</div>
+        <div><span class="paf-badge" title="Source: Islami et al. 2024 (CA Cancer J Clin) — 2019 US data — cigarette smoking">19.3% of US cancer cases</span></div>
+      </div>
+    </div>
+    <div class="standard-block">
+      <div class="standard-label">Standard Definitions
+        <span class="standard-sub">Site codes shown below use the default histology range (8000–9049, 9056–9139, 9141–9589) with no microscopic or age restrictions.</span>
+      </div>
+      <div class="standard-grid">
+        <span class="std-name">Lip, Oral Cavity &amp; Pharynx</span><span class="std-codes">C00.0–C14.8</span>
+        <span class="std-name">Esophagus</span><span class="std-codes">C15.0–C15.9</span>
+        <span class="std-name">Colon and Rectum</span><span class="std-codes">C18.0–C20.9, C26.0</span>
+        <span class="std-name">Liver</span><span class="std-codes">C22.0</span>
+        <span class="std-name">Pancreas</span><span class="std-codes">C25.0–C25.9</span>
+        <span class="std-name">Larynx</span><span class="std-codes">C32.0–C32.9</span>
+        <span class="std-name">Trachea, Lung &amp; Bronchus</span><span class="std-codes">C33.9–C34.9</span>
+        <span class="std-name">Urinary Bladder</span><span class="std-codes">C67.0–C67.9</span>
+      </div>
+    </div>
+    <div class="notable-label">Notable Restrictions &amp; Variations</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Cancer</th><th>ICD-O-3 Site Codes</th><th>ICD-O-3 Histology Codes</th><th>Restrictions</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="cancer-name"><span class="cancer-dot"></span>Stomach</div>
+            <div class="cancer-desc">All gastric cancers — <strong>full stomach</strong> (C16.0–C16.9)</div>
+            <span class="analyst-note">Full stomach (C16.0–C16.9) is included here. Compare with Obesity which links only gastric cardia (C16.0).</span>
+          </td>
+          <td><span class="code-badge">C16.0–C16.9</span></td>
+          <td><span class="code-badge">8000–9049</span><br><span class="code-badge">9056–9139</span><br><span class="code-badge">9141–9589</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cancer-name"><span class="cancer-dot"></span>Cervix Uteri</div>
+            <div class="cancer-desc">All cervical cancers — broader histology range than the HPV cervical definition</div>
+            <span class="analyst-note">This tobacco definition uses the broad default histology range, whereas the HPV cervical definition uses hist 8010–8671, 8940–8941. The two definitions overlap but are not identical.</span>
+          </td>
+          <td><span class="code-badge">C53.0–C53.9</span></td>
+          <td><span class="code-badge">8000–9049</span><br><span class="code-badge">9056–9139</span><br><span class="code-badge">9141–9589</span></td>
+          <td><span class="sex-flag female">♀ Female only</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cancer-name"><span class="cancer-dot"></span>Kidney &amp; Renal Pelvis</div>
+            <div class="cancer-desc">Kidney parenchyma <strong>and renal pelvis combined</strong></div>
+            <span class="analyst-note">Includes both C64.9 (kidney) and C65.9 (renal pelvis). Compare with Obesity which covers <strong>kidney only</strong> (C64.9).</span>
+          </td>
+          <td><div class="code-wrap"><span class="code-badge">C64.9</span><span class="code-badge">C65.9</span></div></td>
+          <td><span class="code-badge">8000–9049</span><br><span class="code-badge">9056–9139</span><br><span class="code-badge">9141–9589</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cancer-name"><span class="cancer-dot"></span>Acute Myeloid Leukemia (AML)</div>
+            <div class="cancer-desc">Aggressive myeloid leukemia — <strong>no site code restriction</strong>, defined entirely by histology</div>
+            <span class="analyst-note">Histology-only definition. Histology codes match a subset of the SEER AML recode (35021). Note that hist 9891 (acute monocytic) is excluded here but included in SEER recode 35031.</span>
+          </td>
+          <td>—</td>
+          <td><div class="code-wrap">
+            <span class="code-badge">9840; 9861</span>
+            <span class="code-badge">9865–9869</span>
+            <span class="code-badge">9871–9874</span>
+            <span class="code-badge">9877–9879</span>
+            <span class="code-badge">9910–9912; 9920</span>
+          </div></td>
+          <td>—</td>
+        </tr>
+      </tbody>
+    </table></div>
+  </div>
+
+
+  <!-- REFERENCES -->
+  <div class="footnotes">
+    <strong style="font-size:10px;">References</strong>
+    <ol>
+      <li>Henley SJ et al. Invasive cancer incidence and survival — United States, 2013. <em>MMWR Morb Mortal Wkly Rep.</em> 2017;66(3):69–75.</li>
+      <li>IARC Monographs Vol. 100E: Consumption of Alcoholic Beverages. Lyon: IARC; 2012.</li>
+      <li>IARC Monographs Vol. 90: Human Papillomaviruses. Lyon: IARC; 2007.</li>
+      <li>Lauby-Secretan B et al. Body fatness and cancer — IARC Working Group viewpoint. <em>N Engl J Med.</em> 2016;375:794–798.</li>
+      <li>World Cancer Research Fund / AICR. Diet, Nutrition, Physical Activity and Cancer: A Global Perspective. CUP Expert Report 2018.</li>
+      <li>U.S. Surgeon General. Health Consequences of Smoking — 50 Years of Progress. DHHS; 2014.</li>
+      <li>IARC Monographs Vol. 96: Alcohol Consumption and Ethyl Carbamate. Lyon: IARC; 2010.</li>
+      <li>Watson M et al. Using cancer registry data to assess HPV-associated cancer burden. <em>Cancer.</em> 2008;113(10 Suppl):2841–2854.</li>
+      <li>Saraiya M et al. U.S. assessment of HPV types in cancers. <em>J Natl Cancer Inst.</em> 2015;107(6):djv086.</li>
+      <li>Viens LJ et al. HPV-associated cancers — United States, 2008–2012. <em>MMWR Morb Mortal Wkly Rep.</em> 2016;65(26):661–666.</li>
+      <li>CDC. Cancers linked with HPV each year. Atlanta, GA: DHHS; 2024.</li>
+      <li>Eheman C et al. Annual report to the nation, 1975–2008: cancers associated with excess weight and lack of physical activity. <em>Cancer.</em> 2012;118:2338–2366.</li>
+      <li>Islami F, Marlow EC, Thomson B, et al. Proportion and number of cancer cases and deaths attributable to potentially modifiable risk factors in the United States, 2019. <em>CA Cancer J Clin.</em> 2024;74(5):405–432. <em>(Source of population attributable fraction estimates shown in section headers; updates the 2018 Islami et al. analysis with 2019 US data.)</em></li>
+    </ol>
+  </div>
+  <p class="source-note">Source: <a href="https://www.cdc.gov/united-states-cancer-statistics/public-use/definitions-risk-factor-associated-cancers.html" target="_blank">CDC / U.S. Cancer Statistics</a> — Definitions of Risk Factor-Associated Cancers, updated May 29, 2025</p>
+
+</div>
+
+<script>
+(function() {
+  const input = document.getElementById('search-input');
+  const clearBtn = document.getElementById('search-clear');
+  const stats = document.getElementById('search-stats');
+  const sections = document.querySelectorAll('.section-block');
+  const expandBtn = document.getElementById('expand-all');
+  const collapseBtn = document.getElementById('collapse-all');
+
+  /* ── COLLAPSE / EXPAND ── */
+  sections.forEach(section => {
+    const header = section.querySelector('.section-header');
+    if (!header) return;
+    header.addEventListener('click', (e) => {
+      if (e.target.closest('a, button, input')) return;
+      section.classList.toggle('collapsed');
+    });
+  });
+  expandBtn.addEventListener('click', () => sections.forEach(s => s.classList.remove('collapsed')));
+  collapseBtn.addEventListener('click', () => sections.forEach(s => s.classList.add('collapsed')));
+
+  /* ── SEARCH ── */
+  const rowData = [];
+  sections.forEach(section => {
+    section.querySelectorAll('tbody tr').forEach(row => {
+      rowData.push({ row, section, text: row.textContent.toLowerCase() });
+    });
+  });
+  const sectionData = [];
+  sections.forEach(section => {
+    const txt = (section.querySelector('.section-title-wrap')?.textContent || '').toLowerCase();
+    sectionData.push({ section, text: txt });
+  });
+
+  function clearHighlights() {
+    document.querySelectorAll('mark.search-mark').forEach(mark => {
+      mark.parentNode.replaceChild(document.createTextNode(mark.textContent), mark);
+    });
+    document.querySelectorAll('.section-block').forEach(s => s.normalize());
+  }
+
+  function escapeRegExp(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function highlight(el, query) {
+    if (!query) return;
+    const re = new RegExp(escapeRegExp(query), 'gi');
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+      acceptNode: (n) => {
+        if (n.parentElement.closest('script, style, mark')) return NodeFilter.FILTER_REJECT;
+        return n.nodeValue.toLowerCase().includes(query) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      }
+    });
+    const targets = [];
+    let n;
+    while (n = walker.nextNode()) targets.push(n);
+    targets.forEach(textNode => {
+      const text = textNode.nodeValue;
+      const frag = document.createDocumentFragment();
+      let lastIndex = 0, match;
+      re.lastIndex = 0;
+      while ((match = re.exec(text)) !== null) {
+        if (match.index > lastIndex) frag.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+        const mark = document.createElement('mark');
+        mark.className = 'search-mark';
+        mark.textContent = match[0];
+        frag.appendChild(mark);
+        lastIndex = match.index + match[0].length;
+        if (match.index === re.lastIndex) re.lastIndex++;
+      }
+      if (lastIndex < text.length) frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+      textNode.parentNode.replaceChild(frag, textNode);
+    });
+  }
+
+  function filter() {
+    const q = input.value.trim().toLowerCase();
+    clearHighlights();
+    if (!q) {
+      rowData.forEach(r => r.row.classList.remove('row-hidden'));
+      sections.forEach(s => s.classList.remove('section-hidden'));
+      stats.textContent = '';
+      return;
+    }
+    let visibleRowCount = 0;
+    const sectionHasMatch = new Map();
+    rowData.forEach(r => {
+      if (r.text.includes(q)) {
+        r.row.classList.remove('row-hidden');
+        sectionHasMatch.set(r.section, true);
+        visibleRowCount++;
+      } else {
+        r.row.classList.add('row-hidden');
+      }
+    });
+    sectionData.forEach(sd => {
+      if (sd.text.includes(q)) {
+        sectionHasMatch.set(sd.section, true);
+        sd.section.querySelectorAll('tbody tr').forEach(row => {
+          if (row.classList.contains('row-hidden')) { row.classList.remove('row-hidden'); visibleRowCount++; }
+        });
+      }
+    });
+    sections.forEach(s => {
+      if (sectionHasMatch.get(s)) { s.classList.remove('section-hidden'); s.classList.remove('collapsed'); }
+      else s.classList.add('section-hidden');
+    });
+    rowData.forEach(r => { if (!r.row.classList.contains('row-hidden')) highlight(r.row, q); });
+    stats.textContent = visibleRowCount === 0
+      ? 'No matches found.'
+      : `${visibleRowCount} matching row${visibleRowCount === 1 ? '' : 's'} across ${[...sectionHasMatch.keys()].length} section${[...sectionHasMatch.keys()].length === 1 ? '' : 's'}.`;
+  }
+
+  let debounceTimer;
+  input.addEventListener('input', () => { clearTimeout(debounceTimer); debounceTimer = setTimeout(filter, 80); });
+  clearBtn.addEventListener('click', () => { input.value = ''; filter(); input.focus(); });
+  input.addEventListener('keydown', e => { if (e.key === 'Escape') { input.value = ''; filter(); } });
+})();
+</script>
+
+</body>
+</html>
