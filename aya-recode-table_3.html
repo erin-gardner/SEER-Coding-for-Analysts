@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AYA Site Recode / WHO 2020</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --leuk:   #1a4e8a;
+    --lymph:  #3c2e78;
+    --cns:    #1a2e96;
+    --sarc:   #7a2070;
+    --vasc:   #a01448;
+    --nerve:  #7a4e10;
+    --gonad:  #561890;
+    --mel:    #9a4e08;
+    --carc:   #1a6e3c;
+    --misc:   #2a2a2a;
+    --insitu: #095a60;
+    --bg: #edebe8; --card: #ffffff;
+    --text-dark: #0e0c0a; --text-mid: #2e2820; --text-soft: #58504a;
+    --divider: #ccc8c2;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Source Sans 3', sans-serif; background: var(--bg); color: var(--text-dark); padding: 16px 14px 36px; font-size: 11px; }
+  .page-wrap { max-width: 980px; margin: 0 auto; }
+  header h1 { font-family: 'Playfair Display', serif; font-size: 20px; letter-spacing: -0.3px; line-height: 1.2; }
+  header p { font-size: 10px; color: var(--text-soft); margin-top: 4px; line-height: 1.5; }
+  .section-block { background: var(--card); border: 1px solid var(--divider); border-radius: 4px; margin-bottom: 7px; overflow: hidden; page-break-inside: avoid; }
+  .section-header { display: flex; align-items: stretch; cursor: pointer; user-select: none; transition: background 0.12s; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .section-header:hover .section-title-wrap { background: color-mix(in srgb, var(--c) 15%, #fff); }
+  .section-bar { width: 6px; flex-shrink: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .chevron { font-size: 14px; color: var(--text-soft); padding: 0 10px; flex-shrink: 0; align-self: center; transition: transform 0.18s; line-height: 1; }
+  .section-block.collapsed .chevron { transform: rotate(-90deg); }
+  .section-block.collapsed .table-wrap { display: none; }
+  .section-title-wrap { padding: 7px 12px; flex: 1; }
+  .section-title-wrap h2 { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; line-height: 1.15; }
+  .section-title-wrap p { font-size: 10px; color: var(--text-soft); margin-top: 2px; }
+  .parentgroup-row td { background: color-mix(in srgb, var(--c) 14%, #fff); padding: 5px 10px; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; color: color-mix(in srgb, var(--c) 70%, #000); border-top: 2px solid color-mix(in srgb, var(--c) 30%, #fff); border-bottom: 1px solid color-mix(in srgb, var(--c) 20%, #fff); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .subgroup-row td { background: #e6e2dc; padding: 3px 10px; font-size: 8.5px; font-weight: 700; letter-spacing: 0.7px; text-transform: uppercase; color: var(--text-mid); border-top: 1px solid var(--divider); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { border-top: 1px solid var(--divider); }
+  thead th { padding: 3px 10px; text-align: left; font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: var(--text-soft); background: #f2eeea; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  tbody tr { border-top: 1px solid var(--divider); }
+  tbody tr:hover { background: #f8f6f2; }
+  tbody td { padding: 4px 10px; font-size: 10.5px; vertical-align: top; line-height: 1.3; }
+  td:nth-child(2) { white-space: normal; vertical-align: top; }
+  td:nth-child(3), td:nth-child(4), td:nth-child(5) { white-space: nowrap; vertical-align: middle; }
+  .site-name { font-weight: 700; font-size: 10px; display: flex; align-items: flex-start; gap: 6px; }
+  .site-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 2px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .site-desc { font-size: 8.5px; color: var(--text-soft); font-weight: 400; margin-top: 1px; padding-left: 12px; }
+  .code-wrap { display: flex; flex-direction: column; gap: 2px; }
+  .code-badge { display: inline-block; font-size: 8.5px; font-family: 'Courier New', monospace; background: #ddd8d0; color: #0e0c0a; padding: 1px 5px; border-radius: 3px; font-weight: 700; white-space: normal; word-break: break-word; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .recode-num { font-size: 10.5px; font-weight: 700; font-family: 'Courier New', monospace; }
+  .beh { display: inline-block; font-size: 8px; font-family: 'Courier New', monospace; padding: 2px 5px; border-radius: 3px; font-weight: 700; white-space: normal; line-height: 1.4; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .beh-3   { background: #f4d8d8; color: #5a1010; }
+  .beh-01  { background: #d8ecd8; color: #1a4a1a; }
+  .beh-013 { background: #ece8f8; color: #2a0a5a; }
+  .beh-2   { background: #d8e4f4; color: #0a2a5a; }
+  .t-leuk  { --c: var(--leuk);  } .t-lymph { --c: var(--lymph); } .t-cns   { --c: var(--cns);  }
+  .t-sarc  { --c: var(--sarc);  } .t-vasc  { --c: var(--vasc);  } .t-nerve { --c: var(--nerve); }
+  .t-gonad { --c: var(--gonad); } .t-mel   { --c: var(--mel);   } .t-carc  { --c: var(--carc);  }
+  .t-misc  { --c: var(--misc);  } .t-insitu{ --c: var(--insitu);}
+  .section-block .section-bar { background: var(--c); }
+  .section-block .section-title-wrap { background: color-mix(in srgb, var(--c) 8%, #fff); }
+  .section-block .section-title-wrap h2 { color: var(--c); }
+  .section-block .site-dot { background: var(--c); }
+  .footnotes { font-size: 8.5px; color: var(--text-soft); padding: 8px 0 0; line-height: 1.8; }
+  .source-note { font-size: 8.5px; color: var(--text-soft); text-align: right; margin-top: 4px; }
+  .source-note a { color: var(--text-soft); }
+  .search-wrap { position: sticky; top: 0; z-index: 50; background: var(--bg); padding: 8px 0 10px; margin-bottom: 6px; border-bottom: 1px solid var(--divider); }
+  .search-row { display: flex; align-items: center; gap: 10px; }
+  .search-input { flex: 1; font-family: inherit; font-size: 13px; padding: 8px 12px; border: 1.5px solid var(--divider); border-radius: 5px; background: #fff; color: var(--text-dark); outline: none; transition: border-color 0.15s; }
+  .search-input:focus { border-color: #7a8aa0; }
+  .search-clear { font-size: 11px; font-weight: 600; background: #fff; border: 1px solid var(--divider); border-radius: 4px; padding: 6px 10px; cursor: pointer; color: var(--text-mid); }
+  .search-clear:hover { background: #f4f0ec; }
+  .search-stats { font-size: 10px; color: var(--text-soft); margin-top: 4px; min-height: 12px; }
+  mark.search-mark { background: #fff3a0; color: inherit; padding: 0 1px; border-radius: 2px; }
+  .row-hidden { display: none !important; }
+  .section-hidden { display: none !important; }
+  .collapse-controls { display: flex; gap: 8px; margin-bottom: 8px; }
+  .collapse-controls button { background: #fff; border: 1px solid var(--divider); border-radius: 4px; padding: 4px 10px; font-size: 10px; font-weight: 600; color: var(--text-mid); cursor: pointer; font-family: inherit; }
+  .collapse-controls button:hover { background: #f4f0ec; }
+  @media print {
+    .search-wrap, .collapse-controls, .chevron { display: none !important; }
+    .section-block.collapsed .table-wrap { display: block !important; }
+    @page { margin: 9mm 8mm; size: A4; }
+    body { background: white !important; padding: 0; }
+    .page-wrap { max-width: 100%; }
+    tbody tr:hover { background: transparent !important; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+<header style="margin-bottom:12px;">
+  <h1>AYA Site Recode Reference Guide</h1>
+  <p>Adolescents &amp; Young Adults Cancer Classification &mdash; ICD-O-3 / WHO 2020 &mdash; 219 recode entries with histology, primary site, and behavior codes. Source: <strong>seer.cancer.gov/ayarecode/aya-2020.html</strong></p>
+</header>
+<div class="search-wrap">
+  <div class="search-row">
+    <input type="text" id="search-input" class="search-input" placeholder="Search by site group, histology code, ICD-O-3 site code, recode value, or keyword…" autocomplete="off">
+    <button id="search-clear" class="search-clear" type="button">Clear</button>
+  </div>
+  <div id="search-stats" class="search-stats"></div>
+</div>
+<div class="collapse-controls">
+  <button id="expand-all" type="button">Expand all</button>
+  <button id="collapse-all" type="button">Collapse all</button>
+</div>
+
+<!-- 1. LEUKEMIAS -->
+<div class="section-block t-leuk">
+  <div class="section-header"><div class="section-bar"></div><span class="chevron">▾</span>
+    <div class="section-title-wrap"><h2>1. Leukemias and Related Disorders</h2><p>Blood cell malignancies originating in the bone marrow — lymphoblastic, myeloid, chronic, and related clonal disorders &nbsp;(001–015)</p></div>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Site Group</th><th>ICD-O-3 Histology</th><th>ICD-O-3 Primary Site</th><th>Behavior</th><th>Recode</th></tr></thead>
+    <tbody>
+      <tr><td><div class="site-name"><span class="site-dot"></span>1.1 Acute lymphoblastic leukemia</div><div class="site-desc">Precursor B- and T-cell ALL; most common AYA leukemia</div></td><td><div class="code-wrap"><span class="code-badge">9826, 9835–9836</span><span class="code-badge">9687, 9811–9819, 9827, 9837</span></div></td><td><div class="code-wrap"><span class="code-badge">C000–C809</span><span class="code-badge">C420–C421, C424</span></div></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">001</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">1.2 Acute myeloid leukemia</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>1.2.1 Acute promyelocytic leukemia</div><div class="site-desc">APL; t(15;17) PML-RARA fusion</div></td><td><span class="code-badge">9866</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">002</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>1.2.2 Other acute myeloid leukemia</div><div class="site-desc">AML subtypes including erythroleukemia, megakaryoblastic, and WHO-defined entities</div></td><td><span class="code-badge">9840, 9861, 9865, 9867, 9869–9874, 9877–9879, 9891, 9895–9898, 9910–9912, 9920, 9931</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">003</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>1.3 Chronic myeloid leukemia</div><div class="site-desc">CML; BCR-ABL1 fusion; includes accelerated and blast phase</div></td><td><span class="code-badge">9863, 9875–9876, 9945–9946</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">004</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>1.4 Chronic lymphocytic leukemia</div><div class="site-desc">CLL; rare in AYA; mature B-lymphocytes</div></td><td><span class="code-badge">9823</span></td><td><span class="code-badge">C420–C421, C424</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">005</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>1.5 Polycythemia vera</div><div class="site-desc">JAK2-driven myeloproliferative neoplasm; excess red cell production</div></td><td><span class="code-badge">9950</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">006</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>1.6 Essential thrombocythemia</div></td><td><span class="code-badge">9962</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">007</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>1.7 Primary myelofibrosis</div></td><td><span class="code-badge">9961</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">008</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>1.8 Myelodysplastic syndrome (MDS)</div></td><td><span class="code-badge">9980, 9982–9989, 9991–9993</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">009</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">1.9 Other and unspecified leukemias and related disorders</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>1.9.1 Hairy cell leukemia</div></td><td><span class="code-badge">9940</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">010</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>1.9.2 Other lymphocytic/lymphoblastic leukemias</div><div class="site-desc">Prolymphocytic and other mature lymphoid leukemias NOS</div></td><td><span class="code-badge">9820, 9831–9834, 9948</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">011</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>1.9.3 Other myeloid leukemias</div><div class="site-desc">Granulocytic sarcoma, chronic neutrophilic leukemia, and related</div></td><td><span class="code-badge">9860, 9930, 9963–9964</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">012</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>1.9.4 Leukemias of mixed phenotype</div><div class="site-desc">Biphenotypic and ambiguous lineage leukemias</div></td><td><span class="code-badge">9805–9809</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">013</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>1.9.5 Mast cell diseases</div><div class="site-desc">Systemic mastocytosis and mast cell leukemia</div></td><td><span class="code-badge">9740–9742</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">014</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>1.9.6 Other</div><div class="site-desc">Leukemia NOS, CMML, and other clonal hematopoietic neoplasms</div></td><td><span class="code-badge">9800–9801, 9960, 9965–9968, 9975</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">015</span></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- 2. LYMPHOMAS -->
+<div class="section-block t-lymph">
+  <div class="section-header"><div class="section-bar"></div><span class="chevron">▾</span>
+    <div class="section-title-wrap"><h2>2. Lymphomas</h2><p>Malignancies of lymphoid tissue — non-Hodgkin, Hodgkin, myeloma, cutaneous &nbsp;(016–031)</p></div>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Site Group</th><th>ICD-O-3 Histology</th><th>ICD-O-3 Primary Site</th><th>Behavior</th><th>Recode</th></tr></thead>
+    <tbody>
+      <tr class="parentgroup-row"><td colspan="5">2.1 Non-Hodgkin lymphomas</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>2.1.1 Lymphoblastic</div><div class="site-desc">Precursor B/T-lymphoblastic lymphoma; distinguished from ALL by primary site</div></td><td><div class="code-wrap"><span class="code-badge">9727–9729</span><span class="code-badge">9811–9819, 9827, 9837</span></div></td><td><div class="code-wrap"><span class="code-badge">C000–C809</span><span class="code-badge">C000–C419, C422–C423, C440–C809</span></div></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">016</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>2.1.2 Burkitt</div><div class="site-desc">Highly aggressive B-cell NHL; c-MYC translocation; common in AYA</div></td><td><span class="code-badge">9687</span></td><td><span class="code-badge">C000–C419, C422–C423, C440–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">017</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>2.1.3 Diffuse large B-cell (DLBCL)</div><div class="site-desc">Most common aggressive NHL; GCB and ABC subtypes</div></td><td><span class="code-badge">9596, 9673, 9680, 9684, 9688–9689, 9712, 9737–9738</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">018</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>2.1.4 Primary mediastinal large B-cell (excl. DLBCL)</div><div class="site-desc">Mediastinal large B-cell lymphoma; adolescent predominance; distinct from DLBCL</div></td><td><span class="code-badge">9679</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">019</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>2.1.5 Anaplastic T- and null-cell (excl. NK/T-cell)</div><div class="site-desc">ALCL; ALK-positive common in AYA; peripheral T-cell NHL subtypes</div></td><td><span class="code-badge">9700, 9702, 9705, 9708–9709, 9714–9718</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">020</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>2.1.6 Follicular</div><div class="site-desc">Indolent B-cell NHL from germinal center follicular cells</div></td><td><span class="code-badge">9690–9691, 9695, 9698</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">021</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>2.1.7 NK/T-cell (excl. anaplastic T-cell)</div><div class="site-desc">Extranodal NK/T-cell lymphoma, nasal type; EBV-associated</div></td><td><span class="code-badge">9719</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">022</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>2.1.8 MALT (mucosa-associated lymphoid tissue)</div><div class="site-desc">Extranodal marginal zone B-cell lymphoma of mucosa</div></td><td><span class="code-badge">9699</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">023</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>2.1.9 Other non-Hodgkin lymphoma NOS</div><div class="site-desc">Lymphoma NOS, marginal zone, SLL (nodal sites only)</div></td><td><div class="code-wrap"><span class="code-badge">9591, 9670, 9971</span><span class="code-badge">9823 (nodal)</span></div></td><td><div class="code-wrap"><span class="code-badge">C000–C809</span><span class="code-badge">C000–C419, C422–C423, C440–C809</span></div></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">024</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">2.2 Hodgkin lymphoma</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>2.2.1 Hodgkin NLP</div><div class="site-desc">Nodular lymphocyte-predominant HL; indolent; LP (popcorn) cells</div></td><td><span class="code-badge">9659</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">025</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>2.2.2 Hodgkin classic – other</div><div class="site-desc">Nodular sclerosis, mixed cellularity, lymphocyte-rich, lymphocyte-depleted</div></td><td><span class="code-badge">9650–9655, 9661–9665, 9667</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">026</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>2.3 Myeloma</div><div class="site-desc">Plasma cell neoplasms; multiple myeloma and plasmacytoma</div></td><td><span class="code-badge">9731–9734</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">027</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>2.4 Cutaneous lymphomas</div><div class="site-desc">Mycosis fungoides, Sézary syndrome, and primary cutaneous lymphomas</div></td><td><span class="code-badge">9597, 9701, 9725, 9726</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">028</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>2.5 Other B- and T-cell lymphomas</div><div class="site-desc">Mantle cell, splenic marginal zone, hepatosplenic T-cell, enteropathy-type</div></td><td><span class="code-badge">9671, 9675, 9678, 9724, 9735</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">029</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">2.6 Other lymphomas – specified and unspecified</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>2.6.1 Histiocytic and dendritic cell neoplasms</div><div class="site-desc">Histiocytic sarcoma, Langerhans cell histiocytosis (malignant), follicular dendritic cell sarcoma</div></td><td><span class="code-badge">9749–9759</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">030</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>2.6.2 Lymphoma NOS</div><div class="site-desc">Lymphoma NOS; immunoproliferative diseases; lymphoproliferative NOS</div></td><td><span class="code-badge">9590, 9760–9762, 9764–9769, 9970</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">031</span></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- 3. CNS -->
+<div class="section-block t-cns">
+  <div class="section-header"><div class="section-bar"></div><span class="chevron">▾</span>
+    <div class="section-title-wrap"><h2>3. CNS and Other Intracranial and Intraspinal Neoplasms</h2><p>Brain, spinal cord, and CNS tumors — benign/borderline (beh 0,1) and invasive (beh 3) &nbsp;(032–057) &nbsp;† CNS germ cell: see 7.3</p></div>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Site Group</th><th>ICD-O-3 Histology</th><th>ICD-O-3 Primary Site</th><th>Behavior</th><th>Recode</th></tr></thead>
+    <tbody>
+      <tr class="parentgroup-row"><td colspan="5">3.1 Astroglial and related neoplasms</td></tr>
+      <tr class="subgroup-row"><td colspan="5">3.1.1 Oligodendrogliomas</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.1.1.1 Oligodendroglioma – benign/borderline</div></td><td><span class="code-badge">9382, 9385, 9450–9451, 9460</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-01">0, 1 (Benign, Borderline)</span></td><td><span class="recode-num">032</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.1.1.2 Oligodendroglioma – invasive</div></td><td><span class="code-badge">9382, 9385, 9450–9451, 9460</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">033</span></td></tr>
+      <tr class="subgroup-row"><td colspan="5">3.1.2 Glioblastomas / gliofibromas</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.1.2.1 Gliofibroma – benign/borderline</div></td><td><span class="code-badge">9440–9442, 9445</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-01">0, 1 (Benign, Borderline)</span></td><td><span class="recode-num">034</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.1.2.2 Glioblastoma – invasive</div></td><td><span class="code-badge">9440–9442, 9445</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">035</span></td></tr>
+      <tr class="subgroup-row"><td colspan="5">3.1.3 Ependymomas</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.1.3.1 Ependymoma – benign/borderline</div></td><td><span class="code-badge">9383, 9391–9394, 9396</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-01">0, 1 (Benign, Borderline)</span></td><td><span class="recode-num">036</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.1.3.2 Ependymoma – invasive</div></td><td><span class="code-badge">9383, 9391–9394, 9396</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">037</span></td></tr>
+      <tr class="subgroup-row"><td colspan="5">3.1.4 Other astrocytoma / astroglial neoplasms</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.1.4.1 Pilocytic astrocytoma</div><div class="site-desc">Grade I; most common pediatric brain tumor; often curable</div></td><td><span class="code-badge">9421</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-013">0, 1, 3 (Benign, Borderline, Malignant)</span></td><td><span class="recode-num">038</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.1.4.2 Other astrocytoma/astroglial – benign/borderline</div></td><td><span class="code-badge">9380–9381, 9384, 9400–9401, 9410–9412, 9420, 9424–9425, 9431–9432</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-01">0, 1 (Benign, Borderline)</span></td><td><span class="recode-num">039</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.1.4.3 Other astrocytoma/astroglial – invasive</div></td><td><span class="code-badge">9380–9381, 9384, 9400–9401, 9410–9412, 9420, 9424–9425, 9431–9432</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">040</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.2 Medulloblastoma and other invasive embryonal CNS tumors</div><div class="site-desc">Posterior fossa embryonal tumors; PNET; supratentorial embryonal</div></td><td><span class="code-badge">8963, 9260, 9364–9365, 9470–9478, 9480, 9508</span></td><td><span class="code-badge">C700–C729, C751–C753</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">041</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">3.3 Neuroblastomas / ganglioneuromas (CNS)</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.3.1 Ganglioneuroma – benign/borderline</div></td><td><span class="code-badge">9490, 9500</span></td><td><span class="code-badge">C700–C729, C751–C753</span></td><td><span class="beh beh-01">0, 1 (Benign, Borderline)</span></td><td><span class="recode-num">042</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.3.2 Neuroblastoma/ganglioneuroblastoma – invasive</div></td><td><span class="code-badge">9490, 9500</span></td><td><span class="code-badge">C700–C729, C751–C753</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">043</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">3.4 Neuronal and mixed neuronal-glial neoplasms</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.4.1 Neuronal/mixed neuronal-glial – benign/borderline</div></td><td><span class="code-badge">8680–8693, 9413, 9492–9493, 9505–9506, 9509</span></td><td><span class="code-badge">C700–C729, C751–C753</span></td><td><span class="beh beh-01">0, 1 (Benign, Borderline)</span></td><td><span class="recode-num">044</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.4.2 Neuronal/mixed neuronal-glial – invasive</div></td><td><span class="code-badge">8680–8693, 9413, 9492–9493, 9505–9506, 9509</span></td><td><span class="code-badge">C700–C729, C751–C753</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">045</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">3.5 Meningiomas</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.5.1 Meningioma – benign/borderline</div></td><td><span class="code-badge">9530–9539</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-01">0, 1 (Benign, Borderline)</span></td><td><span class="recode-num">046</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.5.2 Meningioma – invasive</div></td><td><span class="code-badge">9530–9539</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">047</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">3.6 Choroid plexus neoplasms</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.6.1 Choroid plexus – benign/borderline</div></td><td><span class="code-badge">9390</span></td><td><span class="code-badge">C700–C729, C751–C753</span></td><td><span class="beh beh-01">0, 1 (Benign, Borderline)</span></td><td><span class="recode-num">048</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.6.2 Choroid plexus – invasive</div></td><td><span class="code-badge">9390</span></td><td><span class="code-badge">C700–C729, C751–C753</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">049</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">3.7 Craniopharyngiomas</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.7.1 Craniopharyngioma – benign/borderline</div></td><td><span class="code-badge">9350–9352</span></td><td><span class="code-badge">C700–C729, C751–C753</span></td><td><span class="beh beh-01">0, 1 (Benign, Borderline)</span></td><td><span class="recode-num">050</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.7.2 Craniopharyngioma – invasive</div></td><td><span class="code-badge">9350–9352</span></td><td><span class="code-badge">C700–C729, C751–C753</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">051</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">3.8 Pituitary neoplasms</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.8.1 Pituitary – benign/borderline</div></td><td><div class="code-wrap"><span class="code-badge">8040, 8140, 8146, 8246, 8260, 8270–8273, 8280–8281, 8290, 8300, 8310, 8323, 9582</span><span class="code-badge">8000–8679, 8700–8709, 8800–8814, 8816–9059, 9110, 9180–9342, 9363–9379, 9386–9389, 9395, 9422, 9443, 9470–9477, 9479–9480, 9491, 9501–9504, 9507, 9510–9522, 9572–9993</span></div></td><td><div class="code-wrap"><span class="code-badge">C700–C729, C752 (row 1)</span><span class="code-badge">C751 (row 2)</span></div></td><td><span class="beh beh-01">0, 1 (Benign, Borderline)</span></td><td><span class="recode-num">052</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.8.2 Pituitary – invasive</div></td><td><div class="code-wrap"><span class="code-badge">8040, 8140, 8146, 8246, 8260, 8270–8273, 8280–8281, 8290, 8300, 8310, 8323, 9582</span><span class="code-badge">8000–8361, 8380–8589, 8936, 8940–8941, 9050–9055, 9363, 9501–9504, 9582</span></div></td><td><div class="code-wrap"><span class="code-badge">C700–C729, C752 (row 1)</span><span class="code-badge">C751 (row 2)</span></div></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">053</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">3.9 Pineal neoplasms</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.9.1 Pineal – benign/borderline</div></td><td><div class="code-wrap"><span class="code-badge">8000–8679, 8700–8709, 8800–8814, 8816–9059, 9110, 9180–9342, 9360–9379, 9386–9389, 9395, 9422, 9443, 9470–9477, 9479–9480, 9491, 9501–9504, 9507, 9510–9522, 9572–9993</span><span class="code-badge">9360–9362</span></div></td><td><div class="code-wrap"><span class="code-badge">C753 (row 1)</span><span class="code-badge">C700–C729, C751–C752 (row 2)</span></div></td><td><span class="beh beh-01">0, 1 (Benign, Borderline)</span></td><td><span class="recode-num">054</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.9.2 Pineal – invasive</div></td><td><div class="code-wrap"><span class="code-badge">8000–8679, 8700–8709, 8827, 8834, 8898, 8905, 8930–8960, 8964–8981, 9020, 9050–9055, 9110, 9360–9363, 9395, 9491, 9501–9504, 9507, 9510–9514, 9582</span><span class="code-badge">9360–9362</span></div></td><td><div class="code-wrap"><span class="code-badge">C753 (row 1)</span><span class="code-badge">C700–C729, C751–C752 (row 2)</span></div></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">055</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">3.10 Other and unspecified CNS neoplasms</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.10.1 Other/unspecified CNS – benign/borderline</div></td><td><div class="code-wrap"><span class="code-badge">8000–8039, 8041–8139, 8141–8145, 8147–8245, 8247–8259, 8261–8265, 8311–8322, 8324–8679, 8700–8709, 8800–8814, 8816–9059, 9110, 9180–9342, 9363–9379, 9386–9389, 9395, 9422, 9443, 9470–9477, 9479–9480, 9491, 9501–9504, 9507, 9510–9522, 9572–9581, 9583–9993</span><span class="code-badge">8720–8799, 9423, 9430, 9444</span></div></td><td><div class="code-wrap"><span class="code-badge">C700–C729, C752 (row 1)</span><span class="code-badge">C700–C729, C751–C753 (row 2)</span></div></td><td><span class="beh beh-01">0, 1 (Benign, Borderline)</span></td><td><span class="recode-num">056</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>3.10.2 Other/unspecified CNS – invasive</div></td><td><div class="code-wrap"><span class="code-badge">8000–8005, 8935–8936, 9050–9055, 9363, 9501–9504</span><span class="code-badge">9423, 9430, 9444</span></div></td><td><div class="code-wrap"><span class="code-badge">C700–C729, C752 (row 1)</span><span class="code-badge">C000–C809 (row 2)</span></div></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">057</span></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- 4. SARCOMAS -->
+<div class="section-block t-sarc">
+  <div class="section-header"><div class="section-bar"></div><span class="chevron">▾</span>
+    <div class="section-title-wrap"><h2>4. Sarcomas</h2><p>Malignant tumors of bone, cartilage, and soft tissue — osteosarcoma, Ewing, rhabdomyosarcoma prominent in AYA &nbsp;(058–076) &nbsp;† Kaposi sarcoma: see 5.2.1</p></div>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Site Group</th><th>ICD-O-3 Histology</th><th>ICD-O-3 Primary Site</th><th>Behavior</th><th>Recode</th></tr></thead>
+    <tbody>
+      <tr><td><div class="site-name"><span class="site-dot"></span>4.1 Osteosarcoma</div><div class="site-desc">Primary bone-forming malignancy; peak in adolescents; distal femur / proximal tibia</div></td><td><span class="code-badge">9180–9187, 9192–9210</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">058</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>4.2 Chondrosarcoma</div><div class="site-desc">Cartilage-forming malignancy; axial skeleton and long bones</div></td><td><span class="code-badge">9220–9221, 9230–9231, 9240, 9242–9243</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">059</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">4.3 Ewing family of tumors</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>4.3.1 Bone</div><div class="site-desc">Ewing sarcoma of bone; EWSR1-FLI1 fusion; long bone diaphysis</div></td><td><span class="code-badge">9260, 9364–9365, 9473</span></td><td><span class="code-badge">C400–C419</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">060</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>4.3.2 Soft tissue</div><div class="site-desc">Extraskeletal Ewing sarcoma / PNET of soft tissue</div></td><td><span class="code-badge">9260, 9364–9365, 9473</span></td><td><span class="code-badge">C000–C399, C420–C699, C730–C750, C754–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">061</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">4.4 Fibromatous neoplasms</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>4.4.1 Myxofibrosarcoma</div></td><td><span class="code-badge">8811</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">062</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>4.4.2 Malignant fibrous histiocytoma</div><div class="site-desc">Also known as undifferentiated pleomorphic sarcoma</div></td><td><span class="code-badge">8830–8831, 8835–8836</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">063</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>4.4.3 Other fibromatous neoplasms</div><div class="site-desc">Fibrosarcoma, desmoid, low-grade fibromyxoid sarcoma, and related</div></td><td><span class="code-badge">8810, 8813–8814, 8820–8826, 8832–8833, 9252</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">064</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>4.5 Liposarcoma</div><div class="site-desc">Adipocytic malignancy; well-differentiated through dedifferentiated and myxoid subtypes</div></td><td><span class="code-badge">8850–8881</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">065</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>4.6 Synovial sarcoma</div><div class="site-desc">Biphasic or monophasic; SYT-SSX fusion; extremities; common in AYA</div></td><td><span class="code-badge">9040–9043</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">066</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>4.7 Leiomyosarcoma</div><div class="site-desc">Smooth muscle malignancy; retroperitoneum, uterus, vascular walls</div></td><td><span class="code-badge">8890–8893</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">067</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>4.8 Rhabdomyosarcoma</div><div class="site-desc">Skeletal muscle malignancy; alveolar and embryonal subtypes; head/neck and GU common</div></td><td><span class="code-badge">8900–8904, 8910, 8912, 8920–8921</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">068</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>4.9 Gastrointestinal stromal tumor (GIST) – malignant</div><div class="site-desc">KIT/PDGFRA-driven mesenchymal tumor; stomach most common</div></td><td><span class="code-badge">8936</span></td><td><span class="code-badge">C000–C699, C730–C750, C754–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">069</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>4.10 Spindle cell sarcoma</div></td><td><span class="code-badge">8801</span></td><td><span class="code-badge">C000–C399, C420–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">070</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>4.11 Epithelioid sarcoma</div><div class="site-desc">Rare; extremities; proximal and distal types; SMARCB1 loss</div></td><td><span class="code-badge">8804</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">071</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>4.12 Desmoplastic small round cell tumor</div><div class="site-desc">EWSR1-WT1 fusion; abdominal/pelvic; aggressive</div></td><td><span class="code-badge">8806</span></td><td><span class="code-badge">C000–C399, C420–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">072</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>4.13 Chordoma</div><div class="site-desc">Notochordal remnant tumor; sacrum and skull base</div></td><td><span class="code-badge">9370–9379</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">073</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>4.14 Giant cell sarcoma</div></td><td><span class="code-badge">8802</span></td><td><span class="code-badge">C000–C399, C420–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">074</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>4.15 Other soft tissue sarcomas</div><div class="site-desc">Alveolar soft part, clear cell sarcoma, malignant mesenchymoma, and others</div></td><td><div class="code-wrap"><span class="code-badge">8840–8849, 8894–8897, 8982–8983, 8990–8991, 9044–9045, 9251, 9580–9581 → all sites</span><span class="code-badge">8935 → excl. CNS/gonad</span><span class="code-badge">8800, 8803, 8805 → excl. visceral/CNS</span></div></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">075</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>4.16 Other bone tumors</div><div class="site-desc">Adamantinoma, giant cell tumor of bone, parosteal, chondromyxoid fibroma, odontogenic</div></td><td><div class="code-wrap"><span class="code-badge">8812, 9250, 9261, 9270–9342 → C000–C809</span><span class="code-badge">8000–8005, 8800–8803, 8805–8806 → C400–C419</span></div></td><td><span class="code-badge">C000–C809 / C400–C419</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">076</span></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- 5. VASCULAR -->
+<div class="section-block t-vasc">
+  <div class="section-header"><div class="section-bar"></div><span class="chevron">▾</span>
+    <div class="section-title-wrap"><h2>5. Blood and Lymphatic Vessel Tumors</h2><p>Benign CNS hemangiomas through Kaposi sarcoma and other malignant angiosarcomas &nbsp;(077–081)</p></div>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Site Group</th><th>ICD-O-3 Histology</th><th>ICD-O-3 Primary Site</th><th>Behavior</th><th>Recode</th></tr></thead>
+    <tbody>
+      <tr class="parentgroup-row"><td colspan="5">5.1 Benign blood and lymphatic vessel tumors – CNS</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>5.1.1 Hemangioblastoma and tufted hemangioma</div></td><td><span class="code-badge">9161</span></td><td><span class="code-badge">C700–C729, C751–C753</span></td><td><span class="beh beh-01">0, 1 (Benign, Borderline)</span></td><td><span class="recode-num">077</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>5.1.2 Cavernous hemangioma</div></td><td><span class="code-badge">9121</span></td><td><span class="code-badge">C700–C729, C751–C753</span></td><td><span class="beh beh-01">0, 1 (Benign, Borderline)</span></td><td><span class="recode-num">078</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>5.1.3 Other benign CNS vascular tumors</div></td><td><span class="code-badge">8710–8714, 8815, 9120, 9122–9160, 9170–9175</span></td><td><span class="code-badge">C700–C729, C751–C753</span></td><td><span class="beh beh-01">0, 1 (Benign, Borderline)</span></td><td><span class="recode-num">079</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">5.2 Malignant blood and lymphatic vessel tumors – all sites</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>5.2.1 Kaposi sarcoma</div><div class="site-desc">HIV/HHV-8-associated vascular tumor; skin, mucosa, visceral organs</div></td><td><span class="code-badge">9140</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">080</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>5.2.2 Other malignant vascular tumors</div><div class="site-desc">Angiosarcoma, malignant hemangioendothelioma, hemangiopericytoma, lymphangiosarcoma</div></td><td><span class="code-badge">8710–8714, 8815, 9120–9138, 9141–9175</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">081</span></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- 6. NERVE SHEATH -->
+<div class="section-block t-nerve">
+  <div class="section-header"><div class="section-bar"></div><span class="chevron">▾</span>
+    <div class="section-title-wrap"><h2>6. Nerve Sheath Tumors</h2><p>Benign CNS schwannomas and neurofibromas through malignant MPNST &nbsp;(082–086)</p></div>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Site Group</th><th>ICD-O-3 Histology</th><th>ICD-O-3 Primary Site</th><th>Behavior</th><th>Recode</th></tr></thead>
+    <tbody>
+      <tr class="parentgroup-row"><td colspan="5">6.1 Benign – CNS</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>6.1.1 Neurilemmoma (schwannoma) – CNS</div></td><td><span class="code-badge">9560</span></td><td><span class="code-badge">C700–C729, C751–C753</span></td><td><span class="beh beh-01">0, 1 (Benign, Borderline)</span></td><td><span class="recode-num">082</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>6.1.2 Other benign CNS nerve sheath</div><div class="site-desc">Neurofibroma, perineurioma, and mixed nerve sheath tumors (CNS)</div></td><td><span class="code-badge">9540–9550, 9561–9571</span></td><td><span class="code-badge">C700–C729, C751–C753</span></td><td><span class="beh beh-01">0, 1 (Benign, Borderline)</span></td><td><span class="recode-num">083</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">6.2 Malignant nerve sheath tumors</td></tr>
+      <tr class="subgroup-row"><td colspan="5">6.2.1 MPNST (Malignant peripheral nerve sheath tumor)</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>6.2.1.1 MPNST – CNS</div></td><td><span class="code-badge">9540–9542</span></td><td><span class="code-badge">C700–C729, C751–C753</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">084</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>6.2.1.2 MPNST – Peripheral</div><div class="site-desc">NF1-associated or sporadic; high-grade; poor prognosis</div></td><td><span class="code-badge">9540–9542</span></td><td><span class="code-badge">C000–C699, C730–C750, C754–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">085</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>6.2.2 Other malignant nerve sheath</div></td><td><span class="code-badge">9543–9571</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">086</span></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- 7. GONADAL -->
+<div class="section-block t-gonad">
+  <div class="section-header"><div class="section-bar"></div><span class="chevron">▾</span>
+    <div class="section-title-wrap"><h2>7. Gonadal and Related Tumors</h2><p>Germ cell, sex cord, and epithelial tumors of testis, ovary, CNS, and extragonadal sites — highly prevalent in AYA &nbsp;(087–112)</p></div>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Site Group</th><th>ICD-O-3 Histology</th><th>ICD-O-3 Primary Site</th><th>Behavior</th><th>Recode</th></tr></thead>
+    <tbody>
+      <tr class="parentgroup-row"><td colspan="5">7.1 Testis</td></tr>
+      <tr class="subgroup-row"><td colspan="5">7.1.1 Germ cell and trophoblastic (testis)</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.1.1.1 Seminoma</div><div class="site-desc">Most common testicular tumor; radiosensitive; AFP-negative</div></td><td><span class="code-badge">9060–9064</span></td><td><span class="code-badge">C620–C629</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">087</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.1.1.2 Embryonal carcinoma</div></td><td><span class="code-badge">9070</span></td><td><span class="code-badge">C620–C629</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">088</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.1.1.3 Endodermal sinus (yolk sac tumor)</div></td><td><span class="code-badge">9071</span></td><td><span class="code-badge">C620–C629</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">089</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.1.1.4 Teratoma</div></td><td><span class="code-badge">9080–9084</span></td><td><span class="code-badge">C620–C629</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">090</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.1.1.5 Mixed germ cell</div></td><td><span class="code-badge">9085, 9086</span></td><td><span class="code-badge">C620–C629</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">091</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.1.1.6 Choriocarcinoma and other trophoblastic</div></td><td><span class="code-badge">9100–9105</span></td><td><span class="code-badge">C620–C629</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">092</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.1.1.7 Other germ cell (testis)</div></td><td><span class="code-badge">9065, 9072</span></td><td><span class="code-badge">C620–C629</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">093</span></td></tr>
+      <tr class="subgroup-row"><td colspan="5">7.1.2 Non-germ cell (testis)</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.1.2.1 Carcinoma</div></td><td><span class="code-badge">8010–8589</span></td><td><span class="code-badge">C620–C629</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">094</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.1.2.2 Sex cord</div><div class="site-desc">Leydig cell, Sertoli cell, granulosa cell tumors of testis</div></td><td><span class="code-badge">8590–8671</span></td><td><span class="code-badge">C620–C629</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">095</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">7.2 Ovary</td></tr>
+      <tr class="subgroup-row"><td colspan="5">7.2.1 Germ cell and trophoblastic (ovary)</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.2.1.1 Teratoma</div></td><td><span class="code-badge">9070, 9072–9084</span></td><td><span class="code-badge">C569</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">096</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.2.1.2 Dysgerminoma</div></td><td><span class="code-badge">9060</span></td><td><span class="code-badge">C569</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">097</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.2.1.3 Yolk sac</div></td><td><span class="code-badge">9071</span></td><td><span class="code-badge">C569</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">098</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.2.1.4 Mixed germ cell</div></td><td><span class="code-badge">9085, 9086</span></td><td><span class="code-badge">C569</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">099</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.2.1.5 Other germ cell and trophoblastic (ovary)</div></td><td><span class="code-badge">9061–9065, 9090–9091, 9100–9105</span></td><td><span class="code-badge">C569</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">100</span></td></tr>
+      <tr class="subgroup-row"><td colspan="5">7.2.2 Non-germ cell (ovary) — Carcinoma — Adenocarcinoma</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.2.2.1.1.1 Clear cell adenocarcinoma</div></td><td><span class="code-badge">8310</span></td><td><span class="code-badge">C569</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">101</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.2.2.1.1.2 Cystadenocarcinoma</div></td><td><span class="code-badge">8440–8474</span></td><td><span class="code-badge">C569</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">102</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.2.2.1.1.3 Mixed cell adenocarcinoma</div></td><td><span class="code-badge">8323</span></td><td><span class="code-badge">C569</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">103</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.2.2.1.1.4 Mucinous adenocarcinoma</div></td><td><span class="code-badge">8480–8482</span></td><td><span class="code-badge">C569</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">104</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.2.2.1.1.5 Endometrioid</div></td><td><span class="code-badge">8380–8383</span></td><td><span class="code-badge">C569</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">105</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.2.2.1.1.6 Other adenocarcinoma (ovary)</div></td><td><span class="code-badge">8140–8231, 8250–8309, 8311–8322, 8324–8379, 8384, 9110</span></td><td><span class="code-badge">C569</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">106</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.2.2.1.2 Other carcinoma (ovary)</div></td><td><span class="code-badge">8010–8139, 8240–8249, 8390–8439, 8483–8589</span></td><td><span class="code-badge">C569</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">107</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.2.2.2 Sex cord and other specialized gonadal (ovary)</div><div class="site-desc">Granulosa cell, Sertoli-Leydig, and other sex cord–stromal tumors of ovary</div></td><td><span class="code-badge">8590–8671</span></td><td><span class="code-badge">C569</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">108</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.3 Germ cell and trophoblastic – CNS</div><div class="site-desc">Intracranial germ cell tumors; germinoma, teratoma, mixed; pineal/suprasellar</div></td><td><span class="code-badge">9060–9065, 9070–9073, 9080–9085, 9090–9091, 9100–9105</span></td><td><span class="code-badge">C700–C729, C751–C753</span></td><td><span class="beh beh-013">0, 1, 3 (Benign, Borderline, Malignant)</span></td><td><span class="recode-num">109</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.4 Germ cell and trophoblastic – excl. CNS, ovary, testis</div><div class="site-desc">Extragonadal GCTs; mediastinum, retroperitoneum, sacrococcyx, and other sites</div></td><td><span class="code-badge">9060–9065, 9070–9073, 9080–9085, 9090–9091, 9100–9105</span></td><td><span class="code-badge">C000–C568, C570–C619, C630–C699, C730–C750, C754–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">110</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.5 Non-germ cell specified – excl. CNS, ovary, testis</div></td><td><span class="code-badge">8590–8671</span></td><td><span class="code-badge">C000–C559, C570–C619, C630–C699, C730–C750, C754–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">111</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>7.6 Fibroepithelial incl. Brenner (excl. breast phyllodes)</div><div class="site-desc">Borderline and malignant Brenner tumor; fibroepithelial tumors of ovary and other sites</div></td><td><span class="code-badge">9000–9019, 9021–9030</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">112</span></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- 8. MELANOMA -->
+<div class="section-block t-mel">
+  <div class="section-header"><div class="section-bar"></div><span class="chevron">▾</span>
+    <div class="section-title-wrap"><h2>8. Melanoma – Malignant</h2><p>Cutaneous and mucosal melanoma subtypes — behavior 3 only &nbsp;(113–115)</p></div>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Site Group</th><th>ICD-O-3 Histology</th><th>ICD-O-3 Primary Site</th><th>Behavior</th><th>Recode</th></tr></thead>
+    <tbody>
+      <tr><td><div class="site-name"><span class="site-dot"></span>8.1 Superficial spreading / low cumulative sun damage melanoma</div></td><td><span class="code-badge">8743</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">113</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>8.2 Nodular melanoma</div></td><td><span class="code-badge">8721</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">114</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>8.3 Other malignant melanoma</div><div class="site-desc">Lentigo maligna melanoma, acral lentiginous, desmoplastic, mucosal, uveal, NOS</div></td><td><span class="code-badge">8720, 8722–8742, 8744–8790</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">115</span></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- 9. CARCINOMAS -->
+<div class="section-block t-carc">
+  <div class="section-header"><div class="section-bar"></div><span class="chevron">▾</span>
+    <div class="section-title-wrap"><h2>9. Carcinomas</h2><p>Epithelial malignancies by organ system — thyroid through urinary tract &nbsp;(116–198) &nbsp;† Excludes in situ; includes histology codes that may not occur at every listed site</p></div>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Site Group</th><th>ICD-O-3 Histology</th><th>ICD-O-3 Primary Site</th><th>Behavior</th><th>Recode</th></tr></thead>
+    <tbody>
+      <tr class="parentgroup-row"><td colspan="5">9.1 Thyroid carcinoma</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.1.1 Medullary</div></td><td><span class="code-badge">8345, 8510–8513</span></td><td><span class="code-badge">C739</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">116</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.1.2 Hürthle cell carcinoma</div></td><td><span class="code-badge">8290</span></td><td><span class="code-badge">C739</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">117</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.1.3 Papillary</div></td><td><span class="code-badge">8050–8053, 8260, 8341–8344, 8503–8507</span></td><td><span class="code-badge">C739</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">118</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.1.4 Follicular</div></td><td><span class="code-badge">8330–8335, 8339</span></td><td><span class="code-badge">C739</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">119</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.1.5 Papillary with follicular variant</div></td><td><span class="code-badge">8340</span></td><td><span class="code-badge">C739</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">120</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.1.6 Other thyroid carcinoma</div></td><td><span class="code-badge">8010–8046, 8054–8257, 8261–8289, 8291–8325, 8336–8337, 8346–8502, 8508–8509, 8514–8589</span></td><td><span class="code-badge">C739</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">121</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">9.2 Other carcinoma of head and neck</td></tr>
+      <tr class="subgroup-row"><td colspan="5">9.2.1 Nasopharyngeal carcinoma</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.2.1.1 Nasopharyngeal – squamous</div></td><td><span class="code-badge">8050–8089</span></td><td><span class="code-badge">C110–C119</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">122</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.2.1.2 Nasopharyngeal – other</div></td><td><span class="code-badge">8010–8049, 8090–8589</span></td><td><span class="code-badge">C110–C119</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">123</span></td></tr>
+      <tr class="subgroup-row"><td colspan="5">9.2.2 Oral cavity, lip, and pharynx</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.2.2.1 Oral cavity, lip, pharynx – squamous</div></td><td><span class="code-badge">8050–8089</span></td><td><span class="code-badge">C000–C069, C090–C109, C120–C148</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">124</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.2.2.2 Oral cavity, lip, pharynx – mucoepidermoid</div></td><td><span class="code-badge">8430–8439</span></td><td><span class="code-badge">C000–C069, C090–C109, C120–C148</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">125</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.2.2.3 Oral cavity, lip, pharynx – other</div></td><td><span class="code-badge">8010–8049, 8090–8429, 8440–8589</span></td><td><span class="code-badge">C000–C069, C090–C109, C120–C148</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">126</span></td></tr>
+      <tr class="subgroup-row"><td colspan="5">9.2.3 Salivary gland</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.2.3.1 Salivary gland – acinar</div></td><td><span class="code-badge">8550–8552</span></td><td><span class="code-badge">C079–C081, C088–C089</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">127</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.2.3.2 Salivary gland – other malignant</div></td><td><span class="code-badge">8010–8543, 8560–8589</span></td><td><span class="code-badge">C079–C081, C088–C089</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">128</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.2.4 Other carcinoma of head and neck</div><div class="site-desc">Larynx, nasal cavity, paranasal sinuses, and H&amp;N NOS</div></td><td><span class="code-badge">8010–8589</span></td><td><span class="code-badge">C300–C329, C760</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">129</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">9.3 Carcinoma of gastrointestinal tract</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.1 Esophagus</div></td><td><span class="code-badge">8010–8589</span></td><td><span class="code-badge">C150–C159</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">130</span></td></tr>
+      <tr class="subgroup-row"><td colspan="5">9.3.2 Stomach</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.2.1.1 Stomach – NET</div></td><td><span class="code-badge">8240–8245, 8248–8249</span></td><td><span class="code-badge">C160–C169</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">131</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.2.1.2 Stomach – NEC</div></td><td><span class="code-badge">8013, 8041–8045, 8246</span></td><td><span class="code-badge">C160–C169</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">132</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.2.2 Stomach – signet ring</div></td><td><span class="code-badge">8490</span></td><td><span class="code-badge">C160–C169</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">133</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.2.3 Stomach – other adenocarcinoma</div></td><td><span class="code-badge">8140–8239, 8250–8489, 8491–8579</span></td><td><span class="code-badge">C160–C169</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">134</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.2.4 Stomach – other invasive</div></td><td><span class="code-badge">8010–8012, 8014–8040, 8046–8139, 8247, 8580–8589</span></td><td><span class="code-badge">C160–C169</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">135</span></td></tr>
+      <tr class="subgroup-row"><td colspan="5">9.3.3 Small intestine</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.3.1.1 Small intestine – NET</div></td><td><span class="code-badge">8240–8245, 8248–8249</span></td><td><span class="code-badge">C170–C179</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">136</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.3.1.2 Small intestine – NEC</div></td><td><span class="code-badge">8013, 8041–8045, 8246</span></td><td><span class="code-badge">C170–C179</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">137</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.3.2 Small intestine – other</div></td><td><span class="code-badge">8010–8012, 8014–8040, 8046–8239, 8247, 8250–8589</span></td><td><span class="code-badge">C170–C179</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">138</span></td></tr>
+      <tr class="subgroup-row"><td colspan="5">9.3.4 Colon — Appendix (C181)</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.4.1.1 Appendix – NET</div></td><td><span class="code-badge">8240–8245, 8248–8249</span></td><td><span class="code-badge">C181</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">139</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.4.1.2 Appendix – NEC</div></td><td><span class="code-badge">8013, 8041–8045, 8246</span></td><td><span class="code-badge">C181</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">140</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.4.1.3 Appendix – other</div></td><td><span class="code-badge">8010–8012, 8014–8040, 8046–8239, 8247, 8250–8589</span></td><td><span class="code-badge">C181</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">141</span></td></tr>
+      <tr class="subgroup-row"><td colspan="5">9.3.4 Colon excl. appendix (C180, C182–C189)</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.4.2.1.1 Colon excl. appendix – NET</div></td><td><span class="code-badge">8240–8245, 8248–8249</span></td><td><span class="code-badge">C180, C182–C189</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">142</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.4.2.1.2 Colon excl. appendix – NEC</div></td><td><span class="code-badge">8013, 8041–8045, 8246</span></td><td><span class="code-badge">C180, C182–C189</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">143</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.4.2.2 Colon excl. appendix – adenocarcinoma</div></td><td><span class="code-badge">8140–8239, 8250–8579</span></td><td><span class="code-badge">C180, C182–C189</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">144</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.4.2.3 Colon excl. appendix – other</div></td><td><span class="code-badge">8010–8012, 8014–8040, 8046–8139, 8247, 8580–8589</span></td><td><span class="code-badge">C180, C182–C189</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">145</span></td></tr>
+      <tr class="subgroup-row"><td colspan="5">9.3.5 Rectum</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.5.1.1 Rectum – NET</div></td><td><span class="code-badge">8240–8245, 8248–8249</span></td><td><span class="code-badge">C199–C209</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">146</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.5.1.2 Rectum – NEC</div></td><td><span class="code-badge">8013, 8041–8045, 8246</span></td><td><span class="code-badge">C199–C209</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">147</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.5.2 Rectum – adenocarcinoma</div></td><td><span class="code-badge">8140–8239, 8250–8579</span></td><td><span class="code-badge">C199–C209</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">148</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.5.3 Rectum – other</div></td><td><span class="code-badge">8010–8012, 8014–8040, 8046–8139, 8247, 8580–8589</span></td><td><span class="code-badge">C199–C209</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">149</span></td></tr>
+      <tr class="subgroup-row"><td colspan="5">9.3.6 Anus</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.6.1 Anus – squamous</div></td><td><span class="code-badge">8050–8089</span></td><td><span class="code-badge">C210–C218</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">150</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.6.2 Anus – other</div></td><td><span class="code-badge">8010–8046, 8090–8589</span></td><td><span class="code-badge">C210–C218</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">151</span></td></tr>
+      <tr class="subgroup-row"><td colspan="5">9.3.7 Liver and intrahepatic bile ducts (IBD)</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.7.1 Cholangiocarcinoma</div></td><td><span class="code-badge">8160–8169</span></td><td><span class="code-badge">C220–C221</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">152</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.7.2 Hepatocellular carcinoma</div></td><td><span class="code-badge">8170–8189</span></td><td><span class="code-badge">C220–C221</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">153</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.7.3 Liver and IBD – other</div></td><td><span class="code-badge">8010–8159, 8190–8589</span></td><td><span class="code-badge">C220–C221</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">154</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.8 Gallbladder and extrahepatic biliary</div></td><td><span class="code-badge">8010–8589</span></td><td><span class="code-badge">C239–C249</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">155</span></td></tr>
+      <tr class="subgroup-row"><td colspan="5">9.3.9 Pancreas</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.9.1.1 Pancreas – NET</div></td><td><span class="code-badge">8150, 8240, 8249</span></td><td><span class="code-badge">C250–C259</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">156</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.9.1.2 Pancreas – NEC</div></td><td><span class="code-badge">8013, 8041–8045, 8246</span></td><td><span class="code-badge">C250–C259</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">157</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.9.1.3 Pancreas – neuroendocrine other</div></td><td><span class="code-badge">8151–8153, 8155–8156, 8241–8245, 8248</span></td><td><span class="code-badge">C250–C259</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">158</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.9.2 Pancreas – adenocarcinoma</div></td><td><span class="code-badge">8140–8149, 8160–8239, 8250–8579</span></td><td><span class="code-badge">C250–C259</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">159</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.9.3 Pancreas – other</div></td><td><span class="code-badge">8010–8012, 8014–8040, 8046, 8050–8139, 8154, 8157, 8247, 8580–8589</span></td><td><span class="code-badge">C250–C259</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">160</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.3.10 Other carcinoma of gastrointestinal tract</div></td><td><span class="code-badge">8010–8589</span></td><td><span class="code-badge">C260–C269</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">161</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">9.4 Carcinoma of lung, bronchus, and trachea</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.4.1 Small cell (NEC)</div></td><td><span class="code-badge">8041–8045</span></td><td><span class="code-badge">C330–C349</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">162</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.4.2.1 Non-small cell – adenocarcinoma</div></td><td><span class="code-badge">8140–8239, 8250–8579</span></td><td><span class="code-badge">C330–C349</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">163</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.4.2.2.1 Non-small cell – NET</div></td><td><span class="code-badge">8240–8245, 8248–8249</span></td><td><span class="code-badge">C330–C349</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">164</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.4.2.2.2 Non-small cell – NEC</div></td><td><span class="code-badge">8013, 8246</span></td><td><span class="code-badge">C330–C349</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">165</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.4.2.3 Non-small cell – other</div></td><td><span class="code-badge">8010–8012, 8014–8040, 8046–8139, 8247, 8580–8589, 9050–9059</span></td><td><span class="code-badge">C330–C349</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">166</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.5 Carcinoma of skin (if collected)</div></td><td><span class="code-badge">8010–8589</span></td><td><span class="code-badge">C440–C449</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">167</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">9.6 Carcinoma of breast</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.6.1 Breast – infiltrating duct</div></td><td><span class="code-badge">8500, 8522–8523</span></td><td><span class="code-badge">C500–C509</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">168</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.6.2 Breast – adenocarcinoma</div></td><td><span class="code-badge">8140–8230, 8250–8313, 8321–8323, 8360–8384, 8401–8402, 8410–8420, 8440–8450, 8460–8490, 8503–8504, 8509, 8550–8552, 8570–8574</span></td><td><span class="code-badge">C500–C509</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">169</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.6.3 Breast – lobular</div></td><td><span class="code-badge">8520, 8524</span></td><td><span class="code-badge">C500–C509</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">170</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.6.4 Breast – phyllodes</div></td><td><span class="code-badge">9020</span></td><td><span class="code-badge">C500–C509</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">171</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.6.5 Breast – medullary</div></td><td><span class="code-badge">8510–8513</span></td><td><span class="code-badge">C500–C509</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">172</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.6.6 Breast – Paget</div></td><td><span class="code-badge">8540–8543</span></td><td><span class="code-badge">C500–C509</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">173</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.6.7 Breast – ductal</div></td><td><span class="code-badge">8507, 8514, 8521</span></td><td><span class="code-badge">C500–C509</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">174</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.6.8 Breast – metaplastic</div></td><td><span class="code-badge">8575</span></td><td><span class="code-badge">C500–C509</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">175</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.6.9 Breast – inflammatory</div></td><td><span class="code-badge">8530</span></td><td><span class="code-badge">C500–C509</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">176</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.6.10 Breast – other</div></td><td><span class="code-badge">8010–8131, 8231–8249, 8314–8320, 8324–8350, 8390–8400, 8403–8409, 8430, 8452–8454, 8501–8502, 8505–8506, 8508, 8525, 8560–8562, 8580–8589</span></td><td><span class="code-badge">C500–C509</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">177</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">9.7 Carcinoma of genital sites (excl. ovary and testis)</td></tr>
+      <tr class="subgroup-row"><td colspan="5">9.7.1 Uterine cervix</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.7.1.1 Cervix – squamous</div></td><td><span class="code-badge">8050–8089</span></td><td><span class="code-badge">C530–C539</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">178</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.7.1.2 Cervix – adenosquamous</div></td><td><span class="code-badge">8560–8570</span></td><td><span class="code-badge">C530–C539</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">179</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.7.1.3 Cervix – adenocarcinoma</div></td><td><span class="code-badge">8140–8559, 8571–8579</span></td><td><span class="code-badge">C530–C539</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">180</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.7.1.4 Cervix – other</div></td><td><span class="code-badge">8010–8049, 8090–8139, 8580–8589</span></td><td><span class="code-badge">C530–C539</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">181</span></td></tr>
+      <tr class="subgroup-row"><td colspan="5">9.7.2 Corpus uteri</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.7.2.1.1 Corpus uteri – endometrioid</div></td><td><span class="code-badge">8380–8383</span></td><td><span class="code-badge">C540–C559</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">182</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.7.2.1.2 Corpus uteri – other adenocarcinoma</div></td><td><span class="code-badge">8140–8379, 8384–8579</span></td><td><span class="code-badge">C540–C559</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">183</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.7.2.2 Corpus uteri – other</div></td><td><span class="code-badge">8010–8139, 8580–8589, 8930–8931, 8950</span></td><td><span class="code-badge">C540–C559</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">184</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.7.3 Vulva and vagina</div></td><td><span class="code-badge">8010–8589</span></td><td><span class="code-badge">C510–C519, C529</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">185</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.7.4 Penis</div></td><td><span class="code-badge">8010–8589</span></td><td><span class="code-badge">C600–C609</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">186</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.7.5 Prostate</div></td><td><span class="code-badge">8010–8589</span></td><td><span class="code-badge">C619</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">187</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.7.6 Other genital</div></td><td><span class="code-badge">8010–8589</span></td><td><span class="code-badge">C570–C579, C589, C630–C639</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">188</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">9.8 Carcinoma of urinary tract</td></tr>
+      <tr class="subgroup-row"><td colspan="5">9.8.1 Kidney</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.8.1.1.1 Kidney – renal cell</div></td><td><span class="code-badge">8310–8319</span></td><td><span class="code-badge">C649</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">189</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.8.1.1.2 Kidney – other adenocarcinoma</div></td><td><span class="code-badge">8140–8309, 8320–8579</span></td><td><span class="code-badge">C649</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">190</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.8.1.2 Kidney – other</div></td><td><span class="code-badge">8010–8139, 8580–8589</span></td><td><span class="code-badge">C649</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">191</span></td></tr>
+      <tr class="subgroup-row"><td colspan="5">9.8.2 Bladder</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.8.2.1 Urinary bladder – transitional cell</div></td><td><span class="code-badge">8120–8139</span></td><td><span class="code-badge">C670–C679</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">192</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.8.2.2 Urinary bladder – other carcinoma</div></td><td><span class="code-badge">8010–8119, 8140–8589</span></td><td><span class="code-badge">C670–C679</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">193</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.8.3 Other urinary</div></td><td><span class="code-badge">8010–8589</span></td><td><span class="code-badge">C659, C669, C680–C689</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">194</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">9.9 Other invasive carcinomas</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.9.1 Adrenocortical carcinoma</div></td><td><span class="code-badge">8010–8589</span></td><td><span class="code-badge">C740–C749</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">195</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.9.2 Unknown primary</div></td><td><span class="code-badge">8010–8589</span></td><td><span class="code-badge">C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">196</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.9.3 Thymic carcinoma</div></td><td><span class="code-badge">8010–8589</span></td><td><span class="code-badge">C379</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">197</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>9.9.4 Carcinoma of other and ill-defined sites</div></td><td><span class="code-badge">8010–8589</span></td><td><span class="code-badge">C380–C424, C470–C499, C690–C699, C750, C754–C759, C761–C808</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">198</span></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- 10. MISCELLANEOUS -->
+<div class="section-block t-misc">
+  <div class="section-header"><div class="section-bar"></div><span class="chevron">▾</span>
+    <div class="section-title-wrap"><h2>10. Miscellaneous Specified Neoplasms</h2><p>Pediatric/embryonal tumors, paraganglioma, and other specified neoplasms not classified elsewhere &nbsp;(199–203)</p></div>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Site Group</th><th>ICD-O-3 Histology</th><th>ICD-O-3 Primary Site</th><th>Behavior</th><th>Recode</th></tr></thead>
+    <tbody>
+      <tr class="parentgroup-row"><td colspan="5">10.1 Other pediatric and embryonal tumors</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>10.1.1 Wilms tumor</div><div class="site-desc">Nephroblastoma; most common renal malignancy in children; occasional AYA</div></td><td><span class="code-badge">8959–8960</span></td><td><span class="code-badge">C000–C699, C730–C750, C754–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">199</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>10.1.2 Olfactory and other non-CNS neuroblastomas</div><div class="site-desc">Olfactory neuroblastoma (esthesioneuroblastoma) and peripheral neuroblastoma outside CNS</div></td><td><div class="code-wrap"><span class="code-badge">9490, 9500</span><span class="code-badge">9520–9522</span></div></td><td><div class="code-wrap"><span class="code-badge">C000–C699, C730–C750, C754–C809</span><span class="code-badge">C000–C809</span></div></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">200</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>10.1.3 Other neuronal and embryonal non-CNS tumors</div><div class="site-desc">Pancreatoblastoma, hepatoblastoma, pleuropulmonary blastoma, and other embryonal</div></td><td><span class="code-badge">8963–8964, 8970–8973, 8981, 9501–9519, 9523</span></td><td><span class="code-badge">C000–C699, C730–C750, C754–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">201</span></td></tr>
+      <tr class="parentgroup-row"><td colspan="5">10.2 Other specified tumors</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>10.2.1 Paraganglioma – non-CNS</div><div class="site-desc">Pheochromocytoma and extraadrenal paraganglioma; catecholamine-secreting</div></td><td><span class="code-badge">8680–8693, 8700</span></td><td><span class="code-badge">C000–C699, C730–C750, C754–C809</span></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">202</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>10.2.2 Other specified neoplasms</div><div class="site-desc">Mesothelial tumors, carcinosarcoma, endometrial stromal sarcoma, müllerian mixed, mesothelioma (excl. pleura), and other specified</div></td><td><div class="code-wrap"><span class="code-badge">8932–8934, 8937–8939, 8941–8949, 8951, 8980, 9110</span><span class="code-badge">9050–9055</span><span class="code-badge">8930–8931, 8950</span><span class="code-badge">8370–8375 → C751</span></div></td><td><div class="code-wrap"><span class="code-badge">C000–C568, C570–C699, C730–C750, C754–C809</span><span class="code-badge">C000–C329, C350–C699, C730–C750, C754–C809</span><span class="code-badge">C000–C539, C560–C699, C730–C750, C754–C809</span></div></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">203</span></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- 11. UNSPECIFIED MALIGNANT -->
+<div class="section-block t-misc">
+  <div class="section-header"><div class="section-bar"></div><span class="chevron">▾</span>
+    <div class="section-title-wrap"><h2>11. Unspecified Malignant Neoplasms (excl. CNS)</h2><p>Malignant neoplasm NOS and unspecified malignancies outside the central nervous system &nbsp;(204)</p></div>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Site Group</th><th>ICD-O-3 Histology</th><th>ICD-O-3 Primary Site</th><th>Behavior</th><th>Recode</th></tr></thead>
+    <tbody>
+      <tr><td><div class="site-name"><span class="site-dot"></span>11. Unspecified malignant neoplasms excl. CNS</div><div class="site-desc">Neoplasm NOS and unspecified malignant tumors at non-CNS sites</div></td><td><div class="code-wrap"><span class="code-badge">8000–8005</span><span class="code-badge">8940</span></div></td><td><div class="code-wrap"><span class="code-badge">C000–C399, C420–C699, C730–C750, C754–C809</span><span class="code-badge">C000–C699, C730–C750, C754–C809</span></div></td><td><span class="beh beh-3">3 (Malignant)</span></td><td><span class="recode-num">204</span></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- A. IN SITU -->
+<div class="section-block t-insitu">
+  <div class="section-header"><div class="section-bar"></div><span class="chevron">▾</span>
+    <div class="section-title-wrap"><h2>A. In Situ</h2><p>In situ lesions (behavior 2) — melanoma in situ, colorectal, breast, cervix, and other sites &nbsp;(205–218) &nbsp;* Not collected by all registries</p></div>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Site Group</th><th>ICD-O-3 Histology</th><th>ICD-O-3 Primary Site</th><th>Behavior</th><th>Recode</th></tr></thead>
+    <tbody>
+      <tr class="parentgroup-row"><td colspan="5">A.1 Melanoma in situ (if collected)</td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>A.1.1 Superficial spreading melanoma in situ</div></td><td><span class="code-badge">8743</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-2">2 (In Situ)</span></td><td><span class="recode-num">205</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>A.1.2 Lentigo maligna</div></td><td><span class="code-badge">8742</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-2">2 (In Situ)</span></td><td><span class="recode-num">206</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>A.1.3 Other in situ melanoma</div></td><td><span class="code-badge">8720–8741, 8744–8790</span></td><td><span class="code-badge">C000–C809</span></td><td><span class="beh beh-2">2 (In Situ)</span></td><td><span class="recode-num">207</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>A.2 Colon incl. appendix – in situ</div></td><td><span class="code-badge">8000–8719, 8800–9589</span></td><td><span class="code-badge">C180–C189</span></td><td><span class="beh beh-2">2 (In Situ)</span></td><td><span class="recode-num">208</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>A.3 Rectum – in situ</div></td><td><span class="code-badge">8000–8719, 8800–9589</span></td><td><span class="code-badge">C199–C209</span></td><td><span class="beh beh-2">2 (In Situ)</span></td><td><span class="recode-num">209</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>A.4 Anus – in situ</div></td><td><span class="code-badge">8000–8719, 8800–9589</span></td><td><span class="code-badge">C210–C218</span></td><td><span class="beh beh-2">2 (In Situ)</span></td><td><span class="recode-num">210</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>A.5 Breast – in situ</div></td><td><span class="code-badge">8000–8719, 8800–9589</span></td><td><span class="code-badge">C500–C509</span></td><td><span class="beh beh-2">2 (In Situ)</span></td><td><span class="recode-num">211</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>A.6 Cervix uteri – in situ</div><div class="site-desc">Not collected by some registries</div></td><td><span class="code-badge">8000–8719, 8800–9589</span></td><td><span class="code-badge">C530–C539</span></td><td><span class="beh beh-2">2 (In Situ)</span></td><td><span class="recode-num">212</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>A.7 Ovary – in situ</div></td><td><span class="code-badge">8000–8719, 8800–9589</span></td><td><span class="code-badge">C569</span></td><td><span class="beh beh-2">2 (In Situ)</span></td><td><span class="recode-num">213</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>A.8 Vulva and vagina – in situ</div></td><td><span class="code-badge">8000–8719, 8800–9589</span></td><td><span class="code-badge">C510–C519, C529</span></td><td><span class="beh beh-2">2 (In Situ)</span></td><td><span class="recode-num">214</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>A.9 Penis – in situ</div></td><td><span class="code-badge">8000–8719, 8800–9589</span></td><td><span class="code-badge">C600–C609</span></td><td><span class="beh beh-2">2 (In Situ)</span></td><td><span class="recode-num">215</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>A.10 Prostate in situ incl. PIN III</div><div class="site-desc">Prostatic intraepithelial neoplasia grade III — not collected by all registries</div></td><td><span class="code-badge">8000–8719, 8800–9589</span></td><td><span class="code-badge">C619</span></td><td><span class="beh beh-2">2 (In Situ)</span></td><td><span class="recode-num">216</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>A.11 Urinary bladder – in situ</div></td><td><span class="code-badge">8000–8719, 8800–9589</span></td><td><span class="code-badge">C670–C679</span></td><td><span class="beh beh-2">2 (In Situ)</span></td><td><span class="recode-num">217</span></td></tr>
+      <tr><td><div class="site-name"><span class="site-dot"></span>A.12 Other in situ</div></td><td><span class="code-badge">8000–8719, 8800–9589</span></td><td><span class="code-badge">C000–C179, C220–C499, C540–C559, C570–C589, C620–C669, C680–C809</span></td><td><span class="beh beh-2">2 (In Situ)</span></td><td><span class="recode-num">218</span></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- UNCLASSIFIED -->
+<div class="section-block t-misc">
+  <div class="section-header"><div class="section-bar"></div><span class="chevron">▾</span>
+    <div class="section-title-wrap"><h2>Unclassified</h2><p>Cases that do not meet criteria for any AYA site group category</p></div>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Site Group</th><th>ICD-O-3 Histology</th><th>ICD-O-3 Primary Site</th><th>Behavior</th><th>Recode</th></tr></thead>
+    <tbody>
+      <tr><td><div class="site-name"><span class="site-dot"></span>Unclassified</div><div class="site-desc">Tumors not meeting criteria for any category above</div></td><td><span class="code-badge">—</span></td><td><span class="code-badge">—</span></td><td><span class="code-badge">—</span></td><td><span class="recode-num">999</span></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="footnotes">
+  Note: Except for CNS, behavior codes 0 and 1 are not collected by many cancer registries.&nbsp;&nbsp;
+  + CNS germ cell tumor: see category 7.3 under Gonadal and Related Tumors.&nbsp;&nbsp;
+  # Carcinomas section excludes in situ; includes histology codes which may not occur for a particular site.&nbsp;&nbsp;
+  * Prostatic intraepithelial neoplasia grade III — not collected by all registries.&nbsp;&nbsp;
+  @ Kaposi sarcoma: see category 5.2.1.&nbsp;&nbsp;
+  $ Malignant fibrous histiocytoma = undifferentiated pleomorphic sarcoma.&nbsp;&nbsp;
+  NET = Neuroendocrine tumor; NEC = Neuroendocrine carcinoma; NOS = Not Otherwise Specified; MPNST = Malignant peripheral nerve sheath tumor.
+</div>
+<p class="source-note">Source: <a href="https://seer.cancer.gov/ayarecode/aya-2020.html">seer.cancer.gov/ayarecode/aya-2020.html</a> — AYA Site Recode 2020 Revision / WHO 2020</p>
+
+</div><!-- end page-wrap -->
+
+<script>
+(function() {
+  const input = document.getElementById('search-input');
+  const clearBtn = document.getElementById('search-clear');
+  const stats = document.getElementById('search-stats');
+  const sections = document.querySelectorAll('.section-block');
+  const expandBtn = document.getElementById('expand-all');
+  const collapseBtn = document.getElementById('collapse-all');
+
+  sections.forEach(section => {
+    const header = section.querySelector('.section-header');
+    if (!header) return;
+    header.addEventListener('click', (e) => {
+      if (e.target.closest('a, button, input')) return;
+      section.classList.toggle('collapsed');
+    });
+  });
+  expandBtn.addEventListener('click', () => sections.forEach(s => s.classList.remove('collapsed')));
+  collapseBtn.addEventListener('click', () => sections.forEach(s => s.classList.add('collapsed')));
+
+  const rowData = [];
+  sections.forEach(section => {
+    section.querySelectorAll('tbody tr').forEach(row => {
+      if (row.classList.contains('subgroup-row') || row.classList.contains('parentgroup-row')) return;
+      rowData.push({ row, section, text: row.textContent.toLowerCase() });
+    });
+  });
+  const sectionData = [];
+  sections.forEach(section => {
+    const t = (section.querySelector('.section-title-wrap')?.textContent || '').toLowerCase();
+    sectionData.push({ section, text: t });
+  });
+
+  function clearHighlights() {
+    document.querySelectorAll('mark.search-mark').forEach(mark => {
+      mark.parentNode.replaceChild(document.createTextNode(mark.textContent), mark);
+    });
+    document.querySelectorAll('.section-block').forEach(s => s.normalize());
+  }
+  function escapeRE(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+  function highlight(el, q) {
+    if (!q) return;
+    const re = new RegExp(escapeRE(q), 'gi');
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+      acceptNode: n => {
+        if (n.parentElement.closest('script,style,mark')) return NodeFilter.FILTER_REJECT;
+        return n.nodeValue.toLowerCase().includes(q) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      }
+    });
+    const targets = [];
+    let n;
+    while (n = walker.nextNode()) targets.push(n);
+    targets.forEach(tn => {
+      const text = tn.nodeValue, frag = document.createDocumentFragment();
+      let last = 0, m;
+      re.lastIndex = 0;
+      while ((m = re.exec(text)) !== null) {
+        if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+        const mk = document.createElement('mark');
+        mk.className = 'search-mark'; mk.textContent = m[0]; frag.appendChild(mk);
+        last = m.index + m[0].length;
+        if (m.index === re.lastIndex) re.lastIndex++;
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      tn.parentNode.replaceChild(frag, tn);
+    });
+  }
+
+  function filter() {
+    const q = input.value.trim().toLowerCase();
+    clearHighlights();
+    if (!q) {
+      rowData.forEach(r => r.row.classList.remove('row-hidden'));
+      sections.forEach(s => { s.classList.remove('section-hidden'); });
+      stats.textContent = '';
+      return;
+    }
+    let count = 0;
+    const hit = new Map();
+    rowData.forEach(r => {
+      if (r.text.includes(q)) { r.row.classList.remove('row-hidden'); hit.set(r.section, true); count++; }
+      else r.row.classList.add('row-hidden');
+    });
+    sectionData.forEach(sd => {
+      if (sd.text.includes(q)) {
+        hit.set(sd.section, true);
+        sd.section.querySelectorAll('tbody tr').forEach(row => {
+          if (!row.classList.contains('subgroup-row') && !row.classList.contains('parentgroup-row') && row.classList.contains('row-hidden')) {
+            row.classList.remove('row-hidden'); count++;
+          }
+        });
+      }
+    });
+    sections.forEach(s => {
+      if (hit.get(s)) { s.classList.remove('section-hidden'); s.classList.remove('collapsed'); }
+      else s.classList.add('section-hidden');
+    });
+    rowData.forEach(r => { if (!r.row.classList.contains('row-hidden')) highlight(r.row, q); });
+    const sc = [...hit.keys()].length;
+    stats.textContent = count === 0 ? 'No matches found.' : `${count} matching row${count===1?'':'s'} across ${sc} section${sc===1?'':'s'}.`;
+  }
+
+  let timer;
+  input.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(filter, 80); });
+  clearBtn.addEventListener('click', () => { input.value = ''; filter(); input.focus(); });
+  input.addEventListener('keydown', e => { if (e.key === 'Escape') { input.value = ''; filter(); } });
+})();
+</script>
+</body>
+</html>
