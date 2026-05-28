@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ICCC Recode ICD-O-3/WHO 2008</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* 12 main group colors — each distinct, all deep enough for print */
+    --g1:  #7a2020;  /* I   Leukemias — deep red */
+    --g2:  #2a5a8a;  /* II  Lymphomas — deep blue */
+    --g3:  #3a3a8a;  /* III CNS — periwinkle */
+    --g4:  #1a6858;  /* IV  Neuroblastoma — teal */
+    --g5:  #7a5000;  /* V   Retinoblastoma — amber */
+    --g6:  #1a5a3a;  /* VI  Renal — forest green */
+    --g7:  #6a3a00;  /* VII Hepatic — brown */
+    --g8:  #4a3a00;  /* VIII Bone — dark olive */
+    --g9:  #6a2060;  /* IX  Soft Tissue — plum */
+    --g10: #005a6a;  /* X   Germ Cell — dark cyan */
+    --g11: #3a5a2a;  /* XI  Epithelial — deep sage */
+    --g12: #3a3a3a;  /* XII Other — charcoal */
+
+    --bg: #edebe8;
+    --card: #ffffff;
+    --text-dark: #0e0c0a;
+    --text-mid: #2e2820;
+    --text-soft: #58504a;
+    --divider: #ccc8c2;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--text-dark);
+    padding: 16px 14px 36px;
+    font-size: 11px;
+  }
+  .page-wrap { max-width: 960px; margin: 0 auto; }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+  }
+  header p {
+    font-size: 10px;
+    color: var(--text-soft);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  /* ── OVERVIEW BOX ── */
+  .overview {
+    background: var(--card);
+    border: 1px solid var(--divider);
+    border-left: 5px solid #3a3a8a;
+    border-radius: 0 5px 5px 0;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    font-size: 10px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+  .overview strong { color: var(--text-dark); }
+  .overview .age-warn {
+    display: inline-block;
+    background: #fff3cd;
+    border: 1px solid #e6c800;
+    border-radius: 3px;
+    padding: 2px 8px;
+    font-weight: 700;
+    color: #5a4200;
+    margin-top: 6px;
+    font-size: 9.5px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ── SEARCH ── */
+  .search-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--bg);
+    padding: 8px 0 10px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid var(--divider);
+  }
+  .search-row { display: flex; align-items: center; gap: 10px; }
+  .search-input {
+    flex: 1;
+    font-family: inherit;
+    font-size: 13px;
+    padding: 8px 12px;
+    border: 1.5px solid var(--divider);
+    border-radius: 5px;
+    background: #fff;
+    color: var(--text-dark);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .search-input:focus { border-color: #7a8aa0; }
+  .search-clear {
+    font-size: 11px;
+    font-weight: 600;
+    background: #fff;
+    border: 1px solid var(--divider);
+    border-radius: 4px;
+    padding: 6px 10px;
+    cursor: pointer;
+    color: var(--text-mid);
+    font-family: inherit;
+  }
+  .search-clear:hover { background: #f4f0ec; }
+  .search-stats { font-size: 10px; color: var(--text-soft); margin-top: 4px; min-height: 12px; }
+  mark.search-mark {
+    background: #fff3a0;
+    color: inherit;
+    padding: 0 1px;
+    border-radius: 2px;
+  }
+  .row-hidden { display: none !important; }
+  .section-hidden { display: none !important; }
+
+  /* ── SECTION BLOCKS ── */
+  .section-block {
+    background: var(--card);
+    border: 1px solid var(--divider);
+    border-radius: 5px;
+    margin-bottom: 20px;
+    overflow: clip;
+    page-break-inside: avoid;
+    scroll-margin-top: 60px;
+  }
+  @keyframes section-flash {
+    0%   { box-shadow: 0 0 0 3px transparent; }
+    15%  { box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 55%, transparent); }
+    60%  { box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 30%, transparent); }
+    100% { box-shadow: 0 0 0 3px transparent; }
+  }
+  .section-block:target { animation: section-flash 1.6s ease-out forwards; }
+
+  .section-header {
+    display: flex;
+    align-items: stretch;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .section-bar {
+    width: 6px;
+    flex-shrink: 0;
+    background: var(--c);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .section-title-wrap {
+    padding: 7px 12px;
+    flex: 1;
+    background: color-mix(in srgb, var(--c) 8%, #fff);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .section-title-wrap h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--c);
+    letter-spacing: -0.1px;
+    line-height: 1.2;
+  }
+  .section-title-wrap p {
+    font-size: 10px;
+    color: var(--text-soft);
+    margin-top: 2px;
+  }
+  .recode-tag {
+    display: inline-block;
+    font-size: 8.5px;
+    font-weight: 700;
+    background: color-mix(in srgb, var(--c) 18%, #fff);
+    color: color-mix(in srgb, var(--c) 85%, #000);
+    border: 1px solid color-mix(in srgb, var(--c) 35%, #fff);
+    padding: 1px 6px;
+    border-radius: 10px;
+    margin-top: 3px;
+    margin-right: 3px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ── BEHAVIOR BANNER ── */
+  .behavior-banner {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-top: 1px solid var(--divider);
+    border-left: 4px solid transparent;
+    letter-spacing: 0.1px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .behavior-banner.malignant-only {
+    background: #fdf0d0;
+    color: #5a3400;
+    border-left-color: #c47800;
+  }
+  .behavior-banner.all-behaviors {
+    background: #d8ecd8;
+    color: #1a3a1a;
+    border-left-color: #2a7a2a;
+    font-weight: 700;
+  }
+
+  /* ── SUBGROUP ROWS ── */
+  /* Main subgroup (a, b, c...) */
+  .subgroup-row td {
+    background: #e8e4de;
+    padding: 4px 12px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    border-top: 1px solid var(--divider);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  /* Extended sub-subgroup (a.1, a.2...) — slightly indented */
+  .subsubgroup-row td {
+    background: color-mix(in srgb, var(--c) 6%, #fff);
+    padding: 3px 12px 3px 22px;
+    font-size: 9px;
+    font-weight: 700;
+    color: color-mix(in srgb, var(--c) 75%, #222);
+    border-top: 1px solid var(--divider);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ── TABLE ── */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { border-top: 1px solid var(--divider); }
+  thead th {
+    padding: 3px 10px;
+    text-align: left;
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: var(--text-soft);
+    background: #f2eeea;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  thead th.recode-col { text-align: center; white-space: nowrap; }
+  tbody tr { border-top: 1px solid var(--divider); }
+  tbody tr:hover { background: #faf8f5; }
+  tbody td {
+    padding: 4px 10px;
+    font-size: 10px;
+    vertical-align: middle;
+    line-height: 1.3;
+  }
+  td.recode-col {
+    text-align: center;
+    white-space: nowrap;
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    font-size: 10px;
+  }
+  td.site-col { white-space: nowrap; }
+  td.hist-col { font-size: 9.5px; }
+
+  .site-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: 1px;
+    background: var(--c);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    flex-shrink: 0;
+  }
+  .code-badge {
+    display: inline-block;
+    font-size: 9px;
+    font-family: 'Courier New', monospace;
+    background: #ddd8d0;
+    color: #0e0c0a;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 700;
+    margin-right: 2px;
+    margin-bottom: 1px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .behavior-badge {
+    display: inline-block;
+    font-size: 8px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .behavior-badge.mal {
+    background: #e8e0d8;
+    color: #3a2a18;
+  }
+  .behavior-badge.all {
+    background: #d8ecd8;
+    color: #1a4a1a;
+  }
+  .analyst-note {
+    display: block;
+    font-size: 8.5px;
+    font-weight: 600;
+    color: #5a2a18;
+    background: #fdf0e0;
+    border-left: 3px solid #c46028;
+    padding: 2px 6px 2px 7px;
+    margin-top: 3px;
+    border-radius: 0 3px 3px 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .analyst-note::before {
+    content: "↳ Analyst note: ";
+    font-weight: 700;
+    color: #8a4018;
+  }
+
+  /* ── THEMES ── */
+  .t-g1  { --c: var(--g1); }
+  .t-g2  { --c: var(--g2); }
+  .t-g3  { --c: var(--g3); }
+  .t-g4  { --c: var(--g4); }
+  .t-g5  { --c: var(--g5); }
+  .t-g6  { --c: var(--g6); }
+  .t-g7  { --c: var(--g7); }
+  .t-g8  { --c: var(--g8); }
+  .t-g9  { --c: var(--g9); }
+  .t-g10 { --c: var(--g10); }
+  .t-g11 { --c: var(--g11); }
+  .t-g12 { --c: var(--g12); }
+
+  .section-block .section-bar    { background: var(--c); }
+  .section-block .site-dot       { background: var(--c); }
+
+  /* ── FOOTNOTES ── */
+  .footnotes {
+    font-size: 9px;
+    color: var(--text-soft);
+    padding: 10px 0 0;
+    line-height: 1.8;
+  }
+  .source-note { font-size: 9px; color: var(--text-soft); text-align: right; margin-top: 4px; }
+  .source-note a { color: var(--text-soft); }
+
+  @media print {
+    @page { margin: 9mm 8mm; size: A4; }
+    body { background: white !important; padding: 0; }
+    .page-wrap { max-width: 100%; }
+    .section-block { page-break-inside: avoid; }
+    .search-wrap { display: none !important; }
+    .section-block.collapsed .table-wrap { display: block !important; }
+    .collapse-controls { display: none !important; }
+    .chevron { display: none !important; }
+
+    tbody tr:hover { background: transparent !important; }
+  }
+
+  /* ── COLLAPSE ── */
+  .section-header {
+    cursor: pointer;
+    user-select: none;
+  }
+  .section-header:hover .section-title-wrap {
+    background: color-mix(in srgb, var(--c) 14%, #fff);
+  }
+  .chevron {
+    font-size: 14px; color: var(--text-soft);
+    padding: 0 10px; flex-shrink: 0;
+    align-self: center;
+    transition: transform 0.18s; line-height: 1;
+  }
+  .section-block.collapsed .chevron { transform: rotate(-90deg); }
+  .section-block.collapsed .table-wrap { display: none; }
+  .section-block.collapsed .behavior-banner { display: none; }
+  .collapse-controls {
+    display: flex; gap: 8px; margin-bottom: 8px;
+  }
+  .collapse-controls button {
+    background: #fff; border: 1px solid var(--divider);
+    border-radius: 4px; padding: 4px 10px;
+    font-size: 10px; font-weight: 600;
+    color: var(--text-mid); cursor: pointer; font-family: inherit;
+  }
+  .collapse-controls button:hover { background: #f4f0ec; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <header style="margin-bottom:10px;">
+    <h1>ICCC Recode ICD-O-3/WHO 2008</h1>
+    <p>International Classification of Childhood Cancer — Main &amp; Extended classification definitions based on ICD-O-3 site, histology, and behavior. Source: <strong>seer.cancer.gov/iccc/iccc-who2008.html</strong></p>
+  </header>
+
+  <div class="overview">
+    <strong>Key differences from the adult SEER Site Recode:</strong> The ICCC classifies cancer by <em>morphology first</em>, not primary site. The same histology code may appear in multiple groups depending on site. Two recode values are provided: the <strong>Extended Classification</strong> (3-digit, 001–114) for detailed subgroup analysis, and the <strong>Main Classification</strong> (3-digit, 011–122) for broader groupings.
+    <br><br>
+    <strong>Behavior codes:</strong> Most groups restrict to malignant behavior (ICD-O-3 behavior = 3). CNS and germ cell tumor groups include benign and borderline tumors (behavior 0 and 1) — flagged with a green banner. This reflects the clinical significance of intracranial tumors regardless of behavior.
+    <br><br>
+    <strong>Updated for WHO 2008:</strong> Hematopoietic codes updated per <em>WHO Classification of Tumours of Haematopoietic and Lymphoid Tissues (2008)</em>. Subject to change based on evolving ICD-O-3 coding rules.
+    <div class="age-warn">⚠ DENOMINATOR NOTE — Restrict population at risk to ages 0–19 when calculating ICCC-based rates</div>
+  </div>
+
+  <div class="search-wrap">
+    <div class="search-row">
+      <input type="text" id="search-input" class="search-input"
+             placeholder="Search by cancer name, ICD-O-3 site or histology code, recode number…"
+             autocomplete="off">
+      <button id="search-clear" class="search-clear" type="button">Clear</button>
+    </div>
+    <div id="search-stats" class="search-stats"></div>
+  </div>
+  <div class="collapse-controls">
+    <button id="expand-all" type="button">Expand all</button>
+    <button id="collapse-all" type="button">Collapse all</button>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════
+       I. LEUKEMIAS
+  ════════════════════════════════════════════════ -->
+  <div class="section-block t-g1" id="sec-i">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>I. Leukemias, Myeloproliferative &amp; Myelodysplastic Diseases</h2>
+        <p>Lymphoid, myeloid, and unspecified leukemias; chronic myeloproliferative and myelodysplastic disorders</p>
+        <div><span class="recode-tag">Main: 011–015</span></div>
+      </div>
+    </div>
+    <div class="behavior-banner malignant-only">All rows: Malignant behavior only (ICD-O-3 behavior = 3)</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Cancer Group</th><th>ICD-O-3 Site</th><th class="hist-col">ICD-O-3 Histology</th><th class="recode-col">Extended</th><th class="recode-col">Main</th></tr></thead>
+      <tbody>
+        <tr class="subgroup-row"><td colspan="5">(a) Lymphoid Leukemias — Main 011</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(a.1) Precursor cell leukemias</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9835–9836</span></td><td class="recode-col">001</td><td class="recode-col">011</td></tr>
+        <tr><td><span class="site-dot"></span>Bone marrow / blood / lymph nodes</td><td class="site-col"><span class="code-badge">C420–C421, C424</span></td><td class="hist-col"><span class="code-badge">9811–9818, 9837</span></td><td class="recode-col">001</td><td class="recode-col">011</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(a.2) Mature B-cell leukemias</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9826, 9832–9833, 9940</span></td><td class="recode-col">002</td><td class="recode-col">011</td></tr>
+        <tr><td><span class="site-dot"></span>Bone marrow / blood / lymph nodes</td><td class="site-col"><span class="code-badge">C420–C421, C424</span></td><td class="hist-col"><span class="code-badge">9823</span></td><td class="recode-col">002</td><td class="recode-col">011</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(a.3) Mature T-cell and NK cell leukemias</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9831, 9834, 9948</span></td><td class="recode-col">003</td><td class="recode-col">011</td></tr>
+        <tr><td><span class="site-dot"></span>Bone marrow / blood / lymph nodes</td><td class="site-col"><span class="code-badge">C420–C421, C424</span></td><td class="hist-col"><span class="code-badge">9827</span></td><td class="recode-col">003</td><td class="recode-col">011</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(a.4) Lymphoid leukemia, NOS</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9820</span></td><td class="recode-col">004</td><td class="recode-col">011</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(b) Acute Myeloid Leukemias — Main 012</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9840, 9861, 9865–9867, 9869–9874</span><br><span class="code-badge">9891, 9895–9898, 9910–9911, 9920, 9931</span></td><td class="recode-col">005</td><td class="recode-col">012</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(c) Chronic Myeloproliferative Diseases — Main 013</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9863, 9875–9876, 9950, 9960–9964</span></td><td class="recode-col">006</td><td class="recode-col">013</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(d) Myelodysplastic Syndrome and Other Myeloproliferative Diseases — Main 014</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9945–9946, 9975, 9980, 9982–9987</span><br><span class="code-badge">9989, 9991–9992</span></td><td class="recode-col">007</td><td class="recode-col">014</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(e) Unspecified and Other Specified Leukemias — Main 015</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9800–9801, 9805–9809, 9860, 9930</span><br><span class="code-badge">9965–9967, 9971</span></td><td class="recode-col">008</td><td class="recode-col">015</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       II. LYMPHOMAS
+  ════════════════════════════════════════════════ -->
+  <div class="section-block t-g2" id="sec-ii">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>II. Lymphomas and Reticuloendothelial Neoplasms</h2>
+        <p>Hodgkin, Non-Hodgkin, Burkitt, miscellaneous lymphoreticular, and unspecified lymphomas</p>
+        <div><span class="recode-tag">Main: 021–025</span></div>
+      </div>
+    </div>
+    <div class="behavior-banner malignant-only">All rows: Malignant behavior only (ICD-O-3 behavior = 3)</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Cancer Group</th><th>ICD-O-3 Site</th><th class="hist-col">ICD-O-3 Histology</th><th class="recode-col">Extended</th><th class="recode-col">Main</th></tr></thead>
+      <tbody>
+        <tr class="subgroup-row"><td colspan="5">(a) Hodgkin Lymphomas — Main 021</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9650–9655, 9659, 9661–9665, 9667</span></td><td class="recode-col">009</td><td class="recode-col">021</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(b) Non-Hodgkin Lymphomas (except Burkitt) — Main 022</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(b.1) Precursor cell lymphomas</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9727–9729</span></td><td class="recode-col">010</td><td class="recode-col">022</td></tr>
+        <tr><td><span class="site-dot"></span>All sites except bone marrow/blood</td><td class="site-col"><span class="code-badge">C000–C419, C422–C423, C425–C809</span></td><td class="hist-col"><span class="code-badge">9811–9818, 9837</span></td><td class="recode-col">010</td><td class="recode-col">022</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(b.2) Mature B-cell lymphomas (except Burkitt)</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9597, 9670–9671, 9673, 9675, 9678–9680, 9684</span><br><span class="code-badge">9688–9691, 9695, 9698–9699, 9712, 9731–9735</span><br><span class="code-badge">9737–9738, 9761–9762, 9764–9766, 9769, 9970</span></td><td class="recode-col">011</td><td class="recode-col">022</td></tr>
+        <tr><td><span class="site-dot"></span>All sites except bone marrow/blood</td><td class="site-col"><span class="code-badge">C000–C419, C422–C423, C425–C809</span></td><td class="hist-col"><span class="code-badge">9823</span></td><td class="recode-col">011</td><td class="recode-col">022</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(b.3) Mature T-cell and NK-cell lymphomas</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9700–9702, 9705, 9708–9709, 9714, 9716–9719</span><br><span class="code-badge">9724–9726, 9767–9768</span></td><td class="recode-col">012</td><td class="recode-col">022</td></tr>
+        <tr><td><span class="site-dot"></span>All sites except bone marrow/blood</td><td class="site-col"><span class="code-badge">C000–C419, C422–C423, C425–C809</span></td><td class="hist-col"><span class="code-badge">9827</span></td><td class="recode-col">012</td><td class="recode-col">022</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(b.4) Non-Hodgkin lymphomas, NOS</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9591, 9760</span></td><td class="recode-col">013</td><td class="recode-col">022</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(c) Burkitt Lymphoma — Main 023</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9687</span></td><td class="recode-col">014</td><td class="recode-col">023</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(d) Miscellaneous Lymphoreticular Neoplasms — Main 024</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9740–9742, 9750–9759</span></td><td class="recode-col">015</td><td class="recode-col">024</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(e) Unspecified Lymphomas — Main 025</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9590, 9596</span></td><td class="recode-col">016</td><td class="recode-col">025</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       III. CNS
+  ════════════════════════════════════════════════ -->
+  <div class="section-block t-g3" id="sec-iii">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>III. CNS and Miscellaneous Intracranial and Intraspinal Neoplasms</h2>
+        <p>Ependymomas, astrocytomas, embryonal tumors, gliomas, pituitary, pineal, meningiomas, and other CNS tumors</p>
+        <div><span class="recode-tag">Main: 031–036</span></div>
+      </div>
+    </div>
+    <div class="behavior-banner all-behaviors">⚠ All behaviors included: benign (0), borderline (1), and malignant (3) — reflects clinical significance of intracranial tumors regardless of behavior</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Cancer Group</th><th>ICD-O-3 Site</th><th class="hist-col">ICD-O-3 Histology</th><th class="recode-col">Extended</th><th class="recode-col">Main</th></tr></thead>
+      <tbody>
+        <tr class="subgroup-row"><td colspan="5">(a) Ependymomas and Choroid Plexus Tumor — Main 031</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(a.1) Ependymomas</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9383, 9391–9394</span></td><td class="recode-col">017</td><td class="recode-col">031</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(a.2) Choroid plexus tumor</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9390</span></td><td class="recode-col">018</td><td class="recode-col">031</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(b) Astrocytomas — Main 032</td></tr>
+        <tr><td><span class="site-dot"></span>Spinal cord (C723)</td><td class="site-col"><span class="code-badge">C723</span></td><td class="hist-col"><span class="code-badge">9380</span></td><td class="recode-col">019</td><td class="recode-col">032</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9384, 9400–9411, 9420–9424, 9440–9442</span></td><td class="recode-col">019</td><td class="recode-col">032</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(c) Intracranial and Intraspinal Embryonal Tumors — Main 033</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(c.1) Medulloblastomas</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9470–9472, 9474, 9480</span></td><td class="recode-col">020</td><td class="recode-col">033</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(c.2) PNET (Primitive Neuroectodermal Tumor)</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9473</span></td><td class="recode-col">021</td><td class="recode-col">033</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(c.3) Medulloepithelioma</td></tr>
+        <tr><td><span class="site-dot"></span>CNS sites</td><td class="site-col"><span class="code-badge">C700–C729</span></td><td class="hist-col"><span class="code-badge">9501–9504</span></td><td class="recode-col">022</td><td class="recode-col">033</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(c.4) Atypical teratoid/rhabdoid tumor</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9508</span></td><td class="recode-col">023</td><td class="recode-col">033</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(d) Other Gliomas — Main 034</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(d.1) Oligodendrogliomas</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9450, 9451, 9460</span></td><td class="recode-col">024</td><td class="recode-col">034</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(d.2) Mixed and unspecified gliomas</td></tr>
+        <tr><td><span class="site-dot"></span>CNS and peripheral sites</td><td class="site-col"><span class="code-badge">C700–C722, C724–C729, C751, C753</span></td><td class="hist-col"><span class="code-badge">9380</span></td><td class="recode-col">025</td><td class="recode-col">034</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9382</span></td><td class="recode-col">025</td><td class="recode-col">034</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(d.3) Neuroepithelial glial tumors of uncertain origin</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9381, 9430, 9444</span></td><td class="recode-col">026</td><td class="recode-col">034</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(e) Other Specified Intracranial and Intraspinal Neoplasms — Main 035</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(e.1) Pituitary adenomas and carcinomas</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">8270–8281, 8300</span></td><td class="recode-col">027</td><td class="recode-col">035</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(e.2) Tumors of the sellar region (craniopharyngiomas)</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9350–9352, 9582</span></td><td class="recode-col">028</td><td class="recode-col">035</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(e.3) Pineal parenchymal tumors</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9360–9362</span></td><td class="recode-col">029</td><td class="recode-col">035</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(e.4) Neuronal and mixed neuronal-glial tumors</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9412–9413, 9492–9493, 9505–9507</span></td><td class="recode-col">030</td><td class="recode-col">035</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(e.5) Meningiomas</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9530–9539</span></td><td class="recode-col">031</td><td class="recode-col">035</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(f) Unspecified Intracranial and Intraspinal Neoplasms — Main 036</td></tr>
+        <tr><td><span class="site-dot"></span>CNS sites only</td><td class="site-col"><span class="code-badge">C700–C729, C751–C753</span></td><td class="hist-col"><span class="code-badge">8000–8005</span></td><td class="recode-col">032</td><td class="recode-col">036</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       IV. NEUROBLASTOMA
+  ════════════════════════════════════════════════ -->
+  <div class="section-block t-g4" id="sec-iv">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>IV. Neuroblastoma and Other Peripheral Nervous Cell Tumors</h2>
+        <p>Neuroblastoma, ganglioneuroblastoma, and other peripheral nervous cell tumors</p>
+        <div><span class="recode-tag">Main: 041–042</span></div>
+      </div>
+    </div>
+    <div class="behavior-banner malignant-only">All rows: Malignant behavior only (ICD-O-3 behavior = 3)</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Cancer Group</th><th>ICD-O-3 Site</th><th class="hist-col">ICD-O-3 Histology</th><th class="recode-col">Extended</th><th class="recode-col">Main</th></tr></thead>
+      <tbody>
+        <tr class="subgroup-row"><td colspan="5">(a) Neuroblastoma and Ganglioneuroblastoma — Main 041</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9490, 9500</span></td><td class="recode-col">033</td><td class="recode-col">041</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(b) Other Peripheral Nervous Cell Tumors — Main 042</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">8680–8683, 8690–8693, 8700, 9520–9523</span></td><td class="recode-col">034</td><td class="recode-col">042</td></tr>
+        <tr><td><span class="site-dot"></span>Non-CNS sites</td><td class="site-col"><span class="code-badge">C000–C699, C739–C768, C809</span></td><td class="hist-col"><span class="code-badge">9501–9504</span></td><td class="recode-col">034</td><td class="recode-col">042</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       V. RETINOBLASTOMA
+  ════════════════════════════════════════════════ -->
+  <div class="section-block t-g5" id="sec-v">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>V. Retinoblastoma</h2>
+        <p>Malignant tumor of the retina — almost exclusively affects children under 5</p>
+        <div><span class="recode-tag">Main: 050</span></div>
+      </div>
+    </div>
+    <div class="behavior-banner malignant-only">All rows: Malignant behavior only (ICD-O-3 behavior = 3)</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Cancer Group</th><th>ICD-O-3 Site</th><th class="hist-col">ICD-O-3 Histology</th><th class="recode-col">Extended</th><th class="recode-col">Main</th></tr></thead>
+      <tbody>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9510–9514</span></td><td class="recode-col">035</td><td class="recode-col">050</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       VI. RENAL TUMORS
+  ════════════════════════════════════════════════ -->
+  <div class="section-block t-g6" id="sec-vi">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>VI. Renal Tumors</h2>
+        <p>Nephroblastoma (Wilms tumor), rhabdoid renal tumor, kidney sarcomas, renal carcinomas</p>
+        <div><span class="recode-tag">Main: 061–063</span></div>
+      </div>
+    </div>
+    <div class="behavior-banner malignant-only">All rows: Malignant behavior only (ICD-O-3 behavior = 3)</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Cancer Group</th><th>ICD-O-3 Site</th><th class="hist-col">ICD-O-3 Histology</th><th class="recode-col">Extended</th><th class="recode-col">Main</th></tr></thead>
+      <tbody>
+        <tr class="subgroup-row"><td colspan="5">(a) Nephroblastoma and Other Nonepithelial Renal Tumors — Main 061</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(a.1) Nephroblastoma (Wilms tumor)</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">8959–8960</span></td><td class="recode-col">036</td><td class="recode-col">061</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(a.2) Rhabdoid renal tumor</td></tr>
+        <tr><td><span class="site-dot"></span>Kidney only</td><td class="site-col"><span class="code-badge">C649</span></td><td class="hist-col"><span class="code-badge">8963</span></td><td class="recode-col">037</td><td class="recode-col">061</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(a.3) Kidney sarcomas</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">8964–8967</span></td><td class="recode-col">038</td><td class="recode-col">061</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(a.4) pPNET of kidney</td></tr>
+        <tr><td><span class="site-dot"></span>Kidney only</td><td class="site-col"><span class="code-badge">C649</span></td><td class="hist-col"><span class="code-badge">9364</span></td><td class="recode-col">039</td><td class="recode-col">061</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(b) Renal Carcinomas — Main 062</td></tr>
+        <tr><td><span class="site-dot"></span>Kidney only</td><td class="site-col"><span class="code-badge">C649</span></td><td class="hist-col"><span class="code-badge">8010–8041, 8050–8075, 8082, 8120–8122, 8130–8141</span><br><span class="code-badge">8143, 8155, 8190–8201, 8210–8211, 8221–8231</span><br><span class="code-badge">8240–8241, 8244–8246, 8260–8263, 8290, 8310</span><br><span class="code-badge">8320, 8323, 8401, 8430, 8440, 8480–8490</span><br><span class="code-badge">8504, 8510, 8550, 8560–8576</span></td><td class="recode-col">040</td><td class="recode-col">062</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">8311–8312, 8316–8319, 8361</span></td><td class="recode-col">040</td><td class="recode-col">062</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(c) Unspecified Malignant Renal Tumors — Main 063</td></tr>
+        <tr><td><span class="site-dot"></span>Kidney only</td><td class="site-col"><span class="code-badge">C649</span></td><td class="hist-col"><span class="code-badge">8000–8005</span></td><td class="recode-col">041</td><td class="recode-col">063</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       VII. HEPATIC TUMORS
+  ════════════════════════════════════════════════ -->
+  <div class="section-block t-g7" id="sec-vii">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>VII. Hepatic Tumors</h2>
+        <p>Hepatoblastoma, hepatic carcinomas, and unspecified malignant hepatic tumors</p>
+        <div><span class="recode-tag">Main: 071–073</span></div>
+      </div>
+    </div>
+    <div class="behavior-banner malignant-only">All rows: Malignant behavior only (ICD-O-3 behavior = 3)</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Cancer Group</th><th>ICD-O-3 Site</th><th class="hist-col">ICD-O-3 Histology</th><th class="recode-col">Extended</th><th class="recode-col">Main</th></tr></thead>
+      <tbody>
+        <tr class="subgroup-row"><td colspan="5">(a) Hepatoblastoma — Main 071</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">8970</span></td><td class="recode-col">042</td><td class="recode-col">071</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(b) Hepatic Carcinomas — Main 072</td></tr>
+        <tr><td><span class="site-dot"></span>Liver and intrahepatic bile duct</td><td class="site-col"><span class="code-badge">C220, C221</span></td><td class="hist-col"><span class="code-badge">8010–8041, 8050–8075, 8082, 8120–8122, 8140–8141</span><br><span class="code-badge">8143, 8155, 8190–8201, 8210–8211, 8230–8231</span><br><span class="code-badge">8240–8241, 8244–8246, 8260–8264, 8310, 8320</span><br><span class="code-badge">8323, 8401, 8430, 8440, 8480–8490, 8504</span><br><span class="code-badge">8510, 8550, 8560–8576</span></td><td class="recode-col">043</td><td class="recode-col">072</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">8160–8180</span></td><td class="recode-col">043</td><td class="recode-col">072</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(c) Unspecified Malignant Hepatic Tumors — Main 073</td></tr>
+        <tr><td><span class="site-dot"></span>Liver and intrahepatic bile duct</td><td class="site-col"><span class="code-badge">C220–C221</span></td><td class="hist-col"><span class="code-badge">8000–8005</span></td><td class="recode-col">044</td><td class="recode-col">073</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       VIII. MALIGNANT BONE TUMORS
+  ════════════════════════════════════════════════ -->
+  <div class="section-block t-g8" id="sec-viii">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>VIII. Malignant Bone Tumors</h2>
+        <p>Osteosarcomas, chondrosarcomas, Ewing tumor, and other bone malignancies</p>
+        <div><span class="recode-tag">Main: 081–085</span></div>
+      </div>
+    </div>
+    <div class="behavior-banner malignant-only">All rows: Malignant behavior only (ICD-O-3 behavior = 3)</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Cancer Group</th><th>ICD-O-3 Site</th><th class="hist-col">ICD-O-3 Histology</th><th class="recode-col">Extended</th><th class="recode-col">Main</th></tr></thead>
+      <tbody>
+        <tr class="subgroup-row"><td colspan="5">(a) Osteosarcomas — Main 081</td></tr>
+        <tr><td><span class="site-dot"></span>Bone sites / ill-defined</td><td class="site-col"><span class="code-badge">C400–C419, C760–C768, C809</span></td><td class="hist-col"><span class="code-badge">9180–9187, 9191–9195, 9200</span></td><td class="recode-col">045</td><td class="recode-col">081</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(b) Chondrosarcomas — Main 082</td></tr>
+        <tr><td><span class="site-dot"></span>Bone sites / ill-defined</td><td class="site-col"><span class="code-badge">C400–C419, C760–C768, C809</span></td><td class="hist-col"><span class="code-badge">9210, 9220, 9240</span></td><td class="recode-col">046</td><td class="recode-col">082</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9221, 9230, 9241–9243</span></td><td class="recode-col">046</td><td class="recode-col">082</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(c) Ewing Tumor and Related Sarcomas of Bone — Main 083</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(c.1) Ewing tumor and Askin tumor of bone</td></tr>
+        <tr><td><span class="site-dot"></span>Bone sites / ill-defined</td><td class="site-col"><span class="code-badge">C400–C419, C760–C768, C809</span></td><td class="hist-col"><span class="code-badge">9260</span></td><td class="recode-col">047</td><td class="recode-col">083</td></tr>
+        <tr><td><span class="site-dot"></span>Bone sites</td><td class="site-col"><span class="code-badge">C400–C419</span></td><td class="hist-col"><span class="code-badge">9365</span></td><td class="recode-col">047</td><td class="recode-col">083</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(c.2) pPNET of bone</td></tr>
+        <tr><td><span class="site-dot"></span>Bone sites</td><td class="site-col"><span class="code-badge">C400–C419</span></td><td class="hist-col"><span class="code-badge">9363–9364</span></td><td class="recode-col">048</td><td class="recode-col">083</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(d) Other Specified Malignant Bone Tumors — Main 084</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(d.1) Malignant fibrous neoplasms of bone</td></tr>
+        <tr><td><span class="site-dot"></span>Bone sites</td><td class="site-col"><span class="code-badge">C400–C419</span></td><td class="hist-col"><span class="code-badge">8810–8811, 8823, 8830</span></td><td class="recode-col">049</td><td class="recode-col">084</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">8812, 9262</span></td><td class="recode-col">049</td><td class="recode-col">084</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(d.2) Malignant chordomas</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9370–9372</span></td><td class="recode-col">050</td><td class="recode-col">084</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(d.3) Odontogenic malignant tumors</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9270–9275, 9280–9282, 9290, 9300–9302</span><br><span class="code-badge">9310–9312, 9320–9322, 9330, 9340–9342</span></td><td class="recode-col">051</td><td class="recode-col">084</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(d.4) Miscellaneous malignant bone tumors</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9250, 9261</span></td><td class="recode-col">052</td><td class="recode-col">084</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(e) Unspecified Malignant Bone Tumors — Main 085</td></tr>
+        <tr><td><span class="site-dot"></span>Bone sites</td><td class="site-col"><span class="code-badge">C400–C419</span></td><td class="hist-col"><span class="code-badge">8000–8005, 8800–8801, 8803–8805</span></td><td class="recode-col">053</td><td class="recode-col">085</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       IX. SOFT TISSUE SARCOMAS
+  ════════════════════════════════════════════════ -->
+  <div class="section-block t-g9" id="sec-ix">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>IX. Soft Tissue and Other Extraosseous Sarcomas</h2>
+        <p>Rhabdomyosarcoma, fibrosarcoma, Kaposi sarcoma, Ewing tumor of soft tissue, leiomyosarcoma, synovial sarcoma, and other soft tissue malignancies</p>
+        <div><span class="recode-tag">Main: 091–095</span></div>
+      </div>
+    </div>
+    <div class="behavior-banner malignant-only">All rows: Malignant behavior only (ICD-O-3 behavior = 3)</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Cancer Group</th><th>ICD-O-3 Site</th><th class="hist-col">ICD-O-3 Histology</th><th class="recode-col">Extended</th><th class="recode-col">Main</th></tr></thead>
+      <tbody>
+        <tr class="subgroup-row"><td colspan="5">(a) Rhabdomyosarcomas — Main 091</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">8900–8905, 8910, 8912, 8920, 8991</span></td><td class="recode-col">054</td><td class="recode-col">091</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(b) Fibrosarcomas, Peripheral Nerve Sheath Tumors, and Other Fibrous Neoplasms — Main 092</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(b.1) Fibroblastic and myofibroblastic tumors</td></tr>
+        <tr><td><span class="site-dot"></span>Non-skin, non-bone soft tissue</td><td class="site-col"><span class="code-badge">C000–C399, C440–C768, C809</span></td><td class="hist-col"><span class="code-badge">8810–8811, 8813–8815, 8821, 8823, 8834–8835</span></td><td class="recode-col">055</td><td class="recode-col">092</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">8820, 8822, 8824–8827, 9150, 9160</span></td><td class="recode-col">055</td><td class="recode-col">092</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(b.2) Nerve sheath tumors</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9540–9571</span></td><td class="recode-col">056</td><td class="recode-col">092</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(b.3) Other fibromatous neoplasms</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9491, 9580</span></td><td class="recode-col">057</td><td class="recode-col">092</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(c) Kaposi Sarcoma — Main 093</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9140</span></td><td class="recode-col">058</td><td class="recode-col">093</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(d) Other Specified Soft Tissue Sarcomas — Main 094</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(d.1) Ewing tumor and Askin tumor of soft tissue</td></tr>
+        <tr><td><span class="site-dot"></span>Soft tissue / non-bone</td><td class="site-col"><span class="code-badge">C000–C399, C470–C759</span></td><td class="hist-col"><span class="code-badge">9260</span></td><td class="recode-col">059</td><td class="recode-col">094</td></tr>
+        <tr><td><span class="site-dot"></span>Non-bone/non-GU sites</td><td class="site-col"><span class="code-badge">C000–C399, C470–C639, C659–C768, C809</span></td><td class="hist-col"><span class="code-badge">9365</span></td><td class="recode-col">059</td><td class="recode-col">094</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(d.2) pPNET of soft tissue</td></tr>
+        <tr><td><span class="site-dot"></span>Non-bone/non-renal soft tissue</td><td class="site-col"><span class="code-badge">C000–C399, C470–C639, C659–C699, C739–C768, C809</span></td><td class="hist-col"><span class="code-badge">9364</span></td><td class="recode-col">060</td><td class="recode-col">094</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(d.3) Extrarenal rhabdoid tumor</td></tr>
+        <tr><td><span class="site-dot"></span>Non-renal soft tissue</td><td class="site-col"><span class="code-badge">C000–C639, C659–C699, C739–C768, C809</span></td><td class="hist-col"><span class="code-badge">8963</span></td><td class="recode-col">061</td><td class="recode-col">094</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(d.4) Liposarcomas</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">8850–8858, 8860–8862, 8870, 8880–8881</span></td><td class="recode-col">062</td><td class="recode-col">094</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(d.5) Fibrohistiocytic tumors</td></tr>
+        <tr><td><span class="site-dot"></span>Non-skin, non-bone soft tissue</td><td class="site-col"><span class="code-badge">C000–C399, C440–C768, C809</span></td><td class="hist-col"><span class="code-badge">8830</span></td><td class="recode-col">063</td><td class="recode-col">094</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">8831–8833, 8836, 9251–9252</span></td><td class="recode-col">063</td><td class="recode-col">094</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(d.6) Leiomyosarcomas</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">8890–8898</span></td><td class="recode-col">064</td><td class="recode-col">094</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(d.7) Synovial sarcomas</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9040–9044</span></td><td class="recode-col">065</td><td class="recode-col">094</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(d.8) Blood vessel tumors</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9120–9125, 9130–9133, 9135–9136</span><br><span class="code-badge">9141–9142, 9161, 9170–9175</span></td><td class="recode-col">066</td><td class="recode-col">094</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(d.9) Osseous and chondromatous neoplasms of soft tissue</td></tr>
+        <tr><td><span class="site-dot"></span>Soft tissue</td><td class="site-col"><span class="code-badge">C490–C499</span></td><td class="hist-col"><span class="code-badge">9180, 9210, 9220, 9240</span></td><td class="recode-col">067</td><td class="recode-col">094</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9231</span></td><td class="recode-col">067</td><td class="recode-col">094</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(d.10) Alveolar soft parts sarcoma</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9581</span></td><td class="recode-col">068</td><td class="recode-col">094</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(d.11) Miscellaneous soft tissue sarcomas</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">8587, 8710–8713, 8806, 8840–8842</span><br><span class="code-badge">8921, 8982, 8990, 9373</span></td><td class="recode-col">069</td><td class="recode-col">094</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(e) Unspecified Soft Tissue Sarcomas — Main 095</td></tr>
+        <tr><td><span class="site-dot"></span>Non-skin, non-bone soft tissue</td><td class="site-col"><span class="code-badge">C000–C399, C440–C768, C809</span></td><td class="hist-col"><span class="code-badge">8800–8805</span></td><td class="recode-col">070</td><td class="recode-col">095</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       X. GERM CELL TUMORS
+  ════════════════════════════════════════════════ -->
+  <div class="section-block t-g10" id="sec-x">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>X. Germ Cell Tumors, Trophoblastic Tumors, and Neoplasms of Gonads</h2>
+        <p>Intracranial, extracranial extragonadal, and gonadal germ cell tumors; gonadal carcinomas and other gonadal malignancies</p>
+        <div><span class="recode-tag">Main: 101–105</span></div>
+      </div>
+    </div>
+    <div class="behavior-banner all-behaviors">⚠ Intracranial germ cell tumors (subgroup a): all behaviors (0, 1, 3) included. Extragonadal and gonadal germ cell tumors: malignant (3) only</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Cancer Group</th><th>ICD-O-3 Site</th><th class="hist-col">ICD-O-3 Histology</th><th class="recode-col">Extended</th><th class="recode-col">Main</th></tr></thead>
+      <tbody>
+        <tr class="subgroup-row"><td colspan="5">(a) Intracranial and Intraspinal Germ Cell Tumors — Main 101 &nbsp;<span class="behavior-badge all">Behaviors 0, 1, 3</span></td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(a.1) Intracranial/intraspinal germinomas</td></tr>
+        <tr><td><span class="site-dot"></span>CNS / sellar sites</td><td class="site-col"><span class="code-badge">C700–C729, C751–C753</span></td><td class="hist-col"><span class="code-badge">9060–9065</span></td><td class="recode-col">071</td><td class="recode-col">101</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(a.2) Intracranial/intraspinal teratomas</td></tr>
+        <tr><td><span class="site-dot"></span>CNS / sellar sites</td><td class="site-col"><span class="code-badge">C700–C729, C751–C753</span></td><td class="hist-col"><span class="code-badge">9080–9084</span></td><td class="recode-col">072</td><td class="recode-col">101</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(a.3) Intracranial/intraspinal embryonal carcinomas</td></tr>
+        <tr><td><span class="site-dot"></span>CNS / sellar sites</td><td class="site-col"><span class="code-badge">C700–C729, C751–C753</span></td><td class="hist-col"><span class="code-badge">9070, 9072</span></td><td class="recode-col">073</td><td class="recode-col">101</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(a.4) Intracranial/intraspinal yolk sac tumor</td></tr>
+        <tr><td><span class="site-dot"></span>CNS / sellar sites</td><td class="site-col"><span class="code-badge">C700–C729, C751–C753</span></td><td class="hist-col"><span class="code-badge">9071</span></td><td class="recode-col">074</td><td class="recode-col">101</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(a.5) Intracranial/intraspinal choriocarcinoma</td></tr>
+        <tr><td><span class="site-dot"></span>CNS / sellar sites</td><td class="site-col"><span class="code-badge">C700–C729, C751–C753</span></td><td class="hist-col"><span class="code-badge">9100</span></td><td class="recode-col">075</td><td class="recode-col">101</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(a.6) Intracranial/intraspinal tumors of mixed forms</td></tr>
+        <tr><td><span class="site-dot"></span>CNS / sellar sites</td><td class="site-col"><span class="code-badge">C700–C729, C751–C753</span></td><td class="hist-col"><span class="code-badge">9085, 9101</span></td><td class="recode-col">076</td><td class="recode-col">101</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(b) Malignant Extracranial and Extragonadal Germ Cell Tumors — Main 102 &nbsp;<span class="behavior-badge mal">Behavior 3 only</span></td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(b.1) Malignant germinomas of extracranial/extragonadal sites</td></tr>
+        <tr><td><span class="site-dot"></span>Non-CNS/non-gonadal sites</td><td class="site-col"><span class="code-badge">C000–C559, C570–C619, C630–C699, C739–C750, C754–C768, C809</span></td><td class="hist-col"><span class="code-badge">9060–9065</span></td><td class="recode-col">077</td><td class="recode-col">102</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(b.2) Malignant teratomas of extracranial/extragonadal sites</td></tr>
+        <tr><td><span class="site-dot"></span>Non-CNS/non-gonadal sites</td><td class="site-col"><span class="code-badge">C000–C559, C570–C619, C630–C699, C739–C750, C754–C768, C809</span></td><td class="hist-col"><span class="code-badge">9080–9084</span></td><td class="recode-col">078</td><td class="recode-col">102</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(b.3–b.6) Other extracranial/extragonadal germ cell types</td></tr>
+        <tr><td><span class="site-dot"></span>Non-CNS/non-gonadal sites</td><td class="site-col"><span class="code-badge">C000–C559, C570–C619, C630–C699, C739–C750, C754–C768, C809</span></td><td class="hist-col"><span class="code-badge">9070–9072, 9100, 9103–9104</span><br><span class="code-badge">9085, 9101–9102, 9105</span></td><td class="recode-col">079–082</td><td class="recode-col">102</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(c) Malignant Gonadal Germ Cell Tumors — Main 103 &nbsp;<span class="behavior-badge mal">Behavior 3 only</span></td></tr>
+        <tr><td><span class="site-dot"></span>Ovary / testis</td><td class="site-col"><span class="code-badge">C569, C620–C629</span></td><td class="hist-col"><span class="code-badge">9060–9065 (germinomas)</span><br><span class="code-badge">9080–9084, 9090–9091 (teratomas)</span><br><span class="code-badge">9070, 9072 (embryonal)</span><br><span class="code-badge">9071 (yolk sac)</span><br><span class="code-badge">9100 (choriocarcinoma)</span><br><span class="code-badge">9073 (gonadoblastoma)</span><br><span class="code-badge">9085, 9101 (mixed)</span></td><td class="recode-col">083–089</td><td class="recode-col">103</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(d) Gonadal Carcinomas — Main 104</td></tr>
+        <tr><td><span class="site-dot"></span>Ovary / testis</td><td class="site-col"><span class="code-badge">C569, C620–C629</span></td><td class="hist-col"><span class="code-badge">8010–8041, 8050–8075, 8082, 8120–8122, 8130–8141</span><br><span class="code-badge">8143, 8190–8201, 8210–8211, 8221–8241, 8244–8246</span><br><span class="code-badge">8260–8263, 8290, 8310, 8313, 8320, 8323, 8380–8384</span><br><span class="code-badge">8430, 8440, 8480–8490, 8504, 8510, 8550, 8560–8573</span><br><span class="code-badge">9000, 9014, 9015</span></td><td class="recode-col">090</td><td class="recode-col">104</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">8441–8444, 8450–8451, 8460–8473</span></td><td class="recode-col">090</td><td class="recode-col">104</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(e) Other and Unspecified Malignant Gonadal Tumors — Main 105</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">8590–8671</span></td><td class="recode-col">091</td><td class="recode-col">105</td></tr>
+        <tr><td><span class="site-dot"></span>Ovary / testis</td><td class="site-col"><span class="code-badge">C569, C620–C629</span></td><td class="hist-col"><span class="code-badge">8000–8005</span></td><td class="recode-col">091</td><td class="recode-col">105</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       XI. OTHER EPITHELIAL NEOPLASMS
+  ════════════════════════════════════════════════ -->
+  <div class="section-block t-g11" id="sec-xi">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>XI. Other Malignant Epithelial Neoplasms and Malignant Melanomas</h2>
+        <p>Adrenocortical carcinoma, thyroid carcinoma, nasopharyngeal carcinoma, melanoma, skin carcinoma, and other carcinomas by site</p>
+        <div><span class="recode-tag">Main: 111–116</span></div>
+      </div>
+    </div>
+    <div class="behavior-banner malignant-only">All rows: Malignant behavior only (ICD-O-3 behavior = 3)</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Cancer Group</th><th>ICD-O-3 Site</th><th class="hist-col">ICD-O-3 Histology</th><th class="recode-col">Extended</th><th class="recode-col">Main</th></tr></thead>
+      <tbody>
+        <tr class="subgroup-row"><td colspan="5">(a) Adrenocortical Carcinomas — Main 111</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">8370–8375</span></td><td class="recode-col">092</td><td class="recode-col">111</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(b) Thyroid Carcinomas — Main 112</td></tr>
+        <tr><td><span class="site-dot"></span>Thyroid (C739)</td><td class="site-col"><span class="code-badge">C739</span></td><td class="hist-col"><span class="code-badge">8010–8041, 8050–8075, 8082, 8120–8122, 8130–8141</span><br><span class="code-badge">8190, 8200–8201, 8211, 8230–8231, 8244–8246</span><br><span class="code-badge">8260–8263, 8290, 8310, 8320, 8323, 8430, 8440</span><br><span class="code-badge">8480–8481, 8510, 8560–8573</span></td><td class="recode-col">093</td><td class="recode-col">112</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">8330–8337, 8340–8347, 8350</span></td><td class="recode-col">093</td><td class="recode-col">112</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(c) Nasopharyngeal Carcinomas — Main 113</td></tr>
+        <tr><td><span class="site-dot"></span>Nasopharynx (C110–C119)</td><td class="site-col"><span class="code-badge">C110–C119</span></td><td class="hist-col"><span class="code-badge">8010–8041, 8050–8075, 8082–8083, 8120–8122</span><br><span class="code-badge">8130–8141, 8190, 8200–8201, 8211, 8230–8231</span><br><span class="code-badge">8244–8246, 8260–8263, 8290, 8310, 8320, 8323</span><br><span class="code-badge">8430, 8440, 8480–8481, 8500–8576</span></td><td class="recode-col">094</td><td class="recode-col">113</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(d) Malignant Melanomas — Main 114</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">8720–8780, 8790</span></td><td class="recode-col">095</td><td class="recode-col">114</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(e) Skin Carcinomas — Main 115</td></tr>
+        <tr><td><span class="site-dot"></span>Skin (C440–C449)</td><td class="site-col"><span class="code-badge">C440–C449</span></td><td class="hist-col"><span class="code-badge">8010–8041, 8050–8075, 8078, 8082, 8090–8110</span><br><span class="code-badge">8140, 8143, 8147, 8190, 8200, 8240, 8246–8247</span><br><span class="code-badge">8260, 8310, 8320, 8323, 8390–8420, 8430, 8480</span><br><span class="code-badge">8542, 8560, 8570–8573, 8940, 8941</span></td><td class="recode-col">096</td><td class="recode-col">115</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(f) Other and Unspecified Carcinomas (by site) — Main 116</td></tr>
+        <tr><td><span class="site-dot"></span>Salivary glands (f.1)</td><td class="site-col"><span class="code-badge">C079–C089</span></td><td class="hist-col" rowspan="11"><span class="code-badge">8010–8084, 8120–8157, 8190–8264, 8290, 8310</span><br><span class="code-badge">8313–8315, 8320–8325, 8360, 8380–8384</span><br><span class="code-badge">8430–8440, 8452–8454, 8480–8586, 8588–8589</span><br><span class="code-badge">8940–8941, 8983, 9000, 9010–9016, 9020, 9030</span><br><span class="analyst-note">Same histology range applies to all (f.1)–(f.11) subgroups — differs only by site</span></td><td class="recode-col">097</td><td class="recode-col">116</td></tr>
+        <tr><td><span class="site-dot"></span>Colon and rectum (f.2)</td><td class="site-col"><span class="code-badge">C180, C182–C189, C199, C209, C210–C218</span></td><td class="recode-col">098</td><td class="recode-col">116</td></tr>
+        <tr><td><span class="site-dot"></span>Appendix (f.3)</td><td class="site-col"><span class="code-badge">C181</span></td><td class="recode-col">099</td><td class="recode-col">116</td></tr>
+        <tr><td><span class="site-dot"></span>Lung (f.4)</td><td class="site-col"><span class="code-badge">C340–C349</span></td><td class="recode-col">100</td><td class="recode-col">116</td></tr>
+        <tr><td><span class="site-dot"></span>Thymus (f.5)</td><td class="site-col"><span class="code-badge">C379</span></td><td class="recode-col">101</td><td class="recode-col">116</td></tr>
+        <tr><td><span class="site-dot"></span>Breast (f.6)</td><td class="site-col"><span class="code-badge">C500–C509</span></td><td class="recode-col">102</td><td class="recode-col">116</td></tr>
+        <tr><td><span class="site-dot"></span>Cervix uteri (f.7)</td><td class="site-col"><span class="code-badge">C530–C539</span></td><td class="recode-col">103</td><td class="recode-col">116</td></tr>
+        <tr><td><span class="site-dot"></span>Bladder (f.8)</td><td class="site-col"><span class="code-badge">C670–C679</span></td><td class="recode-col">104</td><td class="recode-col">116</td></tr>
+        <tr><td><span class="site-dot"></span>Eye (f.9)</td><td class="site-col"><span class="code-badge">C690–C699</span></td><td class="recode-col">105</td><td class="recode-col">116</td></tr>
+        <tr><td><span class="site-dot"></span>Other specified sites (f.10)</td><td class="site-col"><span class="code-badge">C000–C069, C090–C109, C129–C179</span><br><span class="code-badge">C239–C339, C380–C399, C480–C488</span><br><span class="code-badge">C510–C549, C559, C570–C619</span><br><span class="code-badge">C630–C639, C659–C669, C680–C689</span><br><span class="code-badge">C700–C729, C750–C759</span></td><td class="recode-col">106</td><td class="recode-col">116</td></tr>
+        <tr><td><span class="site-dot"></span>Unspecified site (f.11)</td><td class="site-col"><span class="code-badge">C760–C768, C809</span></td><td class="recode-col">107</td><td class="recode-col">116</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       XII. OTHER AND UNSPECIFIED
+  ════════════════════════════════════════════════ -->
+  <div class="section-block t-g12" id="sec-xii">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>XII. Other and Unspecified Malignant Neoplasms</h2>
+        <p>Gastrointestinal stromal tumor, pancreatoblastoma, pulmonary blastoma, mesothelioma, other complex and stromal neoplasms, and unspecified malignant tumors</p>
+        <div><span class="recode-tag">Main: 121–122</span></div>
+      </div>
+    </div>
+    <div class="behavior-banner malignant-only">All rows: Malignant behavior only (ICD-O-3 behavior = 3)</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Cancer Group</th><th>ICD-O-3 Site</th><th class="hist-col">ICD-O-3 Histology</th><th class="recode-col">Extended</th><th class="recode-col">Main</th></tr></thead>
+      <tbody>
+        <tr class="subgroup-row"><td colspan="5">(a) Other Specified Malignant Tumors — Main 121</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(a.1) Gastrointestinal stromal tumor (GIST)</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">8936</span></td><td class="recode-col">108</td><td class="recode-col">121</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(a.2) Pancreatoblastoma</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">8971</span></td><td class="recode-col">109</td><td class="recode-col">121</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(a.3) Pulmonary blastoma and pleuropulmonary blastoma</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">8972–8973</span></td><td class="recode-col">110</td><td class="recode-col">121</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(a.4) Other complex mixed and stromal neoplasms</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">8930–8935, 8950–8951, 8974–8981</span></td><td class="recode-col">111</td><td class="recode-col">121</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(a.5) Mesothelioma</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9050–9055</span></td><td class="recode-col">112</td><td class="recode-col">121</td></tr>
+        <tr class="subsubgroup-row"><td colspan="5">(a.6) Other specified malignant tumors</td></tr>
+        <tr><td><span class="site-dot"></span>Any site</td><td class="site-col"><span class="code-badge">C000–C809</span></td><td class="hist-col"><span class="code-badge">9110</span></td><td class="recode-col">113</td><td class="recode-col">121</td></tr>
+        <tr><td><span class="site-dot"></span>Soft tissue / non-CNS / non-bone</td><td class="site-col"><span class="code-badge">C000–C399, C470–C759</span></td><td class="hist-col"><span class="code-badge">9363</span></td><td class="recode-col">113</td><td class="recode-col">121</td></tr>
+        <tr class="subgroup-row"><td colspan="5">(b) Other Unspecified Malignant Tumors — Main 122</td></tr>
+        <tr><td><span class="site-dot"></span>All sites except CNS / sellar / gonadal</td><td class="site-col"><span class="code-badge">C000–C218, C239–C399, C420–C559</span><br><span class="code-badge">C570–C619, C630–C639, C659–C699</span><br><span class="code-badge">C739–C750, C754–C809</span></td><td class="hist-col"><span class="code-badge">8000–8005</span></td><td class="recode-col">114</td><td class="recode-col">122</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="footnotes">
+    * This table was updated for Hematopoietic codes based on <em>WHO Classification of Tumours of Haematopoietic and Lymphoid Tissues (2008)</em>.<br>
+    ^ Subject to change based on evolving ICD-O-3 coding rules.<br>
+    NOS = Not Otherwise Specified. pPNET = Peripheral Primitive Neuroectodermal Tumor. GIST = Gastrointestinal Stromal Tumor.
+  </div>
+  <p class="source-note">Source: <a href="https://seer.cancer.gov/iccc/iccc-who2008.html" target="_blank">seer.cancer.gov/iccc/iccc-who2008.html</a> — ICCC Recode ICD-O-3/WHO 2008</p>
+
+</div>
+
+<script>
+(function() {
+  var input    = document.getElementById('search-input');
+  var clearBtn = document.getElementById('search-clear');
+  var stats    = document.getElementById('search-stats');
+  var sections = document.querySelectorAll('.section-block');
+  var expandBtn   = document.getElementById('expand-all');
+  var collapseBtn = document.getElementById('collapse-all');
+
+  /* COLLAPSE / EXPAND */
+  sections.forEach(function(section) {
+    var header = section.querySelector('.section-header');
+    if (!header) return;
+    header.addEventListener('click', function(e) {
+      if (e.target.closest('a, button, input')) return;
+      section.classList.toggle('collapsed');
+    });
+  });
+  expandBtn.addEventListener('click', function() {
+    sections.forEach(function(s) { s.classList.remove('collapsed'); });
+  });
+  collapseBtn.addEventListener('click', function() {
+    sections.forEach(function(s) { s.classList.add('collapsed'); });
+  });
+
+  /* SEARCH */
+  var rowData = [];
+  sections.forEach(function(section) {
+    section.querySelectorAll('tbody tr').forEach(function(row) {
+      if (row.classList.contains('subgroup-row') || row.classList.contains('subsubgroup-row')) return;
+      rowData.push({ row: row, section: section, text: row.textContent.toLowerCase() });
+    });
+  });
+  var sectionData = [];
+  sections.forEach(function(section) {
+    var el = section.querySelector('.section-title-wrap');
+    sectionData.push({ section: section, text: el ? el.textContent.toLowerCase() : '' });
+  });
+
+  function clearHighlights() {
+    document.querySelectorAll('mark.search-mark').forEach(function(mark) {
+      mark.parentNode.replaceChild(document.createTextNode(mark.textContent), mark);
+    });
+    sections.forEach(function(s) { s.normalize(); });
+  }
+
+  function escapeRE(s) {
+    return s.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+  }
+
+  function highlight(el, query) {
+    if (!query) return;
+    var re = new RegExp(escapeRE(query), 'gi');
+    var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+      acceptNode: function(n) {
+        if (n.parentElement.closest('script,style,mark')) return NodeFilter.FILTER_REJECT;
+        return n.nodeValue.toLowerCase().indexOf(query) !== -1
+          ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      }
+    });
+    var targets = [], n;
+    while ((n = walker.nextNode())) targets.push(n);
+    targets.forEach(function(tn) {
+      var text = tn.nodeValue, frag = document.createDocumentFragment();
+      var last = 0, m;
+      re.lastIndex = 0;
+      while ((m = re.exec(text)) !== null) {
+        if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+        var mark = document.createElement('mark');
+        mark.className = 'search-mark';
+        mark.textContent = m[0];
+        frag.appendChild(mark);
+        last = m.index + m[0].length;
+        if (m.index === re.lastIndex) re.lastIndex++;
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      tn.parentNode.replaceChild(frag, tn);
+    });
+  }
+
+  function filter() {
+    var q = input.value.trim().toLowerCase();
+    clearHighlights();
+    if (!q) {
+      rowData.forEach(function(r) { r.row.classList.remove('row-hidden'); });
+      sections.forEach(function(s) { s.classList.remove('section-hidden'); });
+      stats.textContent = '';
+      return;
+    }
+    var count = 0, hit = new Map();
+    rowData.forEach(function(r) {
+      if (r.text.indexOf(q) !== -1) {
+        r.row.classList.remove('row-hidden');
+        hit.set(r.section, true);
+        count++;
+      } else {
+        r.row.classList.add('row-hidden');
+      }
+    });
+    sectionData.forEach(function(sd) {
+      if (sd.text.indexOf(q) !== -1) {
+        hit.set(sd.section, true);
+        sd.section.querySelectorAll('tbody tr').forEach(function(row) {
+          if (!row.classList.contains('subgroup-row') &&
+              !row.classList.contains('subsubgroup-row') &&
+              row.classList.contains('row-hidden')) {
+            row.classList.remove('row-hidden');
+            count++;
+          }
+        });
+      }
+    });
+    sections.forEach(function(s) {
+      if (hit.get(s)) {
+        s.classList.remove('section-hidden');
+        s.classList.remove('collapsed');
+      } else {
+        s.classList.add('section-hidden');
+      }
+    });
+    rowData.forEach(function(r) {
+      if (!r.row.classList.contains('row-hidden')) highlight(r.row, q);
+    });
+    var sc = Array.from(hit.keys()).length;
+    stats.textContent = count === 0
+      ? 'No matches found.'
+      : count + ' matching row' + (count === 1 ? '' : 's') +
+        ' across ' + sc + ' section' + (sc === 1 ? '' : 's') + '.';
+  }
+
+  var timer;
+  input.addEventListener('input', function() { clearTimeout(timer); timer = setTimeout(filter, 80); });
+  clearBtn.addEventListener('click', function() { input.value = ''; filter(); input.focus(); });
+  input.addEventListener('keydown', function(e) { if (e.key === 'Escape') { input.value = ''; filter(); } });
+})();
+</script>
+
+</body>
+</html>

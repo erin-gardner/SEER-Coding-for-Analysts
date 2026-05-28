@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brain/CNS Recode — SEER</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Section colors */
+    --mal:      #7a1a1a;   /* Malignant — deep red */
+    --nonmal:   #1a5a3a;   /* Non-malignant — deep forest green */
+    --pineal:   #4a2878;   /* Pineal region — deep violet */
+    --other:    #2a2a2a;   /* All Other — charcoal */
+
+    /* Sub-group colors within malignant */
+    --glioma:   #9a2020;
+    --embryonal:#8a3a00;
+    --mening:   #006070;
+    --choroid:  #5a4000;
+    --neuronal: #1a4878;
+    --othermal: #3a3a3a;
+
+    --bg: #edebe8;
+    --card: #ffffff;
+    --text-dark: #0e0c0a;
+    --text-mid: #2e2820;
+    --text-soft: #58504a;
+    --divider: #ccc8c2;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--text-dark);
+    padding: 16px 14px 36px;
+    font-size: 11px;
+  }
+  .page-wrap { max-width: 920px; margin: 0 auto; }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+  }
+  header p { font-size: 10px; color: var(--text-soft); margin-top: 4px; line-height: 1.5; }
+
+  /* ── OVERVIEW ── */
+  .overview {
+    background: var(--card);
+    border: 1px solid var(--divider);
+    border-left: 5px solid #6a3a8a;
+    border-radius: 0 5px 5px 0;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    font-size: 10px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+  .overview strong { color: var(--text-dark); }
+
+  /* ── SEARCH ── */
+  .search-wrap {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--bg);
+    padding: 8px 0 10px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid var(--divider);
+  }
+  .search-row { display: flex; align-items: center; gap: 10px; }
+  .search-input {
+    flex: 1; font-family: inherit; font-size: 13px;
+    padding: 8px 12px;
+    border: 1.5px solid var(--divider); border-radius: 5px;
+    background: #fff; color: var(--text-dark); outline: none;
+    transition: border-color 0.15s;
+  }
+  .search-input:focus { border-color: #7a8aa0; }
+  .search-clear {
+    font-size: 11px; font-weight: 600;
+    background: #fff; border: 1px solid var(--divider);
+    border-radius: 4px; padding: 6px 10px;
+    cursor: pointer; color: var(--text-mid); font-family: inherit;
+  }
+  .search-clear:hover { background: #f4f0ec; }
+  .search-stats { font-size: 10px; color: var(--text-soft); margin-top: 4px; min-height: 12px; }
+  mark.search-mark { background: #fff3a0; color: inherit; padding: 0 1px; border-radius: 2px; }
+  .row-hidden { display: none !important; }
+  .section-hidden { display: none !important; }
+
+  /* ── SECTION BLOCKS ── */
+  .section-block {
+    background: var(--card);
+    border: 1px solid var(--divider);
+    border-radius: 5px;
+    margin-bottom: 20px;
+    overflow: clip;
+    page-break-inside: avoid;
+    scroll-margin-top: 60px;
+  }
+  @keyframes section-flash {
+    0%   { box-shadow: 0 0 0 3px transparent; }
+    15%  { box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 55%, transparent); }
+    60%  { box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 30%, transparent); }
+    100% { box-shadow: 0 0 0 3px transparent; }
+  }
+  .section-block:target { animation: section-flash 1.6s ease-out forwards; }
+
+  .section-header {
+    display: flex; align-items: stretch;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .section-bar {
+    width: 6px; flex-shrink: 0;
+    background: var(--c);
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .section-title-wrap {
+    padding: 8px 14px; flex: 1;
+    background: color-mix(in srgb, var(--c) 8%, #fff);
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .section-title-wrap h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px; font-weight: 700;
+    color: var(--c); line-height: 1.15;
+  }
+  .section-title-wrap p { font-size: 10px; color: var(--text-soft); margin-top: 2px; }
+
+  /* ── SUBGROUP ROWS ── */
+  .subgroup-row td {
+    background: color-mix(in srgb, var(--c) 10%, #fff);
+    padding: 5px 12px;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.3px;
+    color: color-mix(in srgb, var(--c) 75%, #111);
+    border-top: 2px solid color-mix(in srgb, var(--c) 25%, #fff);
+    border-bottom: 1px solid color-mix(in srgb, var(--c) 18%, #fff);
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+
+  /* ── TABLE ── */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { border-top: 1px solid var(--divider); }
+  thead th {
+    padding: 3px 10px; text-align: left;
+    font-size: 8px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.7px;
+    color: var(--text-soft); background: #f2eeea;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  thead th.center { text-align: center; }
+  tbody tr { border-top: 1px solid var(--divider); }
+  tbody tr:hover { background: #faf8f5; }
+  tbody td {
+    padding: 5px 10px;
+    font-size: 10.5px; vertical-align: middle; line-height: 1.3;
+  }
+  td.recode-col {
+    text-align: center; font-family: 'Courier New', monospace;
+    font-weight: 700; font-size: 11px; white-space: nowrap;
+  }
+  .recode-num { font-family: 'Courier New', monospace; font-weight: 700; }
+
+  .site-name {
+    font-weight: 700; font-size: 10.5px;
+    display: flex; align-items: flex-start; gap: 6px;
+  }
+  .site-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    flex-shrink: 0; margin-top: 3px;
+    background: var(--c);
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .site-desc {
+    font-size: 8.5px; color: var(--text-soft);
+    font-weight: 400; margin-top: 1px; padding-left: 12px;
+  }
+  .code-wrap { display: flex; flex-direction: column; gap: 2px; }
+  .code-badge {
+    display: inline-block;
+    font-size: 8.5px; font-family: 'Courier New', monospace;
+    background: #ddd8d0; color: #0e0c0a;
+    padding: 1px 5px; border-radius: 3px;
+    font-weight: 700; white-space: nowrap;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .beh-badge {
+    display: inline-block;
+    font-size: 8px; font-weight: 700;
+    padding: 1px 5px; border-radius: 3px;
+    margin-right: 2px; margin-bottom: 1px;
+    font-family: 'Courier New', monospace;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .beh-3   { background: #fdf0d0; color: #5a3400; }
+  .beh-0   { background: #d8ecd8; color: #1a3a1a; }
+  .beh-1   { background: #d8eae8; color: #0a2e2a; }
+  .beh-01  { background: #d0e8e4; color: #0a2a28; }
+  .beh-013 { background: #ece8f8; color: #2a0a5a; }
+
+  .analyst-note {
+    display: block; font-size: 8.5px; font-weight: 600;
+    color: #5a2a18; background: #fdf0e0;
+    border-left: 3px solid #c46028;
+    padding: 3px 6px 3px 8px; margin-top: 4px;
+    border-radius: 0 3px 3px 0;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .analyst-note::before {
+    content: "↳ Analyst note: ";
+    font-weight: 700; color: #8a4018;
+  }
+
+  /* ── THEMES ── */
+  .t-mal    { --c: var(--mal); }
+  .t-nonmal { --c: var(--nonmal); }
+  .t-pineal { --c: var(--pineal); }
+  .t-other  { --c: var(--other); }
+
+  .section-block .section-bar    { background: var(--c); }
+  .section-block .section-title-wrap { background: color-mix(in srgb, var(--c) 8%, #fff); }
+  .section-block .section-title-wrap h2 { color: var(--c); }
+  .section-block .site-dot { background: var(--c); }
+
+  /* ── FOOTNOTES ── */
+  .footnotes {
+    font-size: 9px; color: var(--text-soft);
+    padding: 10px 0 0; line-height: 1.8;
+  }
+  .source-note {
+    font-size: 9px; color: var(--text-soft);
+    text-align: right; margin-top: 4px;
+  }
+  .source-note a { color: var(--text-soft); }
+
+  @media print {
+    @page { margin: 9mm 8mm; size: A4; }
+    body { background: white !important; padding: 0; }
+    .page-wrap { max-width: 100%; }
+    .section-block { page-break-inside: avoid; }
+    .search-wrap { display: none !important; }
+    .section-block.collapsed .table-wrap { display: block !important; }
+    .collapse-controls { display: none !important; }
+    .chevron { display: none !important; }
+
+    tbody tr:hover { background: transparent !important; }
+  }
+
+  /* ── COLLAPSE ── */
+  .section-header {
+    cursor: pointer;
+    user-select: none;
+  }
+  .section-header:hover .section-title-wrap {
+    background: color-mix(in srgb, var(--c) 14%, #fff);
+  }
+  .chevron {
+    font-size: 14px; color: var(--text-soft);
+    padding: 0 10px; flex-shrink: 0;
+    align-self: center;
+    transition: transform 0.18s; line-height: 1;
+  }
+  .section-block.collapsed .chevron { transform: rotate(-90deg); }
+  .section-block.collapsed .table-wrap { display: none; }
+  .section-block.collapsed .behavior-banner { display: none; }
+  .collapse-controls {
+    display: flex; gap: 8px; margin-bottom: 8px;
+  }
+  .collapse-controls button {
+    background: #fff; border: 1px solid var(--divider);
+    border-radius: 4px; padding: 4px 10px;
+    font-size: 10px; font-weight: 600;
+    color: var(--text-mid); cursor: pointer; font-family: inherit;
+  }
+  .collapse-controls button:hover { background: #f4f0ec; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <header style="margin-bottom:10px;">
+    <h1>Brain/CNS Recode</h1>
+    <p>SEER Brain and Other Central Nervous System tumor recode — based on the 2016 WHO Classification of Tumors of the Central Nervous System. All primary sites C700–C729 (brain/CNS) or C753 (pineal region). Source: <strong>seer.cancer.gov/seerstat/variables/seer/brain_cns-recode/</strong></p>
+  </header>
+
+  <div class="overview">
+    <strong>Purpose:</strong> Allows researchers to analyze brain and CNS tumors according to major WHO 2016 histological categories. Both malignant (behavior 3) and non-malignant (behavior 0 and 1) tumors are included — unlike most SEER recodes which capture malignant cases only.
+    <br><br>
+    <strong>Site scope:</strong> All rows apply to primary site codes <strong>C700–C729</strong> (brain, spinal cord, and other CNS sites) unless otherwise noted. Pineal region tumors use site <strong>C753</strong>.
+    <br><br>
+    <strong>Recode 27 "All Other Cancer Types"</strong> captures any brain/CNS site record that does not meet criteria for recodes 01–26. This includes histologies excluded from the CNS recode (9050–9055, 9140, 9590–9993) as well as records at CNS sites with non-CNS tumor types (e.g. lymphomas, which are classified under the SEER Site Recode instead).
+    <br><br>
+    <strong>Reference:</strong> Forjaz G et al. An updated histology recode for the analysis of primary malignant and nonmalignant brain and other CNS tumors in SEER. <em>Neurooncol Adv.</em> 2020;3(1):vdaa175.
+  </div>
+
+  <div class="search-wrap">
+    <div class="search-row">
+      <input type="text" id="search-input" class="search-input"
+             placeholder="Search by tumor type, histology code, recode number, or keyword…"
+             autocomplete="off">
+      <button id="search-clear" class="search-clear" type="button">Clear</button>
+    </div>
+    <div id="search-stats" class="search-stats"></div>
+  </div>
+  <div class="collapse-controls">
+    <button id="expand-all" type="button">Expand all</button>
+    <button id="collapse-all" type="button">Collapse all</button>
+  </div>
+
+
+  <!-- ════════════════════════════════════════
+       MALIGNANT BRAIN / ONS
+  ═════════════════════════════════════════ -->
+  <div class="section-block t-mal" id="sec-malignant">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Malignant Brain / ONS</h2>
+      </div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead>
+        <tr>
+          <th>Tumor Type</th>
+          <th>ICD-O-3 Histology</th>
+          <th class="center">Behavior</th>
+          <th class="center">Recode</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="subgroup-row"><td colspan="4">1. Glioma — Recodes 01–10</td></tr>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>1.1 Diffuse astrocytoma and anaplastic astrocytoma</div>
+          <div class="site-desc">Grade II–III diffuse astrocytic tumors; IDH-mutant typically; WHO 2016 classification</div></td>
+          <td><div class="code-wrap"><span class="code-badge">9400–9401, 9410–9411, 9420</span></div></td>
+          <td class="recode-col"><span class="beh-badge beh-3">3</span></td>
+          <td class="recode-col"><span class="recode-num">01</span></td>
+        </tr>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>1.2 Glioblastoma</div>
+          <div class="site-desc">Grade IV; most common malignant brain tumor in adults; IDH-wildtype and IDH-mutant subtypes</div></td>
+          <td><span class="code-badge">9440–9442, 9445</span></td>
+          <td class="recode-col"><span class="beh-badge beh-3">3</span></td>
+          <td class="recode-col"><span class="recode-num">02</span></td>
+        </tr>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>1.3 Diffuse midline glioma, H3 K27M-mutant</div>
+          <div class="site-desc">New WHO 2016 entity; brainstem/thalamus/spinal cord; pediatric predominance; uniformly fatal</div></td>
+          <td><span class="code-badge">9385</span></td>
+          <td class="recode-col"><span class="beh-badge beh-3">3</span></td>
+          <td class="recode-col"><span class="recode-num">03</span></td>
+        </tr>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>1.4 Oligodendroglioma</div>
+          <div class="site-desc">IDH-mutant and 1p/19q co-deleted by definition in WHO 2016; grade II and III (anaplastic)</div></td>
+          <td><span class="code-badge">9450–9451</span></td>
+          <td class="recode-col"><span class="beh-badge beh-3">3</span></td>
+          <td class="recode-col"><span class="recode-num">04</span></td>
+        </tr>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>1.5 Oligoastrocytoma</div>
+          <div class="site-desc">Mixed glioma; NOS category reduced in WHO 2016 as most now classify as either astrocytoma or oligodendroglioma by molecular markers</div></td>
+          <td><span class="code-badge">9382</span></td>
+          <td class="recode-col"><span class="beh-badge beh-3">3</span></td>
+          <td class="recode-col"><span class="recode-num">05</span></td>
+        </tr>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>1.6 Other astrocytic tumors</div>
+          <div class="site-desc">Pilocytic astrocytoma (malignant), pleomorphic xanthoastrocytoma, and related astrocytic tumors not classified as diffuse or glioblastoma</div></td>
+          <td><span class="code-badge">9421, 9424–9425</span></td>
+          <td class="recode-col"><span class="beh-badge beh-3">3</span></td>
+          <td class="recode-col"><span class="recode-num">06</span></td>
+        </tr>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>1.7 Astroblastoma</div>
+          <div class="site-desc">Rare glial tumor; young adults; perivascular pseudorosettes; uncertain malignant potential</div></td>
+          <td><span class="code-badge">9430</span></td>
+          <td class="recode-col"><span class="beh-badge beh-3">3</span></td>
+          <td class="recode-col"><span class="recode-num">07</span></td>
+        </tr>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>1.8 Ependymal tumors</div>
+          <div class="site-desc">Ependymoma and anaplastic ependymoma; spinal cord predominance in adults; posterior fossa in children</div></td>
+          <td><span class="code-badge">9391–9393, 9396</span></td>
+          <td class="recode-col"><span class="beh-badge beh-3">3</span></td>
+          <td class="recode-col"><span class="recode-num">08</span></td>
+        </tr>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>1.9 Glioma, unspecified</div>
+          <div class="site-desc">Glioma NOS — not further classified by molecular or histological features</div></td>
+          <td><span class="code-badge">9380</span></td>
+          <td class="recode-col"><span class="beh-badge beh-3">3</span></td>
+          <td class="recode-col"><span class="recode-num">09</span></td>
+        </tr>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>1.10 Other gliomas</div>
+          <div class="site-desc">Miscellaneous glial histologies not fitting the specific categories above</div>
+          <span class="analyst-note">Residual category for malignant glial tumors at C700–C729 that are not captured by recodes 01–09. Includes rare histologies (e.g. 9381 gliosarcoma, 9394 myxopapillary ependymoma, 9444 chordoid glioma, and others).</span></td>
+          <td><div class="code-wrap">
+            <span class="code-badge">9381, 9383–9384, 9394–9395, 9397–9399</span>
+            <span class="code-badge">9402–9409, 9412–9419, 9422–9423</span>
+            <span class="code-badge">9426–9429, 9431–9439, 9443–9444</span>
+            <span class="code-badge">9446–9449, 9452–9460</span>
+          </div></td>
+          <td class="recode-col"><span class="beh-badge beh-3">3</span></td>
+          <td class="recode-col"><span class="recode-num">10</span></td>
+        </tr>
+
+        <tr class="subgroup-row"><td colspan="4">2. Embryonal Tumors — Recode 11</td></tr>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>2. Embryonal tumors</div>
+          <div class="site-desc">Medulloblastoma (most common), PNET, atypical teratoid/rhabdoid tumor (ATRT, 9508), other embryonal; posterior fossa predominance in children</div></td>
+          <td><span class="code-badge">8963, 9364, 9470–9478, 9490, 9500–9502, 9508</span></td>
+          <td class="recode-col"><span class="beh-badge beh-3">3</span></td>
+          <td class="recode-col"><span class="recode-num">11</span></td>
+        </tr>
+
+        <tr class="subgroup-row"><td colspan="4">3. Meningiomas (Malignant) — Recode 12</td></tr>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>3. Meningiomas — malignant</div>
+          <div class="site-desc">Anaplastic/malignant meningioma (WHO grade III) — behavior 3 only; cf. non-malignant meningioma recode 16</div></td>
+          <td><span class="code-badge">9530, 9538–9539</span></td>
+          <td class="recode-col"><span class="beh-badge beh-3">3</span></td>
+          <td class="recode-col"><span class="recode-num">12</span></td>
+        </tr>
+
+        <tr class="subgroup-row"><td colspan="4">4. Choroid Plexus Tumors (Malignant) — Recode 13</td></tr>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>4. Choroid plexus tumors — malignant</div>
+          <div class="site-desc">Choroid plexus carcinoma (WHO grade III); cf. non-malignant choroid plexus recode 19</div></td>
+          <td><span class="code-badge">9390</span></td>
+          <td class="recode-col"><span class="beh-badge beh-3">3</span></td>
+          <td class="recode-col"><span class="recode-num">13</span></td>
+        </tr>
+
+        <tr class="subgroup-row"><td colspan="4">5. Neuronal and Mixed Neuronal-Glial Tumors (Malignant) — Recode 14</td></tr>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>5. Neuronal and mixed neuronal-glial — malignant</div>
+          <div class="site-desc">Malignant ganglioglioma (9505), papillary glioneuronal tumor NOS (9509), and related malignant mixed neuronal-glial tumors</div></td>
+          <td><span class="code-badge">9505, 9509</span></td>
+          <td class="recode-col"><span class="beh-badge beh-3">3</span></td>
+          <td class="recode-col"><span class="recode-num">14</span></td>
+        </tr>
+
+        <tr class="subgroup-row"><td colspan="4">6. Other Malignant Brain/ONS — Recode 15</td></tr>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>6. Other malignant Brain/ONS</div>
+          <div class="site-desc">Any malignant histology at C700–C729 not captured by recodes 01–14</div>
+          <span class="analyst-note">Defined by <strong>exclusion</strong>: behavior 3 at C700–C729 with any histology not listed in recodes 01–14, and excluding hist 9050–9055 (mesothelioma), 9140 (Kaposi), and 9590–9993 (lymphomas/hematopoietic). Includes rare CNS tumors such as primary CNS lymphoma (excluded via 9590–9993), hemangiopericytoma, primary CNS melanoma, and other non-glial malignancies.</span></td>
+          <td><div class="site-desc" style="padding-left:0; font-size:9px; color: var(--text-mid);">All histologies at C700–C729, behavior 3, <em>not</em> listed in recodes 01–14<br>Excluding: 9050–9055, 9140, 9590–9993</div></td>
+          <td class="recode-col"><span class="beh-badge beh-3">3</span></td>
+          <td class="recode-col"><span class="recode-num">15</span></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </div>
+
+
+  <!-- ════════════════════════════════════════
+       NON-MALIGNANT BRAIN / ONS
+  ═════════════════════════════════════════ -->
+  <div class="section-block t-nonmal" id="sec-nonmalignant">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Non-Malignant Brain / ONS</h2>
+      </div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead>
+        <tr>
+          <th>Tumor Type</th>
+          <th>ICD-O-3 Histology by Behavior</th>
+          <th class="center">Behavior</th>
+          <th class="center">Recode</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>1. Meningiomas — non-malignant</div>
+          <div class="site-desc">WHO grade I (benign) and grade II (atypical/borderline) meningiomas; most common non-malignant brain tumor</div>
+          <span class="analyst-note">Behavior 0: benign (grade I). Behavior 1: borderline/atypical (grade II, 9538–9539). Malignant meningioma (grade III) uses recode 12.</span></td>
+          <td><div class="code-wrap">
+            <span class="code-badge">9530–9534, 9537 → behavior 0</span>
+            <span class="code-badge">9538–9539 → behavior 1</span>
+          </div></td>
+          <td class="recode-col"><span class="beh-badge beh-0">0</span><span class="beh-badge beh-1">1</span></td>
+          <td class="recode-col"><span class="recode-num">16</span></td>
+        </tr>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>2. Tumors of cranial and paraspinal nerves</div>
+          <div class="site-desc">Schwannoma (neurilemmoma), neurofibroma, and related — acoustic neuroma (vestibular schwannoma) is the most common</div></td>
+          <td><div class="code-wrap">
+            <span class="code-badge">9540, 9550, 9560, 9563, 9571 → behavior 0</span>
+            <span class="code-badge">9560 → behavior 1</span>
+          </div></td>
+          <td class="recode-col"><span class="beh-badge beh-0">0</span><span class="beh-badge beh-1">1</span></td>
+          <td class="recode-col"><span class="recode-num">17</span></td>
+        </tr>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>3. Ependymal tumors — non-malignant</div>
+          <div class="site-desc">Myxopapillary ependymoma (9394, behavior 1) and subependymoma (9383, behavior 1) — spinal predominance</div></td>
+          <td><span class="code-badge">9383, 9394 → behavior 1</span></td>
+          <td class="recode-col"><span class="beh-badge beh-1">1</span></td>
+          <td class="recode-col"><span class="recode-num">18</span></td>
+        </tr>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>4. Choroid plexus tumors — non-malignant</div>
+          <div class="site-desc">Choroid plexus papilloma (behavior 0) and atypical choroid plexus papilloma (behavior 1) — lateral ventricle; children predominate</div></td>
+          <td><div class="code-wrap">
+            <span class="code-badge">9390 → behavior 0</span>
+            <span class="code-badge">9390 → behavior 1</span>
+          </div></td>
+          <td class="recode-col"><span class="beh-badge beh-0">0</span><span class="beh-badge beh-1">1</span></td>
+          <td class="recode-col"><span class="recode-num">19</span></td>
+        </tr>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>5. Neuronal and mixed neuronal-glial — non-malignant</div>
+          <div class="site-desc">Gangliocytoma (9492), ganglioglioma (9505), DNT (9413), and related — often temporal lobe; seizure-associated</div></td>
+          <td><div class="code-wrap">
+            <span class="code-badge">9413, 9492–9493, 9509 → behavior 0</span>
+            <span class="code-badge">8693, 9412, 9505–9506, 9509 → behavior 1</span>
+          </div></td>
+          <td class="recode-col"><span class="beh-badge beh-0">0</span><span class="beh-badge beh-1">1</span></td>
+          <td class="recode-col"><span class="recode-num">20</span></td>
+        </tr>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>6. Mesenchymal, nonmeningothelial tumors — non-malignant</div>
+          <div class="site-desc">Benign CNS mesenchymal tumors — lipoma, hemangioma, fibrous histiocytoma, leiomyoma, and related non-glial, non-meningothelial tumors</div></td>
+          <td><div class="code-wrap">
+            <span class="code-badge">8815, 8825, 8830, 8850, 8861, 8880, 8890, 8900, 9120, 9180, 9210, 9220 → behavior 0</span>
+            <span class="code-badge">8815, 8821, 8825, 9161 → behavior 1</span>
+          </div></td>
+          <td class="recode-col"><span class="beh-badge beh-0">0</span><span class="beh-badge beh-1">1</span></td>
+          <td class="recode-col"><span class="recode-num">21</span></td>
+        </tr>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>7. Other astrocytic tumors — non-malignant</div>
+          <div class="site-desc">Pleomorphic xanthoastrocytoma (9424) borderline/behavior 1; subependymal giant cell astrocytoma (SEGA) associated with tuberous sclerosis</div></td>
+          <td><span class="code-badge">9384 → behavior 1</span></td>
+          <td class="recode-col"><span class="beh-badge beh-1">1</span></td>
+          <td class="recode-col"><span class="recode-num">22</span></td>
+        </tr>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>8. Other gliomas — non-malignant</div>
+          <div class="site-desc">Astroblastoma borderline (9431) and chordoid glioma of the third ventricle borderline (9444)</div></td>
+          <td><span class="code-badge">9431, 9444 → behavior 1</span></td>
+          <td class="recode-col"><span class="beh-badge beh-1">1</span></td>
+          <td class="recode-col"><span class="recode-num">23</span></td>
+        </tr>
+
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>9. Other non-malignant Brain/ONS</div>
+          <div class="site-desc">All other non-malignant histologies at C700–C729 not captured by recodes 16–23</div>
+          <span class="analyst-note">Defined by <strong>exclusion</strong>: behavior 0 or 1 at C700–C729 with any histology not listed in recodes 16–23, excluding hist 9050–9055, 9140, and 9590–9993. Includes pituitary adenomas, craniopharyngiomas, hemangioblastomas, and other benign/borderline CNS tumors not specified above.</span></td>
+          <td><div class="site-desc" style="padding-left:0; font-size:9px; color: var(--text-mid);">All histologies at C700–C729, behavior 0 or 1, <em>not</em> listed in recodes 16–23<br>Excluding: 9050–9055, 9140, 9590–9993</div></td>
+          <td class="recode-col"><span class="beh-badge beh-0">0</span><span class="beh-badge beh-1">1</span></td>
+          <td class="recode-col"><span class="recode-num">24</span></td>
+        </tr>
+
+      </tbody>
+    </table></div>
+  </div>
+
+
+  <!-- ════════════════════════════════════════
+       PINEAL REGION
+  ═════════════════════════════════════════ -->
+  <div class="section-block t-pineal" id="sec-pineal">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>Tumors of the Pineal Region</h2>
+      </div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead>
+        <tr>
+          <th>Tumor Type</th>
+          <th>ICD-O-3 Histology</th>
+          <th class="center">Behavior</th>
+          <th class="center">Recode</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>Malignant tumors of the pineal region</div>
+          <div class="site-desc">Pineoblastoma (9362) — WHO grade IV; highly malignant; children predominate. Pineal region tumors miscellaneous (9395).</div></td>
+          <td><span class="code-badge">9362, 9395</span></td>
+          <td class="recode-col"><span class="beh-badge beh-3">3</span></td>
+          <td class="recode-col"><span class="recode-num">25</span></td>
+        </tr>
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>Non-malignant tumors of the pineal region</div>
+          <div class="site-desc">Pineocytoma (9361) — WHO grade I; slow-growing; behavior 1 (borderline). Distinct from the malignant pineoblastoma.</div></td>
+          <td><span class="code-badge">9361</span></td>
+          <td class="recode-col"><span class="beh-badge beh-1">1</span></td>
+          <td class="recode-col"><span class="recode-num">26</span></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </div>
+
+
+  <!-- ════════════════════════════════════════
+       ALL OTHER CANCER TYPES
+  ═════════════════════════════════════════ -->
+  <div class="section-block t-other" id="sec-other">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <span class="chevron">▾</span>
+      <div class="section-title-wrap">
+        <h2>All Other Cancer Types</h2>
+        <p>Recode 27 — All combinations not meeting criteria for recodes 01–26</p>
+      </div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Description</th>
+          <th class="center">Recode</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="site-name"><span class="site-dot"></span>All Other Cancer Types</div></td>
+          <td><div class="site-desc" style="font-size:10px; color: var(--text-mid);">
+            Any record that does not meet the criteria for recodes 01–26. Includes:
+            <ul style="margin: 4px 0 0 14px; line-height: 1.6; font-size: 9.5px;">
+              <li>CNS site records (C700–C729, C753) with excluded histologies (9050–9055 mesothelioma; 9140 Kaposi; 9590–9993 lymphomas and hematopoietic)</li>
+              <li>Non-CNS primary sites — these records will be classified by other SEER recodes (site recode, lymphoma subtype recode, etc.)</li>
+            </ul>
+            <span class="analyst-note" style="margin-left:0">When restricting analyses to Brain/CNS tumors, filter to recodes 01–26 and exclude recode 27.</span>
+          </div></td>
+          <td class="recode-col"><span class="recode-num">27</span></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </div>
+
+
+  <div class="footnotes">
+    * Based on the 2016 WHO Classification of Tumors of the Central Nervous System.<br>
+    ONS = Other Nervous System. NOS = Not Otherwise Specified. ATRT = Atypical Teratoid/Rhabdoid Tumor. PNET = Primitive Neuroectodermal Tumor. SEGA = Subependymal Giant Cell Astrocytoma. DNT = Dysembryoplastic Neuroepithelial Tumor.<br>
+    Behavior codes: 0 = Benign; 1 = Borderline malignancy / uncertain behavior; 3 = Malignant.
+  </div>
+  <p class="source-note">Source: <a href="https://seer.cancer.gov/seerstat/variables/seer/brain_cns-recode/" target="_blank">seer.cancer.gov/seerstat/variables/seer/brain_cns-recode/</a> — 2020 revision. Reference: Forjaz G et al. <em>Neurooncol Adv.</em> 2020;3(1):vdaa175.</p>
+
+</div>
+
+<script>
+(function() {
+  var input    = document.getElementById('search-input');
+  var clearBtn = document.getElementById('search-clear');
+  var stats    = document.getElementById('search-stats');
+  var sections = document.querySelectorAll('.section-block');
+  var expandBtn   = document.getElementById('expand-all');
+  var collapseBtn = document.getElementById('collapse-all');
+
+  /* COLLAPSE / EXPAND */
+  sections.forEach(function(section) {
+    var header = section.querySelector('.section-header');
+    if (!header) return;
+    header.addEventListener('click', function(e) {
+      if (e.target.closest('a, button, input')) return;
+      section.classList.toggle('collapsed');
+    });
+  });
+  expandBtn.addEventListener('click', function() {
+    sections.forEach(function(s) { s.classList.remove('collapsed'); });
+  });
+  collapseBtn.addEventListener('click', function() {
+    sections.forEach(function(s) { s.classList.add('collapsed'); });
+  });
+
+  /* SEARCH */
+  var rowData = [];
+  sections.forEach(function(section) {
+    section.querySelectorAll('tbody tr').forEach(function(row) {
+      if (row.classList.contains('subgroup-row') || row.classList.contains('subsubgroup-row')) return;
+      rowData.push({ row: row, section: section, text: row.textContent.toLowerCase() });
+    });
+  });
+  var sectionData = [];
+  sections.forEach(function(section) {
+    var el = section.querySelector('.section-title-wrap');
+    sectionData.push({ section: section, text: el ? el.textContent.toLowerCase() : '' });
+  });
+
+  function clearHighlights() {
+    document.querySelectorAll('mark.search-mark').forEach(function(mark) {
+      mark.parentNode.replaceChild(document.createTextNode(mark.textContent), mark);
+    });
+    sections.forEach(function(s) { s.normalize(); });
+  }
+
+  function escapeRE(s) {
+    return s.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+  }
+
+  function highlight(el, query) {
+    if (!query) return;
+    var re = new RegExp(escapeRE(query), 'gi');
+    var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+      acceptNode: function(n) {
+        if (n.parentElement.closest('script,style,mark')) return NodeFilter.FILTER_REJECT;
+        return n.nodeValue.toLowerCase().indexOf(query) !== -1
+          ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      }
+    });
+    var targets = [], n;
+    while ((n = walker.nextNode())) targets.push(n);
+    targets.forEach(function(tn) {
+      var text = tn.nodeValue, frag = document.createDocumentFragment();
+      var last = 0, m;
+      re.lastIndex = 0;
+      while ((m = re.exec(text)) !== null) {
+        if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+        var mark = document.createElement('mark');
+        mark.className = 'search-mark';
+        mark.textContent = m[0];
+        frag.appendChild(mark);
+        last = m.index + m[0].length;
+        if (m.index === re.lastIndex) re.lastIndex++;
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      tn.parentNode.replaceChild(frag, tn);
+    });
+  }
+
+  function filter() {
+    var q = input.value.trim().toLowerCase();
+    clearHighlights();
+    if (!q) {
+      rowData.forEach(function(r) { r.row.classList.remove('row-hidden'); });
+      sections.forEach(function(s) { s.classList.remove('section-hidden'); });
+      stats.textContent = '';
+      return;
+    }
+    var count = 0, hit = new Map();
+    rowData.forEach(function(r) {
+      if (r.text.indexOf(q) !== -1) {
+        r.row.classList.remove('row-hidden');
+        hit.set(r.section, true);
+        count++;
+      } else {
+        r.row.classList.add('row-hidden');
+      }
+    });
+    sectionData.forEach(function(sd) {
+      if (sd.text.indexOf(q) !== -1) {
+        hit.set(sd.section, true);
+        sd.section.querySelectorAll('tbody tr').forEach(function(row) {
+          if (!row.classList.contains('subgroup-row') &&
+              !row.classList.contains('subsubgroup-row') &&
+              row.classList.contains('row-hidden')) {
+            row.classList.remove('row-hidden');
+            count++;
+          }
+        });
+      }
+    });
+    sections.forEach(function(s) {
+      if (hit.get(s)) {
+        s.classList.remove('section-hidden');
+        s.classList.remove('collapsed');
+      } else {
+        s.classList.add('section-hidden');
+      }
+    });
+    rowData.forEach(function(r) {
+      if (!r.row.classList.contains('row-hidden')) highlight(r.row, q);
+    });
+    var sc = Array.from(hit.keys()).length;
+    stats.textContent = count === 0
+      ? 'No matches found.'
+      : count + ' matching row' + (count === 1 ? '' : 's') +
+        ' across ' + sc + ' section' + (sc === 1 ? '' : 's') + '.';
+  }
+
+  var timer;
+  input.addEventListener('input', function() { clearTimeout(timer); timer = setTimeout(filter, 80); });
+  clearBtn.addEventListener('click', function() { input.value = ''; filter(); input.focus(); });
+  input.addEventListener('keydown', function(e) { if (e.key === 'Escape') { input.value = ''; filter(); } });
+})();
+</script>
+</body>
+</html>
